@@ -4,15 +4,19 @@
  */
 import type { Config } from './config.ts';
 import type { ModuleMeta } from './schemas.ts';
+import type { Langue } from './texte.ts';
+import { t, type Cle } from '../i18n/index.ts';
 
 export type TypeAction = 'lancement' | 'accueil' | 'simulation' | 'rappel' | 'veille' | 'crise' | 'bilan';
+export type CleAction = TypeAction | 'renouvellement';
 
 export interface Action {
   id: string;
   date: string; // AAAA-MM-JJ
   type: TypeAction;
-  titre: string;
-  description: string;
+  /** Clé des textes dans le dictionnaire (src/i18n) et paramètres associés. */
+  cle: CleAction;
+  params: Record<string, string | number>;
   /** Profils concernés ; vide = tous. */
   profils: string[];
   modules: string[];
@@ -20,15 +24,18 @@ export interface Action {
 
 export const MOIS_PAR_FREQUENCE = { mensuelle: 1, trimestrielle: 3, semestrielle: 6, annuelle: 12 } as const;
 
-export const LIBELLES_TYPE: Record<TypeAction, string> = {
-  lancement: 'Lancement',
-  accueil: 'Accueil',
-  simulation: 'Simulation',
-  rappel: 'Rappel',
-  veille: 'Mise à jour',
-  crise: 'Exercice de crise',
-  bilan: 'Bilan',
-};
+/** Libellé du type d'action, dans la langue demandée. */
+export const libelleType = (type: TypeAction, langue: Langue = 'fr') => t(`calendrier.type.${type}` as Cle, langue);
+
+/** Titre et description d'une action, dans la langue demandée. */
+export function texteAction(a: Action, langue: Langue = 'fr'): { titre: string; description: string } {
+  const params = { ...a.params };
+  if (typeof params.frequence === 'string') params.frequence = t(`frequence.adjectif.${params.frequence}` as Cle, langue);
+  return {
+    titre: t(`calendrier.${a.cle}.titre` as Cle, langue, params),
+    description: t(`calendrier.${a.cle}.description` as Cle, langue, params),
+  };
+}
 
 /** Ajoute des mois à une date ISO en restant sur un jour ouvré (lundi à vendredi). */
 export function ajouterMois(dateIso: string, mois: number, decalageJours = 0): string {
@@ -54,8 +61,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
     id: 'lancement',
     date: debut,
     type: 'lancement',
-    titre: 'Lancement de la campagne annuelle',
-    description: 'Communication de la direction, pré-tests diagnostiques pour tous les profils et ouverture des parcours.',
+    cle: 'lancement',
+    params: {},
     profils: [],
     modules: [],
   });
@@ -64,8 +71,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
     id: 'accueil',
     date: debut,
     type: 'accueil',
-    titre: `Parcours d'accueil (en continu, sous ${campagnes.onboardingDelaiJours} jours après chaque arrivée)`,
-    description: 'Chaque nouvel arrivant suit son parcours obligatoire dans le délai fixé, puis rejoint le parcours de son profil métier.',
+    cle: 'accueil',
+    params: { jours: campagnes.onboardingDelaiJours },
     profils: ['nouvel-arrivant'],
     modules: modules.filter((m) => m.obligatoirePour.includes('nouvel-arrivant')).map((m) => m.id),
   });
@@ -77,8 +84,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
       id: `simulation-${n}`,
       date: ajouterMois(debut, mois, 7),
       type: 'simulation',
-      titre: `Simulation d'hameçonnage n° ${n}`,
-      description: 'Mise en situation pédagogique dans la plateforme (aucun e-mail réel), suivie d\'un retour immédiat et de la mesure des taux de signalement.',
+      cle: 'simulation',
+      params: { n },
       profils: [],
       modules: modules.filter((m) => m.formats.includes('simulation-hameconnage')).map((m) => m.id),
     });
@@ -95,8 +102,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
       id: `rappel-${i + 1}`,
       date: ajouterMois(debut, (i + 1) * pasRappel - 1, 14),
       type: 'rappel',
-      titre: `Campagne de rappel n° ${i + 1}`,
-      description: 'Relance des modules non terminés, post-tests de consolidation et fiches réflexes.',
+      cle: 'rappel',
+      params: { n: i + 1 },
       profils: [],
       modules: lot.map((m) => m.id),
     });
@@ -111,8 +118,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
         id: `renouvellement-${m.id}-${mois}`,
         date: ajouterMois(debut, mois, 21),
         type: 'rappel',
-        titre: `Renouvellement du module ${m.code}`,
-        description: `Module à renouveler selon une fréquence ${m.renouvellement} (menace évolutive).`,
+        cle: 'renouvellement',
+        params: { code: m.code, frequence: m.renouvellement },
         profils: m.profils,
         modules: [m.id],
       });
@@ -125,8 +132,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
       id: `veille-${n}`,
       date: ajouterMois(debut, mois - 1, 0),
       type: 'veille',
-      titre: 'Revue des contenus face aux nouvelles menaces',
-      description: 'Mise à jour des modules selon la veille (IA générative, deepfakes, QR codes, retours d\'incidents et du panorama de la menace).',
+      cle: 'veille',
+      params: {},
       profils: [],
       modules: [],
     });
@@ -138,8 +145,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
       id: `crise-${n}`,
       date: ajouterMois(debut, mois, 10),
       type: 'crise',
-      titre: 'Exercice de gestion de crise cyber',
-      description: 'Exercice sur table fondé sur un scénario de rançongiciel, avec la direction, les managers et l\'équipe informatique.',
+      cle: 'crise',
+      params: {},
       profils: ['manager', 'admin-it'],
       modules: modules.filter((m) => m.risques.includes('rancongiciel')).map((m) => m.id),
     });
@@ -149,8 +156,8 @@ export function genererCalendrier(config: Config, modules: ModuleMeta[]): Action
     id: 'bilan',
     date: ajouterMois(debut, 11, 7),
     type: 'bilan',
-    titre: 'Bilan annuel et révision du plan',
-    description: 'Post-tests annuels, analyse des indicateurs par profil, mise à jour de l\'analyse de risques et du plan pour l\'année suivante.',
+    cle: 'bilan',
+    params: {},
     profils: [],
     modules: [],
   });
@@ -184,17 +191,18 @@ function plier(ligne: string): string {
   return morceaux.join('\r\n ');
 }
 
-export function exporterIcs(actions: Action[], nomOrganisation: string, horodatage: string): string {
+export function exporterIcs(actions: Action[], nomOrganisation: string, horodatage: string, langue: Langue = 'fr'): string {
   const lignes = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//Plateforme de sensibilisation SSI//FR',
     'CALSCALE:GREGORIAN',
-    `X-WR-CALNAME:${echapperIcs(`Sensibilisation sécurité – ${nomOrganisation}`)}`,
+    `X-WR-CALNAME:${echapperIcs(`${t('site.titre', langue)} – ${nomOrganisation}`)}`,
   ];
   const stamp = horodatage.replace(/[-:]/g, '').slice(0, 15) + 'Z';
   for (const a of actions) {
     const jour = a.date.replace(/-/g, '');
+    const { titre, description } = texteAction(a, langue);
     const lendemain = jourSuivantCompact(a.date);
     lignes.push(
       'BEGIN:VEVENT',
@@ -202,8 +210,8 @@ export function exporterIcs(actions: Action[], nomOrganisation: string, horodata
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${jour}`,
       `DTEND;VALUE=DATE:${lendemain}`,
-      `SUMMARY:${echapperIcs(a.titre)}`,
-      `DESCRIPTION:${echapperIcs(a.description)}`,
+      `SUMMARY:${echapperIcs(titre)}`,
+      `DESCRIPTION:${echapperIcs(description)}`,
       'END:VEVENT',
     );
   }

@@ -1,9 +1,10 @@
 ---
-import PageModule from '../../../components/PageModule.astro';
+import Vue from '../../../vues/Module.astro';
+import { languesPubliees } from '../../../lib/donnees.ts';
 import { plateforme } from '../../../lib/contenus.ts';
 
 export function getStaticPaths() {
-  return plateforme().modules.map((m) => ({ params: { id: m.meta.id } }));
+  return plateforme().modules.map((m) => m.meta.id).map((id) => ({ params: { id } }));
 }
 ---
-<PageModule id={Astro.params.id!} falc={false} />
+<Vue langue={languesPubliees().defaut} id={Astro.params.id!} falc={false} />

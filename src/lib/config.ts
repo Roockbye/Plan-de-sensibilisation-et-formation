@@ -34,7 +34,7 @@ export const configSchema = z.strictObject({
   contacts: z.strictObject({
     securite: courrielSchema,
     /** Comment signaler un incident ou un message suspect (texte affiché dans les modules). */
-    signalement: z.string().trim().min(5).max(200),
+    signalement: texteSchema,
     telephoneUrgence: z.string().trim().regex(/^[0-9 +().-]{4,20}$/, 'numéro de téléphone invalide'),
     accessibilite: courrielSchema,
   }),

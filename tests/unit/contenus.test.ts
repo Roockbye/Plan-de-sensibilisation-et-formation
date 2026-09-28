@@ -11,16 +11,16 @@ describe('contenus pédagogiques', () => {
   it('charge les 8 modules du MVP avec leur version FALC et leurs quiz', () => {
     expect(contenus.modules).toHaveLength(8);
     for (const m of contenus.modules) {
-      expect(m.falc.length, m.meta.id).toBeGreaterThan(100);
-      expect(m.quiz.pretest.length).toBeGreaterThanOrEqual(2);
-      expect(m.quiz.posttest.length).toBeGreaterThanOrEqual(3);
+      expect(m.falc.fr.length, m.meta.id).toBeGreaterThan(100);
+      expect(m.quiz.fr.pretest.length).toBeGreaterThanOrEqual(2);
+      expect(m.quiz.fr.posttest.length).toBeGreaterThanOrEqual(3);
     }
   });
 
   it('personnalise les contenus avec la configuration', () => {
     const m1 = contenus.modules.find((m) => m.meta.id === 'hameconnage')!;
-    expect(m1.standard).toContain(config.contacts.securite);
-    expect(m1.standard).not.toMatch(/\{\{/);
+    expect(m1.standard.fr).toContain(config.contacts.securite);
+    expect(m1.standard.fr).not.toMatch(/\{\{/);
   });
 
   it('couvre au moins une menace émergente (nouvelles technologies)', () => {

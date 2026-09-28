@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Parameters<typeof d.langueDe>[0]) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+---
+<Base titre={T('nav.profils')} langue={d.langue} filAriane={[{ libelle: T('nav.profils') }]}>
+  <h1>{T('nav.profils')}</h1>
+  <p class="lecture">{T('profils.intro', { n: d.profils.length, org: d.config.organisation.nom })}</p>
+
+  <ul class="grille">
+    {d.parcours.map((p) => (
+      <li>
+        <section class="carte" aria-labelledby={`profil-${p.profil.id}`}>
+          <h2 id={`profil-${p.profil.id}`} lang={lang(p.profil.libelle)}>{d.tr(p.profil.libelle)}</h2>
+          <p lang={lang(p.profil.description)}>{d.tr(p.profil.description)}</p>
+          <h3>{T('profils.besoins')}</h3>
+          <ul>{p.profil.besoins.map((b) => <li lang={lang(b)}>{d.tr(b)}</li>)}</ul>
+          <p>{T('profils.resume', { objectifs: p.profil.objectifs.length, modules: p.etapes.length, minutes: p.dureeTotaleMinutes, cible: p.profil.dureeAnnuelleCibleMinutes })}</p>
+          <p><a class="bouton" href={d.lien(`/profils/${p.profil.id}/`)}>{T('profils.voirParcours')}<span class="visuellement-masque"> : {d.tr(p.profil.libelle)}</span></a></p>
+        </section>
+      </li>
+    ))}
+  </ul>
+</Base>

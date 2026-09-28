@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Langue, Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+---
+<Base titre={T('pied.planDuSite')} langue={d.langue} filAriane={[{ libelle: T('pied.planDuSite') }]}>
+  <div class="lecture">
+    <h1>{T('pied.planDuSite')}</h1>
+    <ul>
+      <li><a href={d.lien('/')}>{T('nav.accueil')}</a></li>
+      <li>
+        <a href={d.lien('/profils/')}>{T('nav.profils')}</a>
+        <ul>{d.profils.map((p) => <li><a href={d.lien(`/profils/${p.id}/`)} lang={lang(p.libelle)}>{d.tr(p.libelle)}</a></li>)}</ul>
+      </li>
+      <li>
+        <a href={d.lien('/modules/')}>{T('nav.modules')}</a>
+        <ul>
+          {d.modules.map(({ meta }) => (
+            <li>
+              <a href={d.lien(`/modules/${meta.id}/`)}>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></a>
+              (<a href={d.lien(`/modules/${meta.id}/facile/`)}>{T('module.versionFacileCourt')}<span class="visuellement-masque"> : {meta.code}</span></a>)
+            </li>
+          ))}
+        </ul>
+      </li>
+      <li><a href={d.lien('/ma-progression/')}>{T('nav.progression')}</a></li>
+      <li><a href={d.lien('/calendrier/')}>{T('nav.calendrier')}</a></li>
+      <li><a href={d.lien('/tableau-de-bord/')}>{T('nav.tableauDeBord')}</a></li>
+      <li><a href={d.lien('/plan/')}>{T('nav.plan')}</a></li>
+      <li><a href={d.lien('/preferences/')}>{T('nav.preferences')}</a></li>
+      <li><a href={d.lien('/accessibilite/')}>{T('page.accessibilite')}</a></li>
+      <li><a href={d.lien('/confidentialite/')}>{T('page.confidentialite')}</a></li>
+    </ul>
+  </div>
+</Base>

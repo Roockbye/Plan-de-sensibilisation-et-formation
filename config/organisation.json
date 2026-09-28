@@ -12,7 +12,10 @@
   },
   "contacts": {
     "securite": "securite@exemple.org",
-    "signalement": "le bouton « Signaler » de la messagerie ou un e-mail à securite@exemple.org",
+    "signalement": {
+      "fr": "le bouton « Signaler » de la messagerie ou un e-mail à securite@exemple.org",
+      "en": "the “Report” button in your email client or an email to securite@exemple.org"
+    },
     "telephoneUrgence": "01 23 45 67 89",
     "accessibilite": "accessibilite@exemple.org"
   },
@@ -23,22 +26,71 @@
   },
   "langues": {
     "defaut": "fr",
-    "disponibles": ["fr"]
+    "disponibles": [
+      "fr",
+      "en"
+    ]
   },
-  "profilsActifs": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
-  "risquesPrioritaires": [
-    { "id": "hameconnage", "priorite": 3, "justification": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI)." },
-    { "id": "fraude-president", "priorite": 3, "justification": "Impact financier direct ; renforcé par les deepfakes vocaux." },
-    { "id": "rancongiciel", "priorite": 3, "justification": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques." },
-    { "id": "deepfake", "priorite": 2, "justification": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement." },
-    { "id": "quishing", "priorite": 2, "justification": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie." },
-    { "id": "ia-generative", "priorite": 2, "justification": "Usage croissant d'outils d'IA non encadrés (fuite de données)." },
-    { "id": "fuite-donnees", "priorite": 2, "justification": "Données personnelles clients et salariés (RGPD)." },
-    { "id": "mots-de-passe", "priorite": 2 },
-    { "id": "nomadisme", "priorite": 2 },
-    { "id": "privileges-admin", "priorite": 2 }
+  "profilsActifs": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
   ],
-  "reglementations": ["rgpd", "nis2"],
+  "risquesPrioritaires": [
+    {
+      "id": "hameconnage",
+      "priorite": 3,
+      "justification": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI)."
+    },
+    {
+      "id": "fraude-president",
+      "priorite": 3,
+      "justification": "Impact financier direct ; renforcé par les deepfakes vocaux."
+    },
+    {
+      "id": "rancongiciel",
+      "priorite": 3,
+      "justification": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques."
+    },
+    {
+      "id": "deepfake",
+      "priorite": 2,
+      "justification": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement."
+    },
+    {
+      "id": "quishing",
+      "priorite": 2,
+      "justification": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie."
+    },
+    {
+      "id": "ia-generative",
+      "priorite": 2,
+      "justification": "Usage croissant d'outils d'IA non encadrés (fuite de données)."
+    },
+    {
+      "id": "fuite-donnees",
+      "priorite": 2,
+      "justification": "Données personnelles clients et salariés (RGPD)."
+    },
+    {
+      "id": "mots-de-passe",
+      "priorite": 2
+    },
+    {
+      "id": "nomadisme",
+      "priorite": 2
+    },
+    {
+      "id": "privileges-admin",
+      "priorite": 2
+    }
+  ],
+  "reglementations": [
+    "rgpd",
+    "nis2"
+  ],
   "modulesSectoriels": [],
   "campagnes": {
     "debut": "2027-01-04",

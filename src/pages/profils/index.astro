@@ -1,34 +1,6 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { donnees } from '../../lib/donnees.ts';
-import { traducteur } from '../../i18n/index.ts';
+import Vue from '../../vues/Profils.astro';
+import { languesPubliees } from '../../lib/donnees.ts';
 
-const d = donnees();
-const T = traducteur(d.langue);
 ---
-<Base titre={T('nav.profils')} filAriane={[{ libelle: T('nav.profils') }]}>
-  <h1>{T('nav.profils')}</h1>
-  <p class="lecture">
-    Les utilisateurs n'ont ni les mêmes missions, ni la même exposition aux risques. Le programme distingue
-    {d.profils.length} profils, chacun avec ses besoins, ses objectifs pédagogiques et un parcours calculé
-    à partir de l'analyse de risques de {d.config.organisation.nom}.
-  </p>
-
-  <ul class="grille">
-    {d.parcours.map((p) => (
-      <li>
-        <section class="carte" aria-labelledby={`profil-${p.profil.id}`}>
-          <h2 id={`profil-${p.profil.id}`}>{d.tr(p.profil.libelle)}</h2>
-          <p>{d.tr(p.profil.description)}</p>
-          <h3>Besoins identifiés</h3>
-          <ul>{p.profil.besoins.map((b) => <li>{d.tr(b)}</li>)}</ul>
-          <p>
-            {p.profil.objectifs.length} objectifs pédagogiques – {p.etapes.length} modules – {p.dureeTotaleMinutes} minutes
-            (cible annuelle : {p.profil.dureeAnnuelleCibleMinutes} minutes).
-          </p>
-          <p><a class="bouton" href={`/profils/${p.profil.id}/`}>Voir le parcours<span class="visuellement-masque"> : {d.tr(p.profil.libelle)}</span></a></p>
-        </section>
-      </li>
-    ))}
-  </ul>
-</Base>
+<Vue langue={languesPubliees().defaut} />

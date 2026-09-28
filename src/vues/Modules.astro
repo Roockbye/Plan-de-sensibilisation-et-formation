@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Cle } from '../i18n/index.ts';
+import type { Langue, Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+const profilsActifs = new Set(d.config.profilsActifs);
+---
+<Base titre={T('nav.modules')} langue={d.langue} filAriane={[{ libelle: T('nav.modules') }]}>
+  <h1>{T('nav.modules')}</h1>
+  <p class="lecture">{T('modules.intro', { n: d.modules.length })}</p>
+
+  <ul class="grille">
+    {d.modules.map(({ meta }) => (
+      <li>
+        <section class="carte" aria-labelledby={`carte-${meta.id}`}>
+          <h2 id={`carte-${meta.id}`}><a href={d.lien(`/modules/${meta.id}/`)} data-lien-module={meta.id}>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></a></h2>
+          <p lang={lang(meta.resume)}>{d.tr(meta.resume)}</p>
+          <dl class="meta">
+            <dt>{T('commun.duree')}</dt>
+            <dd>{T('commun.minutes', { n: meta.dureeMinutes })}</dd>
+            <dt>{T('commun.niveau')}</dt>
+            <dd>{T(`niveau.${meta.niveau}` as Cle)}</dd>
+            <dt>{T('commun.formats')}</dt>
+            <dd>{meta.formats.map((f) => T(`format.${f}` as Cle)).join(', ')}</dd>
+            <dt>{T('commun.risques')}</dt>
+            <dd>
+              {meta.risques.map((r) => d.libelleRisque(r)).join(', ')}
+              {meta.risques.some((r) => d.risque(r)?.emergent) && <> <span class="etiquette etiquette--emergent">{T('commun.emergent')}</span></>}
+            </dd>
+            <dt>{T('commun.profils')}</dt>
+            <dd>{meta.profils.filter((p) => profilsActifs.has(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
+            <dt>{T('commun.statut')}</dt>
+            <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
+            {d.langue !== 'fr' && d.contenu(d.module(meta.id).standard).langue !== d.langue && (
+              <>
+                <dt>{T('commun.langue')}</dt>
+                <dd>{T('module.nonTraduitCourt')}</dd>
+              </>
+            )}
+          </dl>
+          <p><a href={d.lien(`/modules/${meta.id}/facile/`)}>{T('module.versionFacileCourt')}<span class="visuellement-masque"> : {meta.code}</span></a></p>
+        </section>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<script>
+  import '../scripts/statuts.ts';
+</script>

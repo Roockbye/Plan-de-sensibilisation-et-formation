@@ -49,7 +49,7 @@ describe('calendrier annuel', () => {
     expect(ics.startsWith('BEGIN:VCALENDAR\r\n')).toBe(true);
     expect(ics.trimEnd().endsWith('END:VCALENDAR')).toBe(true);
     expect(ics.match(/BEGIN:VEVENT/g)).toHaveLength(calendrier.length);
-    expect(ics).toContain('Org\\; test\\, "x"');
+    expect(ics.replace(/\r\n /g, '')).toContain('Org\\; test\\, "x"');
     for (const ligne of ics.split('\r\n')) expect(new TextEncoder().encode(ligne).length).toBeLessThanOrEqual(75);
   });
 });

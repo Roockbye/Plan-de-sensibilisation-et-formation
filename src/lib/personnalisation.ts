@@ -6,31 +6,40 @@
 import { micromark } from 'micromark';
 import { gfm, gfmHtml } from 'micromark-extension-gfm';
 import type { Config } from './config.ts';
+import { tr, type Langue } from './texte.ts';
 
-const LIBELLES_SI: Record<Config['organisation']['typeSI'], string> = {
-  cloud: 'principalement hébergé dans le cloud',
-  'sur-site': 'hébergé sur site',
-  hybride: 'hybride (sur site et cloud)',
+const LIBELLES_SI: Record<Langue, Record<Config['organisation']['typeSI'], string>> = {
+  fr: { cloud: 'principalement hébergé dans le cloud', 'sur-site': 'hébergé sur site', hybride: 'hybride (sur site et cloud)' },
+  en: { cloud: 'mainly cloud-hosted', 'sur-site': 'hosted on premises', hybride: 'hybrid (on premises and cloud)' },
 };
+const ETAT_CONFORMITE: Record<Langue, Record<Config['accessibilite']['etatConformite'], string>> = {
+  fr: { 'totalement conforme': 'totalement conforme', 'partiellement conforme': 'partiellement conforme', 'non conforme': 'non conforme' },
+  en: { 'totalement conforme': 'fully compliant', 'partiellement conforme': 'partially compliant', 'non conforme': 'not compliant' },
+};
+export const LOCALES: Record<Langue, string> = { fr: 'fr-FR', en: 'en-GB' };
 
-export function variables(config: Config): Record<string, string> {
+export function variables(config: Config, langue: Langue = 'fr'): Record<string, string> {
   const o = config.organisation;
+  const dateAudit = config.accessibilite.dateAudit
+    ? new Intl.DateTimeFormat(LOCALES[langue], { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${config.accessibilite.dateAudit}T00:00:00Z`))
+    : undefined;
   return {
     'organisation.nom': o.nom,
     'organisation.nomCourt': o.nomCourt ?? o.nom,
     'organisation.effectif': String(o.effectif),
-    'organisation.typeSI': LIBELLES_SI[o.typeSI],
+    'organisation.typeSI': LIBELLES_SI[langue][o.typeSI],
     // Domaine de messagerie, déduit de l'adresse du contact sécurité (sert aux mises en situation).
     'organisation.domaine': config.contacts.securite.split('@')[1],
     'contacts.securite': config.contacts.securite,
-    'contacts.signalement': config.contacts.signalement,
+    'contacts.signalement': tr(config.contacts.signalement, langue),
     'contacts.telephoneUrgence': config.contacts.telephoneUrgence,
     'contacts.accessibilite': config.contacts.accessibilite,
     'evaluation.seuilReussite': String(config.evaluation.seuilReussite),
-    'accessibilite.etatConformite': config.accessibilite.etatConformite,
-    'accessibilite.dateAudit': config.accessibilite.dateAudit
-      ? `Dernière évaluation : ${new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${config.accessibilite.dateAudit}T00:00:00Z`))}.`
-      : "Aucune évaluation de conformité n'a encore été réalisée.",
+    'accessibilite.etatConformite': ETAT_CONFORMITE[langue][config.accessibilite.etatConformite],
+    'accessibilite.dateAudit':
+      langue === 'en'
+        ? dateAudit ? `Last assessment: ${dateAudit}.` : 'No compliance assessment has been carried out yet.'
+        : dateAudit ? `Dernière évaluation : ${dateAudit}.` : "Aucune évaluation de conformité n'a encore été réalisée.",
   };
 }
 

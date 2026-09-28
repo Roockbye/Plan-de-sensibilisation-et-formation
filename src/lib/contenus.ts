@@ -19,16 +19,29 @@ import {
   type Scenario,
 } from './schemas.ts';
 import { echapperJson, echapperMarkdown, remplacer, variables, variablesInconnues } from './personnalisation.ts';
+import { LANGUE_PAR_DEFAUT, type Langue } from './texte.ts';
+
+/**
+ * Contenu décliné par langue. Le français (langue de référence) est toujours présent ;
+ * les autres langues sont facultatives (fichiers *.en.md, quiz.en.json…).
+ */
+export type ParLangue<T> = { fr: T } & Partial<Record<Langue, T>>;
+
+/** Valeur dans la langue demandée, ou repli sur le français ; indique la langue réellement servie. */
+export function enLangue<T>(v: ParLangue<T>, langue: Langue): { valeur: T; langue: Langue } {
+  const trad = v[langue];
+  return trad !== undefined ? { valeur: trad, langue } : { valeur: v.fr, langue: LANGUE_PAR_DEFAUT };
+}
 
 export interface ModuleComplet {
   meta: ModuleMeta;
   dossier: string;
-  /** Markdown personnalisé (variables remplacées). */
-  standard: string;
-  falc: string;
-  quiz: Quiz;
-  scenario?: Scenario;
-  transcriptions: Record<string, string>;
+  /** Markdown personnalisé (variables remplacées), par langue. */
+  standard: ParLangue<string>;
+  falc: ParLangue<string>;
+  quiz: ParLangue<Quiz>;
+  scenario?: ParLangue<Scenario>;
+  transcriptions: Record<string, ParLangue<string>>;
 }
 
 export interface Contenus {
@@ -38,7 +51,7 @@ export interface Contenus {
   profils: Profil[];
   /** Modules actifs : génériques + secteurs activés dans la configuration. */
   modules: ModuleComplet[];
-  pages: Record<string, string>;
+  pages: Record<string, ParLangue<string>>;
 }
 
 export interface Plateforme extends ConfigValidee, Contenus {}
@@ -78,33 +91,73 @@ function exiger(chemin: string, raison: string) {
   if (!existsSync(chemin)) throw new ErreurConfig(`Fichier manquant : ${chemin} (${raison})`);
 }
 
-function chargerModule(dossier: string, vars: Record<string, string>): ModuleComplet {
-  const meta = lireJson(join(dossier, 'module.json'), moduleSchema, vars);
+/**
+ * Une traduction doit avoir la même structure que l'original : mêmes identifiants,
+ * mêmes bonnes réponses, mêmes enchaînements. Seuls les textes changent.
+ */
+const CLES_STRUCTURELLES = new Set(['id', 'type', 'bonnes', 'suivant', 'depart', 'nature', 'canal', 'media', 'adapte']);
+function comparerStructure(ref: unknown, trad: unknown, chemin: string, cle = ''): void {
+  if (Array.isArray(ref)) {
+    if (!Array.isArray(trad) || trad.length !== ref.length) throw new ErreurConfig(`${chemin} : « ${cle} » n'a pas le même nombre d'éléments que l'original`);
+    ref.forEach((v, i) => comparerStructure(v, trad[i], chemin, cle));
+  } else if (ref && typeof ref === 'object') {
+    if (!trad || typeof trad !== 'object') throw new ErreurConfig(`${chemin} : structure différente de l'original (${cle})`);
+    const cles = new Set([...Object.keys(ref), ...Object.keys(trad)]);
+    for (const k of cles) comparerStructure((ref as Record<string, unknown>)[k], (trad as Record<string, unknown>)[k], chemin, k);
+  } else if (CLES_STRUCTURELLES.has(cle) && ref !== trad) {
+    throw new ErreurConfig(`${chemin} : « ${cle} » vaut « ${String(trad)} » au lieu de « ${String(ref)} » (seuls les textes se traduisent)`);
+  }
+}
+
+function chargerModule(dossier: string, langues: Langue[], vars: Record<Langue, Record<string, string>>): ModuleComplet {
+  const ref = vars.fr;
+  const meta = lireJson(join(dossier, 'module.json'), moduleSchema, ref);
   const nomDossier = dossier.split(/[\\/]/).pop();
   if (meta.id !== nomDossier) throw new ErreurConfig(`${dossier} : l'id « ${meta.id} » doit être identique au nom du dossier`);
 
-  const standard = join(dossier, 'standard.fr.md');
-  const falc = join(dossier, 'falc.fr.md');
-  const quiz = join(dossier, 'quiz.json');
-  exiger(standard, 'version standard du module');
-  exiger(falc, 'version FALC obligatoire pour chaque module');
-  exiger(quiz, 'pré-test et post-test obligatoires');
+  exiger(join(dossier, 'standard.fr.md'), 'version standard du module');
+  exiger(join(dossier, 'falc.fr.md'), 'version FALC obligatoire pour chaque module');
+  exiger(join(dossier, 'quiz.json'), 'pré-test et post-test obligatoires');
 
-  const cheminScenario = join(dossier, 'scenario.json');
-  const scenario = existsSync(cheminScenario) ? lireJson(cheminScenario, scenarioSchema, vars) : undefined;
+  // Fichiers de référence (français) : quiz.json, scenario.json ; traductions : quiz.en.json…
+  const parLangue = <T,>(lire: (l: Langue) => T | undefined): ParLangue<T> => {
+    const r = { fr: lire('fr')! } as ParLangue<T>;
+    for (const l of langues) {
+      if (l === 'fr') continue;
+      const v = lire(l);
+      if (v !== undefined) r[l] = v;
+    }
+    return r;
+  };
+  const markdown = (base: string) => (l: Langue) => {
+    const f = join(dossier, `${base}.${l}.md`);
+    return existsSync(f) ? lireMarkdown(f, vars[l]) : undefined;
+  };
+  const json = <T,>(base: string, schema: z.ZodType<T>) => (l: Langue) => {
+    const f = join(dossier, l === 'fr' ? `${base}.json` : `${base}.${l}.json`);
+    return existsSync(f) ? lireJson(f, schema, vars[l]) : undefined;
+  };
 
-  const transcriptions: Record<string, string> = {};
+  const quiz = parLangue(json('quiz', quizSchema));
+  const aScenario = existsSync(join(dossier, 'scenario.json'));
+  const scenario = aScenario ? parLangue(json('scenario', scenarioSchema)) : undefined;
+  for (const l of langues) {
+    if (l === 'fr') continue;
+    if (quiz[l]) comparerStructure(quiz.fr, quiz[l], join(dossier, `quiz.${l}.json`));
+    if (scenario?.[l]) comparerStructure(scenario.fr, scenario[l], join(dossier, `scenario.${l}.json`));
+  }
+
+  const transcriptions: Record<string, ParLangue<string>> = {};
   for (const media of meta.medias) {
     exiger(resolve(process.cwd(), 'public', media.fichier), `média ${media.id}`);
     exiger(resolve(process.cwd(), 'public', media.sousTitres), `sous-titres obligatoires du média ${media.id}`);
-    const t = join(dossier, media.transcription);
-    exiger(t, `transcription obligatoire du média ${media.id}`);
-    transcriptions[media.id] = lireMarkdown(t, vars);
+    exiger(join(dossier, media.transcription), `transcription obligatoire du média ${media.id}`);
+    transcriptions[media.id] = parLangue(markdown(media.transcription.replace(/\.fr\.md$/, '')));
   }
-  if (scenario?.type === 'embranchements') {
-    for (const etape of scenario.etapes) {
+  if (scenario?.fr.type === 'embranchements') {
+    for (const etape of scenario.fr.etapes) {
       if (etape.media && !meta.medias.some((m) => m.id === etape.media)) {
-        throw new ErreurConfig(`${cheminScenario} : média « ${etape.media} » non déclaré dans module.json`);
+        throw new ErreurConfig(`${join(dossier, 'scenario.json')} : média « ${etape.media} » non déclaré dans module.json`);
       }
     }
   }
@@ -112,9 +165,9 @@ function chargerModule(dossier: string, vars: Record<string, string>): ModuleCom
   return {
     meta,
     dossier,
-    standard: lireMarkdown(standard, vars),
-    falc: lireMarkdown(falc, vars),
-    quiz: lireJson(quiz, quizSchema, vars),
+    standard: parLangue(markdown('standard')),
+    falc: parLangue(markdown('falc')),
+    quiz,
     scenario,
     transcriptions,
   };
@@ -129,7 +182,9 @@ function sousDossiers(chemin: string): string[] {
 }
 
 export function chargerContenus(config: Config, racine = dossierContenus()): Contenus {
-  const vars = variables(config);
+  const langues: Langue[] = [...new Set<Langue>(['fr', ...config.langues.disponibles])];
+  const varsParLangue = Object.fromEntries(langues.map((l) => [l, variables(config, l)])) as Record<Langue, Record<string, string>>;
+  const vars = varsParLangue.fr;
 
   // Risques
   const risques = lireJson(join(racine, 'risques.json'), catalogueRisquesSchema, vars);
@@ -159,7 +214,7 @@ export function chargerContenus(config: Config, racine = dossierContenus()): Con
     ...sousDossiers(join(racine, 'modules')),
     ...config.modulesSectoriels.flatMap((s) => sousDossiers(join(racine, 'secteurs', s, 'modules'))),
   ];
-  const modules = dossiers.map((d) => chargerModule(d, vars)).sort((a, b) => a.meta.ordre - b.meta.ordre);
+  const modules = dossiers.map((d) => chargerModule(d, langues, varsParLangue)).sort((a, b) => a.meta.ordre - b.meta.ordre);
 
   const vus = new Map<string, string>();
   for (const m of modules) {
@@ -187,12 +242,18 @@ export function chargerContenus(config: Config, racine = dossierContenus()): Con
     }
   }
 
-  // Pages éditoriales (déclaration d'accessibilité, confidentialité…)
-  const pages: Record<string, string> = {};
+  // Pages éditoriales (accueil, déclaration d'accessibilité, confidentialité), par langue
+  const pages: Record<string, ParLangue<string>> = {};
   const dossierPages = join(racine, 'pages');
   if (existsSync(dossierPages)) {
     for (const f of readdirSync(dossierPages).filter((f) => f.endsWith('.fr.md'))) {
-      pages[f.replace(/\.fr\.md$/, '')] = lireMarkdown(join(dossierPages, f), vars);
+      const nom = f.replace(/\.fr\.md$/, '');
+      const page = { fr: lireMarkdown(join(dossierPages, f), vars) } as ParLangue<string>;
+      for (const l of langues) {
+        const trad = join(dossierPages, `${nom}.${l}.md`);
+        if (l !== 'fr' && existsSync(trad)) page[l] = lireMarkdown(trad, varsParLangue[l]);
+      }
+      pages[nom] = page;
     }
   }
 

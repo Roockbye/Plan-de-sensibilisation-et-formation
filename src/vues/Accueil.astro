@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const org = d.config.organisation;
+const accueil = d.pages.accueil ? d.contenu(d.pages.accueil) : undefined;
+---
+<Base titre={T('nav.accueil')} langue={d.langue}>
+  <h1>{T('site.titre')} : {org.nom}</h1>
+  {accueil && (
+    <div class="lecture" lang={accueil.langue !== d.langue ? accueil.langue : undefined}>
+      <Markdown source={accueil.valeur} />
+    </div>
+  )}
+
+  <p class="encart" data-reprise data-libelle={T('accueil.votreProfil')} hidden>
+    <span data-reprise-texte></span> <a href={d.lien('/profils/')} data-reprise-lien>{T('accueil.reprendre')}</a>
+  </p>
+
+  <section aria-labelledby="titre-profils">
+    <h2 id="titre-profils">{T('accueil.choisirProfil')}</h2>
+    <p>{T('accueil.choisirProfilIntro', { org: org.nom })}</p>
+    <ul class="grille">
+      {d.parcours.map((p) => (
+        <li>
+          <div class="carte">
+            <h3 lang={d.langueDe(p.profil.libelle) !== d.langue ? 'fr' : undefined}><a href={d.lien(`/profils/${p.profil.id}/`)} data-profil-carte={p.profil.id}>{d.tr(p.profil.libelle)}</a></h3>
+            <p lang={d.langueDe(p.profil.description) !== d.langue ? 'fr' : undefined}>{d.tr(p.profil.description)}</p>
+            <p>{T('accueil.resumeParcours', { n: p.etapes.length, minutes: p.dureeTotaleMinutes, obligatoires: p.etapes.filter((e) => e.categorie === 'obligatoire').length })}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-deroule" class="lecture">
+    <h2 id="titre-deroule">{T('accueil.deroule')}</h2>
+    <ol>
+      <li><strong>{T('module.etape1')}</strong> : {T('accueil.deroule1')}</li>
+      <li><strong>{T('module.etape2')}</strong> : {T('accueil.deroule2')}</li>
+      <li><strong>{T('module.etape3')}</strong> : {T('accueil.deroule3')}</li>
+      <li><strong>{T('module.etape4')}</strong> : {T('accueil.deroule4', { seuil: d.config.evaluation.seuilReussite })}</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="titre-accessibilite" class="lecture">
+    <h2 id="titre-accessibilite">{T('accueil.pourTous')}</h2>
+    <ul>
+      <li>{T('accueil.pourTous1')}</li>
+      <li>{T('accueil.pourTous2')} <a href={d.lien('/preferences/')}>{T('nav.preferences')}</a>.</li>
+      <li>{T('accueil.pourTous3')}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-pilotage" class="lecture">
+    <h2 id="titre-pilotage">{T('accueil.pilotage')}</h2>
+    <ul>
+      <li><a href={d.lien('/tableau-de-bord/')}>{T('nav.tableauDeBord')}</a> : {T('accueil.pilotage1')}</li>
+      <li><a href={d.lien('/calendrier/')}>{T('nav.calendrier')}</a> : {T('accueil.pilotage2')}</li>
+      <li><a href={d.lien('/plan/')}>{T('nav.plan')}</a> : {T('accueil.pilotage3')}</li>
+    </ul>
+  </section>
+</Base>
+
+<script>
+  import { lireProgression } from '../scripts/stockage.ts';
+
+  const zone = document.querySelector<HTMLElement>('[data-reprise]');
+  const p = lireProgression();
+  const carte = p.profil ? document.querySelector<HTMLAnchorElement>(`a[data-profil-carte="${CSS.escape(p.profil)}"]`) : null;
+  if (zone && carte) {
+    zone.querySelector('[data-reprise-texte]')!.textContent = `${zone.dataset.libelle} : ${carte.textContent}.`;
+    zone.querySelector<HTMLAnchorElement>('[data-reprise-lien]')!.href = carte.href;
+    zone.hidden = false;
+  }
+</script>

@@ -10,7 +10,10 @@
   },
   "contacts": {
     "securite": "rssi@tilleuls.example",
-    "signalement": "le numéro interne 4444 ou rssi@tilleuls.example",
+    "signalement": {
+      "fr": "le numéro interne 4444 ou rssi@tilleuls.example",
+      "en": "internal extension 4444 or rssi@tilleuls.example"
+    },
     "telephoneUrgence": "01 23 45 67 89",
     "accessibilite": "handicap@tilleuls.example"
   },

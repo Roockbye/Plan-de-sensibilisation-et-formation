@@ -4,7 +4,7 @@
  * automatique, sous-titres WebVTT et transcription complète toujours disponible.
  */
 import type { ModuleMeta } from '../lib/schemas.ts';
-import { tr } from '../lib/texte.ts';
+import { tr, type Langue } from '../lib/texte.ts';
 import { plateforme } from '../lib/contenus.ts';
 import { traducteur } from '../i18n/index.ts';
 import Markdown from './Markdown.astro';
@@ -12,18 +12,24 @@ import Markdown from './Markdown.astro';
 interface Props {
   media: ModuleMeta['medias'][number];
   transcription?: string;
+  langue: Langue;
+  langueContenu?: Langue;
 }
-const { media, transcription } = Astro.props;
+const { media, transcription, langue, langueContenu } = Astro.props;
 const { config } = plateforme();
-const langue = config.langues.defaut;
 const T = traducteur(langue);
-const titre = tr(media.titre, langue);
+// Langue du contenu réellement servi (repli sur le français si la traduction manque).
+const lc: Langue = langueContenu ?? langue;
+/** Attribut lang pour un contenu dans une autre langue que la page (RGAA 8.7), et pour l'interface à l'intérieur. */
+const langContenu = lc !== langue ? lc : undefined;
+const langUi = lc !== langue ? langue : undefined;
+const titre = tr(media.titre, lc);
 const duree = `${Math.floor(media.dureeSecondes / 60)} min ${String(media.dureeSecondes % 60).padStart(2, '0')} s`;
 ---
-<figure class="media">
+<figure class="media" lang={langContenu}>
   <figcaption>
     <strong>{titre}</strong> ({duree})
-    {media.mentionSynthetique && <span class="media__mention">{tr(media.mentionSynthetique, langue)}</span>}
+    {media.mentionSynthetique && <span class="media__mention">{tr(media.mentionSynthetique, lc)}</span>}
   </figcaption>
   {media.type === 'audio' ? (
     <>
@@ -41,7 +47,7 @@ const duree = `${Math.floor(media.dureeSecondes / 60)} min ${String(media.dureeS
   )}
   {transcription && (
     <details class="media__transcription">
-      <summary>{T('module.transcription')} : {titre}</summary>
+      <summary><span lang={langUi}>{T('module.transcription')}</span> : {titre}</summary>
       <Markdown source={transcription} />
     </details>
   )}

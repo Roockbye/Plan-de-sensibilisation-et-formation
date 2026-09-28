@@ -1,13 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
-import Markdown from '../components/Markdown.astro';
-import { donnees } from '../lib/donnees.ts';
+import Vue from '../vues/Editoriale.astro';
+import { languesPubliees } from '../lib/donnees.ts';
 
-const d = donnees();
 ---
-<Base titre="Déclaration d'accessibilité" filAriane={[{ libelle: "Déclaration d'accessibilité" }]}>
-  <div class="lecture">
-    <h1>Déclaration d'accessibilité</h1>
-    <Markdown source={d.pages.accessibilite ?? ''} />
-  </div>
-</Base>
+<Vue langue={languesPubliees().defaut} page={'accessibilite'} />
