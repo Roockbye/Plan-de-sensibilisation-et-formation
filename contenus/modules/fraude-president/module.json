@@ -3,12 +3,28 @@
   "code": "M3",
   "titre": "Fraude au président et deepfakes voix / vidéo",
   "resume": "Déjouer les demandes urgentes et confidentielles de virement, même lorsqu'elles semblent venir de la voix ou du visage d'un dirigeant.",
-  "risques": ["fraude-president", "deepfake", "ingenierie-sociale"],
-  "profils": ["manager", "utilisateur", "admin-it"],
-  "obligatoirePour": ["manager"],
+  "risques": [
+    "fraude-president",
+    "deepfake",
+    "ingenierie-sociale"
+  ],
+  "profils": [
+    "manager",
+    "utilisateur",
+    "admin-it"
+  ],
+  "obligatoirePour": [
+    "manager"
+  ],
   "dureeMinutes": 12,
   "niveau": "intermediaire",
-  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "audio",
+    "fiche-reflexe"
+  ],
   "objectifs": [
     "Reconnaître les ressorts psychologiques de la fraude au président (autorité, urgence, confidentialité)",
     "Identifier les signes d'un appel ou d'une visioconférence truqués par IA",
@@ -20,8 +36,26 @@
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "Cybermalveillance.gouv.fr – Fraude au président", "url": "https://www.cybermalveillance.gouv.fr/" },
-    { "titre": "ANSSI – État de la menace liée à l'IA générative", "url": "https://cyber.gouv.fr/" }
+    {
+      "titre": "Cybermalveillance.gouv.fr – Fraude au président",
+      "url": "https://www.cybermalveillance.gouv.fr/"
+    },
+    {
+      "titre": "ANSSI – État de la menace liée à l'IA générative",
+      "url": "https://cyber.gouv.fr/"
+    }
   ],
-  "ordre": 30
+  "ordre": 30,
+  "medias": [
+    {
+      "id": "appel-directeur",
+      "type": "audio",
+      "titre": "Enregistrement de l'appel (voix de synthèse)",
+      "fichier": "medias/fraude-president/appel-directeur.mp3",
+      "sousTitres": "medias/fraude-president/appel-directeur.fr.vtt",
+      "transcription": "transcription-appel.fr.md",
+      "dureeSecondes": 42,
+      "mentionSynthetique": "Voix entièrement générée par ordinateur (synthèse vocale Piper) à des fins pédagogiques. Personnages fictifs."
+    }
+  ]
 }

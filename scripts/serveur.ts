@@ -87,7 +87,21 @@ createServer(async (req, res) => {
   const statut = fichier ? 200 : 404;
   try {
     const corps = await readFile(cible);
-    res.writeHead(statut, { ...ENTETES, 'Content-Type': TYPES[extname(cible)] ?? 'application/octet-stream' });
+    const type = TYPES[extname(cible)] ?? 'application/octet-stream';
+    // Requêtes partielles (Range) : nécessaires à la lecture et à la navigation dans les médias.
+    const plage = fichier ? /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? '') : null;
+    if (plage && (plage[1] || plage[2])) {
+      const debut = plage[1] ? Number(plage[1]) : Math.max(0, corps.length - Number(plage[2]));
+      const fin = plage[1] && plage[2] ? Math.min(Number(plage[2]), corps.length - 1) : corps.length - 1;
+      if (debut > fin || debut >= corps.length) {
+        res.writeHead(416, { ...ENTETES, 'Content-Range': `bytes */${corps.length}` }).end();
+        return;
+      }
+      res.writeHead(206, { ...ENTETES, 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${debut}-${fin}/${corps.length}`, 'Content-Length': fin - debut + 1 });
+      res.end(req.method === 'HEAD' ? undefined : corps.subarray(debut, fin + 1));
+      return;
+    }
+    res.writeHead(statut, { ...ENTETES, 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': corps.length });
     res.end(req.method === 'HEAD' ? undefined : corps);
   } catch {
     res.writeHead(404, ENTETES).end('Introuvable');
