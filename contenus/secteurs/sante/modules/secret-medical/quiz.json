@@ -1,0 +1,68 @@
+{
+  "pretest": [
+    {
+      "id": "pre-curiosite",
+      "enonce": "Consulter le dossier d'un collègue hospitalisé, sans rien divulguer, est-il autorisé ?",
+      "enonceFalc": "Pouvez-vous regarder le dossier d'un collègue malade, sans rien dire à personne ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, tant que je ne divulgue rien" },
+        { "id": "non", "texte": "Non, si je ne participe pas à sa prise en charge" }
+      ],
+      "bonnes": ["non"],
+      "explication": "L'accès est réservé à l'équipe de soins. La consultation par curiosité est une violation du secret professionnel, et elle est tracée."
+    },
+    {
+      "id": "pre-carte",
+      "enonce": "En pleine urgence, un collègue vous demande votre carte professionnelle car la sienne ne fonctionne pas. Que faites-vous ?",
+      "enonceFalc": "Pendant une urgence, un collègue veut utiliser votre carte. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "preter", "texte": "Je la lui prête, c'est une urgence" },
+        { "id": "refuser", "texte": "Je refuse et je l'aide à trouver une solution (procédure dégradée, support)" }
+      ],
+      "bonnes": ["refuser"],
+      "explication": "Tout ce qui est fait avec votre carte vous est attribué. Les établissements prévoient des procédures pour ces situations."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-messagerie",
+      "enonce": "Pour transmettre un compte rendu d'examen à un médecin de ville, quel canal utilisez-vous ?",
+      "enonceFalc": "Comment envoyer un résultat d'examen à un médecin ?",
+      "type": "unique",
+      "choix": [
+        { "id": "perso", "texte": "Ma messagerie personnelle, c'est plus rapide" },
+        { "id": "mss", "texte": "La messagerie de santé sécurisée" },
+        { "id": "sms", "texte": "Une photo par SMS" }
+      ],
+      "bonnes": ["mss"],
+      "explication": "Les données de santé ne s'échangent que par des canaux sécurisés et adaptés, comme la messagerie de santé sécurisée."
+    },
+    {
+      "id": "post-telephone",
+      "enonce": "Une personne appelle en se présentant comme la fille d'un patient et demande des nouvelles détaillées. Que faites-vous ?",
+      "enonceFalc": "Une personne appelle. Elle dit qu'elle est la fille d'un patient. Elle veut des informations. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "repondre", "texte": "Je lui donne les informations demandées" },
+        { "id": "verifier", "texte": "Je vérifie son identité et ce que le patient a autorisé, selon la procédure du service" }
+      ],
+      "bonnes": ["verifier"],
+      "explication": "Rien ne prouve l'identité de l'appelant. Le patient décide des personnes qui peuvent être informées."
+    },
+    {
+      "id": "post-traces",
+      "enonce": "Pourquoi les accès aux dossiers patients sont-ils tracés ? (plusieurs réponses possibles)",
+      "enonceFalc": "Pourquoi l'ordinateur garde-t-il une trace des personnes qui lisent les dossiers ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "controle", "texte": "Pour contrôler que seuls les soignants concernés y accèdent" },
+        { "id": "incident", "texte": "Pour enquêter en cas de fuite ou d'accès anormal" },
+        { "id": "vitesse", "texte": "Pour accélérer l'ouverture des dossiers" }
+      ],
+      "bonnes": ["controle", "incident"],
+      "explication": "La traçabilité protège les patients et permet de détecter et d'analyser les accès illégitimes."
+    }
+  ]
+}

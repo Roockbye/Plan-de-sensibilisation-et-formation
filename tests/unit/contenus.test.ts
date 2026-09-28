@@ -28,6 +28,14 @@ describe('contenus pédagogiques', () => {
     expect(contenus.modules.some((m) => m.meta.risques.some((r) => emergents.includes(r)))).toBe(true);
   });
 
+  it("n'active les modules sectoriels que sur demande de la configuration", () => {
+    expect(contenus.modules.some((m) => m.meta.secteur === 'sante')).toBe(false);
+    const c = configExemple();
+    c.modulesSectoriels = ['sante'];
+    const avecSante = chargerContenus(validerConfig(c).config);
+    expect(avecSante.modules.find((m) => m.meta.id === 'secret-medical')?.meta.code).toBe('S1');
+  });
+
   it('refuse un profil actif inexistant', () => {
     const c = configExemple();
     c.profilsActifs.push('astronaute');
