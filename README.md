@@ -16,6 +16,7 @@ La configuration livrée décrit une **« Organisation exemple »** neutre (PME 
 - [Architecture](#architecture)
 - [Adapter la plateforme à une organisation](docs/adapter-a-une-organisation.md)
 - [Ajouter ou modifier un module](docs/adapter-a-une-organisation.md#6-ajouter-ou-modifier-un-module)
+- [Grille d'audit manuel d'accessibilité](docs/audit-accessibilite-manuel.md)
 - [Déploiement gratuit (Cloudflare Pages)](#déploiement-gratuit-cloudflare-pages)
 
 ## Démarrage rapide
@@ -98,7 +99,7 @@ Objectif : **RGAA 4.1 / WCAG 2.2 niveau AA**.
 - absence de défilement horizontal à 320 px ;
 - parcours au clavier seul : quiz, simulation d'hameçonnage, scénario, préférences.
 
-Les tests automatisés ne détectent qu'une partie des défauts : un **audit manuel** avec NVDA (Firefox) et VoiceOver (Safari) reste à réaliser et à consigner dans la déclaration d'accessibilité.
+Les tests automatisés ne détectent qu'une partie des défauts : un **audit manuel** avec NVDA (Firefox) et VoiceOver (Safari) reste à réaliser, avec la [grille d'audit manuel](docs/audit-accessibilite-manuel.md) (40 vérifications rattachées au RGAA), puis à consigner dans la déclaration d'accessibilité.
 
 ## Sécurité de l'application
 
