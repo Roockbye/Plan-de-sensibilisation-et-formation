@@ -1,20 +1,89 @@
 {
   "id": "nomade",
-  "libelle": "Télétravailleur et nomade",
-  "description": "Personnes qui travaillent régulièrement hors des locaux (domicile, déplacements, sites clients) avec du matériel mobile.",
+  "libelle": {
+    "fr": "Télétravailleur et nomade",
+    "en": "Remote and mobile worker"
+  },
+  "description": {
+    "fr": "Personnes qui travaillent régulièrement hors des locaux (domicile, déplacements, sites clients) avec du matériel mobile.",
+    "en": "People who regularly work outside the premises (home, business trips, client sites) with mobile equipment."
+  },
   "besoins": [
-    "Se connecter de façon sûre depuis un réseau non maîtrisé",
-    "Protéger son matériel et la confidentialité de son écran et de ses conversations",
-    "Savoir réagir en cas de perte ou de vol d'un équipement"
+    {
+      "fr": "Se connecter de façon sûre depuis un réseau non maîtrisé",
+      "en": "Connect securely from an untrusted network"
+    },
+    {
+      "fr": "Protéger son matériel et la confidentialité de son écran et de ses conversations",
+      "en": "Protect their equipment and the confidentiality of their screen and conversations"
+    },
+    {
+      "fr": "Savoir réagir en cas de perte ou de vol d'un équipement",
+      "en": "Know how to react if a device is lost or stolen"
+    }
   ],
   "objectifs": [
-    { "id": "connexion-sure", "texte": "Utiliser systématiquement le VPN de l'organisation et choisir un réseau de confiance (partage de connexion plutôt que Wi-Fi public)", "niveau": "appliquer", "modules": ["nomadisme"] },
-    { "id": "confidentialite", "texte": "Protéger la confidentialité de son écran, de ses documents et de ses échanges en public", "niveau": "appliquer", "modules": ["nomadisme"] },
-    { "id": "perte-vol", "texte": "Déclarer immédiatement la perte ou le vol d'un équipement en suivant la procédure", "niveau": "appliquer", "modules": ["nomadisme", "incident"] },
-    { "id": "qr-deplacement", "texte": "Se méfier des QR codes rencontrés en déplacement (parkings, restaurants, bornes)", "niveau": "analyser", "modules": ["hameconnage"] }
+    {
+      "id": "connexion-sure",
+      "texte": {
+        "fr": "Utiliser systématiquement le VPN de l'organisation et choisir un réseau de confiance (partage de connexion plutôt que Wi-Fi public)",
+        "en": "Always use the organisation's VPN and choose a trusted network (phone hotspot rather than public Wi-Fi)"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "nomadisme"
+      ]
+    },
+    {
+      "id": "confidentialite",
+      "texte": {
+        "fr": "Protéger la confidentialité de son écran, de ses documents et de ses échanges en public",
+        "en": "Protect the confidentiality of their screen, documents and conversations in public"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "nomadisme"
+      ]
+    },
+    {
+      "id": "perte-vol",
+      "texte": {
+        "fr": "Déclarer immédiatement la perte ou le vol d'un équipement en suivant la procédure",
+        "en": "Report the loss or theft of a device immediately, following the procedure"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "nomadisme",
+        "incident"
+      ]
+    },
+    {
+      "id": "qr-deplacement",
+      "texte": {
+        "fr": "Se méfier des QR codes rencontrés en déplacement (parkings, restaurants, bornes)",
+        "en": "Be wary of QR codes found while travelling (car parks, restaurants, charging stations)"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "hameconnage"
+      ]
+    }
   ],
-  "exposition": ["nomadisme", "quishing", "fuite-donnees"],
-  "contraintes": ["Connexion parfois lente : contenus légers, transcriptions disponibles", "Consultation fréquente sur mobile"],
+  "exposition": [
+    "nomadisme",
+    "quishing",
+    "fuite-donnees"
+  ],
+  "contraintes": [
+    {
+      "fr": "Connexion parfois lente : contenus légers, transcriptions disponibles",
+      "en": "Sometimes slow connections: lightweight content, transcripts available"
+    },
+    {
+      "fr": "Consultation fréquente sur mobile",
+      "en": "Frequent use on mobile"
+    }
+  ],
   "dureeAnnuelleCibleMinutes": 90,
   "partEffectif": 0.18,
   "ordre": 50

@@ -1,8 +1,14 @@
 {
   "id": "fraude-president",
   "code": "M3",
-  "titre": "Fraude au président et deepfakes voix / vidéo",
-  "resume": "Déjouer les demandes urgentes et confidentielles de virement, même lorsqu'elles semblent venir de la voix ou du visage d'un dirigeant.",
+  "titre": {
+    "fr": "Fraude au président et deepfakes voix / vidéo",
+    "en": "CEO fraud and voice / video deepfakes"
+  },
+  "resume": {
+    "fr": "Déjouer les demandes urgentes et confidentielles de virement, même lorsqu'elles semblent venir de la voix ou du visage d'un dirigeant.",
+    "en": "Thwart urgent and confidential transfer requests, even when they seem to come from an executive's voice or face."
+  },
   "risques": [
     "fraude-president",
     "deepfake",
@@ -26,10 +32,22 @@
     "fiche-reflexe"
   ],
   "objectifs": [
-    "Reconnaître les ressorts psychologiques de la fraude au président (autorité, urgence, confidentialité)",
-    "Identifier les signes d'un appel ou d'une visioconférence truqués par IA",
-    "Appliquer systématiquement la contre-vérification par un canal connu",
-    "Respecter la procédure de double validation des paiements"
+    {
+      "fr": "Reconnaître les ressorts psychologiques de la fraude au président (autorité, urgence, confidentialité)",
+      "en": "Recognise the psychological levers of CEO fraud (authority, urgency, confidentiality)"
+    },
+    {
+      "fr": "Identifier les signes d'un appel ou d'une visioconférence truqués par IA",
+      "en": "Identify the signs of an AI-faked call or video conference"
+    },
+    {
+      "fr": "Appliquer systématiquement la contre-vérification par un canal connu",
+      "en": "Always verify through a known channel"
+    },
+    {
+      "fr": "Respecter la procédure de double validation des paiements",
+      "en": "Follow the dual-approval procedure for payments"
+    }
   ],
   "reglementations": [],
   "renouvellement": "semestrielle",
@@ -50,12 +68,18 @@
     {
       "id": "appel-directeur",
       "type": "audio",
-      "titre": "Enregistrement de l'appel (voix de synthèse)",
+      "titre": {
+        "fr": "Enregistrement de l'appel (voix de synthèse)",
+        "en": "Recording of the call (synthetic voice)"
+      },
       "fichier": "medias/fraude-president/appel-directeur.mp3",
       "sousTitres": "medias/fraude-president/appel-directeur.fr.vtt",
       "transcription": "transcription-appel.fr.md",
       "dureeSecondes": 42,
-      "mentionSynthetique": "Voix entièrement générée par ordinateur (synthèse vocale Piper) à des fins pédagogiques. Personnages fictifs."
+      "mentionSynthetique": {
+        "fr": "Voix entièrement générée par ordinateur (synthèse vocale Piper) à des fins pédagogiques. Personnages fictifs.",
+        "en": "Voice entirely computer-generated (Piper speech synthesis) for educational purposes. Fictitious characters."
+      }
     }
   ]
 }

@@ -1,27 +1,68 @@
 {
   "id": "ia-generative",
   "code": "M4",
-  "titre": "IA générative : l'utiliser sans exposer l'organisation",
-  "resume": "Profiter des assistants d'IA sans y confier de données sensibles, en vérifiant leurs réponses et en respectant les outils autorisés.",
-  "risques": ["ia-generative", "fuite-donnees", "shadow-it"],
-  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "titre": {
+    "fr": "IA générative : l'utiliser sans exposer l'organisation",
+    "en": "Generative AI: using it without exposing the organisation"
+  },
+  "resume": {
+    "fr": "Profiter des assistants d'IA sans y confier de données sensibles, en vérifiant leurs réponses et en respectant les outils autorisés.",
+    "en": "Benefit from AI assistants without entrusting them with sensitive data, checking their answers and sticking to authorised tools."
+  },
+  "risques": [
+    "ia-generative",
+    "fuite-donnees",
+    "shadow-it"
+  ],
+  "profils": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
   "obligatoirePour": [],
   "dureeMinutes": 10,
   "niveau": "intermediaire",
-  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
-  "objectifs": [
-    "Distinguer un outil d'IA autorisé par l'organisation d'un service public grand public",
-    "Identifier les informations qui ne doivent jamais être saisies dans une IA",
-    "Vérifier une réponse générée avant de l'utiliser",
-    "Reconnaître l'usage de l'IA par les attaquants (messages, voix, faux documents)"
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "fiche-reflexe"
   ],
-  "reglementations": ["rgpd"],
+  "objectifs": [
+    {
+      "fr": "Distinguer un outil d'IA autorisé par l'organisation d'un service public grand public",
+      "en": "Tell an AI tool authorised by the organisation from a public consumer service"
+    },
+    {
+      "fr": "Identifier les informations qui ne doivent jamais être saisies dans une IA",
+      "en": "Identify information that must never be entered into an AI"
+    },
+    {
+      "fr": "Vérifier une réponse générée avant de l'utiliser",
+      "en": "Check a generated answer before using it"
+    },
+    {
+      "fr": "Reconnaître l'usage de l'IA par les attaquants (messages, voix, faux documents)",
+      "en": "Recognise how attackers use AI (messages, voices, fake documents)"
+    }
+  ],
+  "reglementations": [
+    "rgpd"
+  ],
   "renouvellement": "semestrielle",
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "CNIL – Intelligence artificielle : recommandations", "url": "https://www.cnil.fr/" },
-    { "titre": "ANSSI – Recommandations de sécurité pour un système d'IA générative", "url": "https://cyber.gouv.fr/" }
+    {
+      "titre": "CNIL – Intelligence artificielle : recommandations",
+      "url": "https://www.cnil.fr/"
+    },
+    {
+      "titre": "ANSSI – Recommandations de sécurité pour un système d'IA générative",
+      "url": "https://cyber.gouv.fr/"
+    }
   ],
   "ordre": 40
 }

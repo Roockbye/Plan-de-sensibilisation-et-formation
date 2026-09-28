@@ -1,22 +1,104 @@
 {
   "id": "utilisateur",
-  "libelle": "Utilisateur standard",
-  "description": "Toute personne qui utilise le système d'information pour son travail quotidien (messagerie, applications métier, documents partagés).",
+  "libelle": {
+    "fr": "Utilisateur standard",
+    "en": "Standard user"
+  },
+  "description": {
+    "fr": "Toute personne qui utilise le système d'information pour son travail quotidien (messagerie, applications métier, documents partagés).",
+    "en": "Anyone who uses the information system for their daily work (email, business applications, shared documents)."
+  },
   "besoins": [
-    "Reconnaître les tentatives d'hameçonnage et de manipulation les plus courantes",
-    "Protéger ses comptes (mots de passe, double authentification)",
-    "Savoir quoi faire et qui prévenir en cas de doute ou d'incident",
-    "Utiliser les outils d'IA générative sans exposer de données"
+    {
+      "fr": "Reconnaître les tentatives d'hameçonnage et de manipulation les plus courantes",
+      "en": "Recognise the most common phishing and manipulation attempts"
+    },
+    {
+      "fr": "Protéger ses comptes (mots de passe, double authentification)",
+      "en": "Protect their accounts (passwords, two-factor authentication)"
+    },
+    {
+      "fr": "Savoir quoi faire et qui prévenir en cas de doute ou d'incident",
+      "en": "Know what to do and whom to alert when in doubt or in case of an incident"
+    },
+    {
+      "fr": "Utiliser les outils d'IA générative sans exposer de données",
+      "en": "Use generative AI tools without exposing data"
+    }
   ],
   "objectifs": [
-    { "id": "reperer-hameconnage", "texte": "Repérer au moins 5 indices d'hameçonnage dans un e-mail, un SMS ou un QR code", "niveau": "analyser", "modules": ["hameconnage"] },
-    { "id": "securiser-comptes", "texte": "Créer une phrase de passe robuste, utiliser un gestionnaire de mots de passe et activer la double authentification", "niveau": "appliquer", "modules": ["mots-de-passe"] },
-    { "id": "signaler", "texte": "Signaler un message suspect ou un incident par le bon canal, sans délai", "niveau": "appliquer", "modules": ["hameconnage", "incident"] },
-    { "id": "ia-sure", "texte": "Distinguer les informations qui peuvent ou non être saisies dans un outil d'IA générative", "niveau": "evaluer", "modules": ["ia-generative"] },
-    { "id": "proteger-donnees", "texte": "Classer une information avant de la partager et choisir le mode de partage adapté", "niveau": "appliquer", "modules": ["donnees"] }
+    {
+      "id": "reperer-hameconnage",
+      "texte": {
+        "fr": "Repérer au moins 5 indices d'hameçonnage dans un e-mail, un SMS ou un QR code",
+        "en": "Spot at least 5 signs of phishing in an email, a text message or a QR code"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "hameconnage"
+      ]
+    },
+    {
+      "id": "securiser-comptes",
+      "texte": {
+        "fr": "Créer une phrase de passe robuste, utiliser un gestionnaire de mots de passe et activer la double authentification",
+        "en": "Create a strong passphrase, use a password manager and enable two-factor authentication"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "mots-de-passe"
+      ]
+    },
+    {
+      "id": "signaler",
+      "texte": {
+        "fr": "Signaler un message suspect ou un incident par le bon canal, sans délai",
+        "en": "Report a suspicious message or an incident through the right channel, without delay"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "hameconnage",
+        "incident"
+      ]
+    },
+    {
+      "id": "ia-sure",
+      "texte": {
+        "fr": "Distinguer les informations qui peuvent ou non être saisies dans un outil d'IA générative",
+        "en": "Tell which information may or may not be entered into a generative AI tool"
+      },
+      "niveau": "evaluer",
+      "modules": [
+        "ia-generative"
+      ]
+    },
+    {
+      "id": "proteger-donnees",
+      "texte": {
+        "fr": "Classer une information avant de la partager et choisir le mode de partage adapté",
+        "en": "Classify information before sharing it and choose the appropriate way to share it"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "donnees"
+      ]
+    }
   ],
-  "exposition": ["hameconnage", "quishing", "mots-de-passe"],
-  "contraintes": ["Temps disponible limité : modules de 10 minutes maximum", "Niveau technique hétérogène"],
+  "exposition": [
+    "hameconnage",
+    "quishing",
+    "mots-de-passe"
+  ],
+  "contraintes": [
+    {
+      "fr": "Temps disponible limité : modules de 10 minutes maximum",
+      "en": "Limited time available: modules of 10 minutes at most"
+    },
+    {
+      "fr": "Niveau technique hétérogène",
+      "en": "Mixed levels of technical knowledge"
+    }
+  ],
   "dureeAnnuelleCibleMinutes": 90,
   "partEffectif": 0.55,
   "ordre": 10

@@ -101,7 +101,9 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .marque img { width: 2.75rem; height: 2.75rem; }
 .marque__texte { display: flex; flex-direction: column; line-height: 1.2; }
 .marque__org { font-size: 0.9rem; font-weight: 400; color: var(--texte-attenue); }
+.entete__outils { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
 .lien-preferences { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+.lien-langue { font-weight: 600; }
 
 .nav-principale ul { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin: 0; padding: 0 1rem 0.6rem; list-style: none; }
 .nav-principale li { margin: 0; }
@@ -174,6 +176,7 @@ button[aria-pressed="true"] { outline: 3px solid var(--texte); outline-offset: 2
 .etiquette--emergent { color: var(--secondaire); }
 .etiquettes { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; padding: 0; list-style: none; }
 .etiquettes li { margin: 0; }
+.meta .etiquettes { flex-direction: column; gap: 0.2rem; margin: 0; }
 
 .meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.3rem 1rem; }
 .meta dt { font-weight: 700; }

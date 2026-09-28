@@ -42,37 +42,58 @@
     {
       "id": "hameconnage",
       "priorite": 3,
-      "justification": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI)."
+      "justification": {
+        "fr": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI).",
+        "en": "Leading intrusion vector observed in SMEs (ANSSI cyber threat overview)."
+      }
     },
     {
       "id": "fraude-president",
       "priorite": 3,
-      "justification": "Impact financier direct ; renforcé par les deepfakes vocaux."
+      "justification": {
+        "fr": "Impact financier direct ; renforcé par les deepfakes vocaux.",
+        "en": "Direct financial impact; amplified by voice deepfakes."
+      }
     },
     {
       "id": "rancongiciel",
       "priorite": 3,
-      "justification": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques."
+      "justification": {
+        "fr": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques.",
+        "en": "Risk of business shutdown; major scenario of the risk assessment."
+      }
     },
     {
       "id": "deepfake",
       "priorite": 2,
-      "justification": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement."
+      "justification": {
+        "fr": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement.",
+        "en": "New threat: executives' voices cloned to back up transfer fraud."
+      }
     },
     {
       "id": "quishing",
       "priorite": 2,
-      "justification": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie."
+      "justification": {
+        "fr": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie.",
+        "en": "New threat: rigged QR codes that bypass email filters."
+      }
     },
     {
       "id": "ia-generative",
       "priorite": 2,
-      "justification": "Usage croissant d'outils d'IA non encadrés (fuite de données)."
+      "justification": {
+        "fr": "Usage croissant d'outils d'IA non encadrés (fuite de données).",
+        "en": "Growing use of unmanaged AI tools (data leaks)."
+      }
     },
     {
       "id": "fuite-donnees",
       "priorite": 2,
-      "justification": "Données personnelles clients et salariés (RGPD)."
+      "justification": {
+        "fr": "Données personnelles clients et salariés (RGPD).",
+        "en": "Personal data of clients and employees (GDPR)."
+      }
     },
     {
       "id": "mots-de-passe",

@@ -1,0 +1,192 @@
+{
+  "pretest": [
+    {
+      "id": "pre-fautes",
+      "enonce": "Is an email with no spelling mistakes necessarily legitimate?",
+      "enonceFalc": "Is a message with no mistakes always a real message?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "oui",
+          "texte": "Yes, criminals always make mistakes"
+        },
+        {
+          "id": "non",
+          "texte": "No, AI lets criminals write flawless messages"
+        }
+      ],
+      "bonnes": [
+        "non"
+      ],
+      "explication": "Thanks to generative AI, fraudulent messages are now polished and personalised. The absence of mistakes proves nothing."
+    },
+    {
+      "id": "pre-qr",
+      "enonce": "Can a QR code lead you to a fraudulent website?",
+      "enonceFalc": "Can a QR code open a fake website?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "oui",
+          "texte": "Yes"
+        },
+        {
+          "id": "non",
+          "texte": "No, QR codes are safe"
+        }
+      ],
+      "bonnes": [
+        "oui"
+      ],
+      "explication": "A QR code is just a hidden link. It is called “quishing” when it leads to a fraudulent page."
+    },
+    {
+      "id": "pre-reflexe",
+      "enonce": "You receive a suspicious message. What is the best reflex?",
+      "enonceFalc": "You receive a strange message. What do you do?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "supprimer",
+          "texte": "Delete it without telling anyone"
+        },
+        {
+          "id": "signaler",
+          "texte": "Report it to the security team"
+        },
+        {
+          "id": "transferer",
+          "texte": "Forward it to colleagues to get their opinion"
+        }
+      ],
+      "bonnes": [
+        "signaler"
+      ],
+      "explication": "Reporting lets the security team block the campaign for everyone. Forwarding the message spreads the risk."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-domaine",
+      "enonce": "Which link really leads to the {{organisation.domaine}} domain?",
+      "enonceFalc": "Which link is the organisation's real website?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "a",
+          "texte": "https://{{organisation.domaine}}.connexion-verif.co/login"
+        },
+        {
+          "id": "b",
+          "texte": "https://messagerie.{{organisation.domaine}}/login"
+        },
+        {
+          "id": "c",
+          "texte": "https://{{organisation.domaine}}-securite.com/login"
+        }
+      ],
+      "bonnes": [
+        "b"
+      ],
+      "explication": "Read the domain from right to left starting from the first “/”: only link b ends with {{organisation.domaine}}."
+    },
+    {
+      "id": "post-indices",
+      "enonce": "Which of these are signs of phishing? (several answers possible)",
+      "enonceFalc": "Which signs show a fake message? (several answers)",
+      "type": "multiple",
+      "choix": [
+        {
+          "id": "urgence",
+          "texte": "A threat to delete the account within 24 hours"
+        },
+        {
+          "id": "mdp",
+          "texte": "A request to enter your password"
+        },
+        {
+          "id": "prenom",
+          "texte": "The message is addressed to you by name"
+        },
+        {
+          "id": "expediteur",
+          "texte": "A sender address imitating the organisation's"
+        }
+      ],
+      "bonnes": [
+        "urgence",
+        "mdp",
+        "expediteur"
+      ],
+      "explication": "Urgency, a request for credentials and an imitated sender are classic signs. Being called by your name proves nothing: that information is easy to find."
+    },
+    {
+      "id": "post-qr-email",
+      "enonce": "An email asks you to scan a QR code to “reactivate your two-factor authentication”. What do you do?",
+      "enonceFalc": "An email asks you to scan a QR code. What do you do?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "scanner",
+          "texte": "I scan it with my personal phone, it's less risky"
+        },
+        {
+          "id": "signaler",
+          "texte": "I don't scan it and I report the email"
+        },
+        {
+          "id": "repondre",
+          "texte": "I reply to the sender to check"
+        }
+      ],
+      "bonnes": [
+        "signaler"
+      ],
+      "explication": "Scanning with a personal phone is even riskier: it is less protected. Replying to the sender means talking to the fraudster."
+    },
+    {
+      "id": "post-clic",
+      "enonce": "You entered your password on a page that now looks suspicious. What do you do?",
+      "enonceFalc": "You gave your password on a fake website. What do you do?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "rien",
+          "texte": "Nothing, to avoid trouble"
+        },
+        {
+          "id": "prevenir",
+          "texte": "I alert the security team immediately"
+        },
+        {
+          "id": "attendre",
+          "texte": "I wait and see if anything happens"
+        }
+      ],
+      "bonnes": [
+        "prevenir"
+      ],
+      "explication": "Every minute counts: the security team can block the account and change the password before the attacker uses it. Contact: {{contacts.securite}}."
+    },
+    {
+      "id": "post-affiche",
+      "enonce": "On a parking meter, a QR code is printed on a sticker placed over the official poster. What is the right attitude?",
+      "enonceFalc": "A QR code is stuck on a poster. It looks added. What do you do?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "scanner",
+          "texte": "I scan it, it's faster"
+        },
+        {
+          "id": "eviter",
+          "texte": "I don't scan it and use the official app or website"
+        }
+      ],
+      "bonnes": [
+        "eviter"
+      ],
+      "explication": "A sticker placed over an official poster is a classic sign of quishing."
+    }
+  ]
+}

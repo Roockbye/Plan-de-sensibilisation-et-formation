@@ -139,7 +139,7 @@ tests/unit, tests/e2e        ← Vitest ; Playwright + axe-core
 
 **Choix techniques** : [Astro](https://astro.build) génère un site statique ; les parties interactives sont en TypeScript natif qui enrichit un HTML déjà complet (pas de framework côté client). C'est plus simple à auditer, cela réduit les dépendances et c'est compatible avec une CSP stricte.
 
-**Traduction** : l'interface passe par `src/i18n/fr.json`. Pour l'anglais, il faut compléter `en.json` (les clés manquantes retombent sur le français), ajouter `"en"` aux textes JSON (`{"fr": "…", "en": "…"}`) et créer les fichiers `*.en.md`.
+**Langues** : français par défaut, **anglais** publié sous `/en/` (`"langues": {"defaut": "fr", "disponibles": ["fr", "en"]}`). L'interface est entièrement traduite (`src/i18n/fr.json`, `en.json`). Côté contenus, les risques, les profils, les pages éditoriales, les métadonnées des modules et le module M1 sont traduits ; les autres modules s'affichent en français avec un avis, et sont balisés `lang="fr"` pour les lecteurs d'écran (RGAA 8.7). Voir [Traduire un contenu](docs/adapter-a-une-organisation.md#9-traduire-un-contenu).
 
 ## Déploiement gratuit (Cloudflare Pages)
 

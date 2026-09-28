@@ -1,26 +1,64 @@
 {
   "id": "donnees",
   "code": "M5",
-  "titre": "Protéger les données au quotidien",
-  "resume": "Classer une information, choisir le bon moyen de partage et réagir en cas d'erreur d'envoi, dans le respect du RGPD.",
-  "risques": ["fuite-donnees", "shadow-it"],
-  "profils": ["utilisateur", "manager", "nouvel-arrivant", "nomade"],
-  "obligatoirePour": ["nouvel-arrivant"],
+  "titre": {
+    "fr": "Protéger les données au quotidien",
+    "en": "Protecting data every day"
+  },
+  "resume": {
+    "fr": "Classer une information, choisir le bon moyen de partage et réagir en cas d'erreur d'envoi, dans le respect du RGPD.",
+    "en": "Classify information, choose the right way to share it and react to a message sent to the wrong person, in line with the GDPR."
+  },
+  "risques": [
+    "fuite-donnees",
+    "shadow-it"
+  ],
+  "profils": [
+    "utilisateur",
+    "manager",
+    "nouvel-arrivant",
+    "nomade"
+  ],
+  "obligatoirePour": [
+    "nouvel-arrivant"
+  ],
   "dureeMinutes": 10,
   "niveau": "decouverte",
-  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
-  "objectifs": [
-    "Reconnaître une donnée personnelle et une information confidentielle",
-    "Choisir un mode de partage adapté au niveau de sensibilité",
-    "Réagir immédiatement à un envoi au mauvais destinataire",
-    "Expliquer pourquoi une violation de données doit être signalée sans délai"
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "fiche-reflexe"
   ],
-  "reglementations": ["rgpd"],
+  "objectifs": [
+    {
+      "fr": "Reconnaître une donnée personnelle et une information confidentielle",
+      "en": "Recognise personal data and confidential information"
+    },
+    {
+      "fr": "Choisir un mode de partage adapté au niveau de sensibilité",
+      "en": "Choose a sharing method suited to the level of sensitivity"
+    },
+    {
+      "fr": "Réagir immédiatement à un envoi au mauvais destinataire",
+      "en": "React immediately to a message sent to the wrong recipient"
+    },
+    {
+      "fr": "Expliquer pourquoi une violation de données doit être signalée sans délai",
+      "en": "Explain why a data breach must be reported without delay"
+    }
+  ],
+  "reglementations": [
+    "rgpd"
+  ],
   "renouvellement": "annuelle",
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "CNIL – Guide de la sécurité des données personnelles", "url": "https://www.cnil.fr/" }
+    {
+      "titre": "CNIL – Guide de la sécurité des données personnelles",
+      "url": "https://www.cnil.fr/"
+    }
   ],
   "ordre": 50
 }

@@ -1,22 +1,103 @@
 {
   "id": "manager",
-  "libelle": "Manager et direction",
-  "description": "Encadrants et membres de la direction : cibles privilégiées des fraudes (autorité, accès aux paiements), ils portent aussi la responsabilité de la sécurité et donnent l'exemple.",
+  "libelle": {
+    "fr": "Manager et direction",
+    "en": "Managers and executives"
+  },
+  "description": {
+    "fr": "Encadrants et membres de la direction : cibles privilégiées des fraudes (autorité, accès aux paiements), ils portent aussi la responsabilité de la sécurité et donnent l'exemple.",
+    "en": "Line managers and members of management: favourite targets of fraud (authority, access to payments), they are also accountable for security and set the example."
+  },
   "besoins": [
-    "Déjouer la fraude au président et les deepfakes qui imitent leur voix ou celle de leurs pairs",
-    "Connaître leurs responsabilités (NIS2 impose la formation des organes de direction, RGPD)",
-    "Savoir réagir et décider en situation de crise",
-    "Encourager la déclaration d'incidents sans sanction dans leur équipe"
+    {
+      "fr": "Déjouer la fraude au président et les deepfakes qui imitent leur voix ou celle de leurs pairs",
+      "en": "Thwart CEO fraud and deepfakes imitating their voice or their peers' voices"
+    },
+    {
+      "fr": "Connaître leurs responsabilités (NIS2 impose la formation des organes de direction, RGPD)",
+      "en": "Know their responsibilities (NIS2 requires training for management bodies; GDPR)"
+    },
+    {
+      "fr": "Savoir réagir et décider en situation de crise",
+      "en": "Know how to react and make decisions in a crisis"
+    },
+    {
+      "fr": "Encourager la déclaration d'incidents sans sanction dans leur équipe",
+      "en": "Encourage incident reporting without blame within their team"
+    }
   ],
   "objectifs": [
-    { "id": "double-validation", "texte": "Appliquer une procédure de double validation pour tout virement ou changement de coordonnées bancaires", "niveau": "appliquer", "modules": ["fraude-president"] },
-    { "id": "deepfake", "texte": "Reconnaître les signes d'un appel ou d'une visioconférence truqués et contre-vérifier par un autre canal", "niveau": "analyser", "modules": ["fraude-president"] },
-    { "id": "crise", "texte": "Décrire son rôle et les premières décisions à prendre lors d'une cyberattaque", "niveau": "comprendre", "modules": ["incident"] },
-    { "id": "responsabilites", "texte": "Expliquer ses obligations en matière de protection des données et de cybersécurité", "niveau": "comprendre", "modules": ["donnees"] },
-    { "id": "ia-encadrer", "texte": "Encadrer l'usage de l'IA générative dans son équipe", "niveau": "evaluer", "modules": ["ia-generative"] }
+    {
+      "id": "double-validation",
+      "texte": {
+        "fr": "Appliquer une procédure de double validation pour tout virement ou changement de coordonnées bancaires",
+        "en": "Apply a dual-approval procedure for any transfer or change of bank details"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "fraude-president"
+      ]
+    },
+    {
+      "id": "deepfake",
+      "texte": {
+        "fr": "Reconnaître les signes d'un appel ou d'une visioconférence truqués et contre-vérifier par un autre canal",
+        "en": "Recognise the signs of a fake call or video conference and verify through another channel"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "fraude-president"
+      ]
+    },
+    {
+      "id": "crise",
+      "texte": {
+        "fr": "Décrire son rôle et les premières décisions à prendre lors d'une cyberattaque",
+        "en": "Describe their role and the first decisions to take during a cyberattack"
+      },
+      "niveau": "comprendre",
+      "modules": [
+        "incident"
+      ]
+    },
+    {
+      "id": "responsabilites",
+      "texte": {
+        "fr": "Expliquer ses obligations en matière de protection des données et de cybersécurité",
+        "en": "Explain their obligations regarding data protection and cybersecurity"
+      },
+      "niveau": "comprendre",
+      "modules": [
+        "donnees"
+      ]
+    },
+    {
+      "id": "ia-encadrer",
+      "texte": {
+        "fr": "Encadrer l'usage de l'IA générative dans son équipe",
+        "en": "Frame the use of generative AI in their team"
+      },
+      "niveau": "evaluer",
+      "modules": [
+        "ia-generative"
+      ]
+    }
   ],
-  "exposition": ["fraude-president", "deepfake", "ingenierie-sociale"],
-  "contraintes": ["Agenda très contraint : formats courts, possibilité de séance collective", "Forte exposition publique (réseaux sociaux, interventions)"],
+  "exposition": [
+    "fraude-president",
+    "deepfake",
+    "ingenierie-sociale"
+  ],
+  "contraintes": [
+    {
+      "fr": "Agenda très contraint : formats courts, possibilité de séance collective",
+      "en": "Very tight schedules: short formats, group sessions possible"
+    },
+    {
+      "fr": "Forte exposition publique (réseaux sociaux, interventions)",
+      "en": "High public exposure (social media, public appearances)"
+    }
+  ],
   "dureeAnnuelleCibleMinutes": 120,
   "partEffectif": 0.12,
   "ordre": 20

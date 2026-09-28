@@ -1,98 +1,286 @@
 [
   {
     "id": "hameconnage",
-    "libelle": "Hameçonnage (phishing, smishing)",
-    "description": "Message frauduleux (e-mail, SMS, messagerie) qui pousse à cliquer, ouvrir une pièce jointe ou donner ses identifiants.",
+    "libelle": {
+      "fr": "Hameçonnage (phishing, smishing)",
+      "en": "Phishing (email, text message)"
+    },
+    "description": {
+      "fr": "Message frauduleux (e-mail, SMS, messagerie) qui pousse à cliquer, ouvrir une pièce jointe ou donner ses identifiants.",
+      "en": "Fraudulent message (email, text message, instant messaging) that pushes you to click, open an attachment or give away your credentials."
+    },
     "categorie": "humain",
     "emergent": false,
-    "exemples": ["Faux e-mail de livraison de colis", "SMS de faux remboursement", "Fausse page de connexion à la messagerie"]
+    "exemples": [
+      {
+        "fr": "Faux e-mail de livraison de colis",
+        "en": "Fake parcel delivery email"
+      },
+      {
+        "fr": "SMS de faux remboursement",
+        "en": "Text message about a fake refund"
+      },
+      {
+        "fr": "Fausse page de connexion à la messagerie",
+        "en": "Fake login page for your mailbox"
+      }
+    ]
   },
   {
     "id": "quishing",
-    "libelle": "Hameçonnage par QR code (quishing)",
-    "description": "QR code piégé (affiche, courrier, e-mail) qui renvoie vers un faux site. L'adresse n'est pas visible avant le scan.",
+    "libelle": {
+      "fr": "Hameçonnage par QR code (quishing)",
+      "en": "QR code phishing (quishing)"
+    },
+    "description": {
+      "fr": "QR code piégé (affiche, courrier, e-mail) qui renvoie vers un faux site. L'adresse n'est pas visible avant le scan.",
+      "en": "Rigged QR code (poster, letter, email) that leads to a fake website. The address is not visible before scanning."
+    },
     "categorie": "humain",
     "emergent": true,
-    "exemples": ["Faux QR code collé sur un parcmètre", "QR code dans un e-mail « réactivez votre double authentification »"]
+    "exemples": [
+      {
+        "fr": "Faux QR code collé sur un parcmètre",
+        "en": "Fake QR code stuck on a parking meter"
+      },
+      {
+        "fr": "QR code dans un e-mail « réactivez votre double authentification »",
+        "en": "QR code in an email asking you to “reactivate your two-factor authentication”"
+      }
+    ]
   },
   {
     "id": "ingenierie-sociale",
-    "libelle": "Ingénierie sociale",
-    "description": "Manipulation psychologique (urgence, autorité, flatterie) pour obtenir une information ou une action.",
+    "libelle": {
+      "fr": "Ingénierie sociale",
+      "en": "Social engineering"
+    },
+    "description": {
+      "fr": "Manipulation psychologique (urgence, autorité, flatterie) pour obtenir une information ou une action.",
+      "en": "Psychological manipulation (urgency, authority, flattery) to obtain information or an action."
+    },
     "categorie": "humain",
     "emergent": false,
-    "exemples": ["Faux technicien du support au téléphone", "Faux prestataire qui demande l'accès à un local"]
+    "exemples": [
+      {
+        "fr": "Faux technicien du support au téléphone",
+        "en": "Fake support technician on the phone"
+      },
+      {
+        "fr": "Faux prestataire qui demande l'accès à un local",
+        "en": "Fake contractor asking for access to a room"
+      }
+    ]
   },
   {
     "id": "fraude-president",
-    "libelle": "Fraude au président et faux ordres de virement",
-    "description": "Un escroc se fait passer pour un dirigeant ou un fournisseur afin d'obtenir un virement urgent et confidentiel.",
+    "libelle": {
+      "fr": "Fraude au président et faux ordres de virement",
+      "en": "CEO fraud and fake transfer requests"
+    },
+    "description": {
+      "fr": "Un escroc se fait passer pour un dirigeant ou un fournisseur afin d'obtenir un virement urgent et confidentiel.",
+      "en": "A fraudster impersonates an executive or a supplier to obtain an urgent, confidential bank transfer."
+    },
     "categorie": "humain",
     "emergent": false,
-    "exemples": ["E-mail « du directeur » demandant un virement confidentiel", "Changement de RIB d'un fournisseur"]
+    "exemples": [
+      {
+        "fr": "E-mail « du directeur » demandant un virement confidentiel",
+        "en": "Email “from the director” requesting a confidential transfer"
+      },
+      {
+        "fr": "Changement de RIB d'un fournisseur",
+        "en": "Change of a supplier's bank details"
+      }
+    ]
   },
   {
     "id": "deepfake",
-    "libelle": "Hypertrucages (deepfakes) voix et vidéo",
-    "description": "Voix ou visage imités par intelligence artificielle pour rendre crédible une demande frauduleuse (appel, visioconférence).",
+    "libelle": {
+      "fr": "Hypertrucages (deepfakes) voix et vidéo",
+      "en": "Voice and video deepfakes"
+    },
+    "description": {
+      "fr": "Voix ou visage imités par intelligence artificielle pour rendre crédible une demande frauduleuse (appel, visioconférence).",
+      "en": "Voices or faces imitated by artificial intelligence to make a fraudulent request credible (phone call, video conference)."
+    },
     "categorie": "humain",
     "emergent": true,
-    "exemples": ["Appel avec la voix clonée d'un dirigeant", "Visioconférence avec de faux participants générés par IA"]
+    "exemples": [
+      {
+        "fr": "Appel avec la voix clonée d'un dirigeant",
+        "en": "Call with an executive's cloned voice"
+      },
+      {
+        "fr": "Visioconférence avec de faux participants générés par IA",
+        "en": "Video conference with fake AI-generated participants"
+      }
+    ]
   },
   {
     "id": "ia-generative",
-    "libelle": "Usages risqués de l'IA générative",
-    "description": "Saisie de données confidentielles dans des outils d'IA non autorisés, confiance excessive dans les réponses, code généré non vérifié.",
+    "libelle": {
+      "fr": "Usages risqués de l'IA générative",
+      "en": "Risky uses of generative AI"
+    },
+    "description": {
+      "fr": "Saisie de données confidentielles dans des outils d'IA non autorisés, confiance excessive dans les réponses, code généré non vérifié.",
+      "en": "Entering confidential data into unauthorised AI tools, over-trusting answers, using generated code without review."
+    },
     "categorie": "organisationnel",
     "emergent": true,
-    "exemples": ["Copier un contrat client dans un chatbot public", "Publier une réponse inventée par l'IA sans vérification"]
+    "exemples": [
+      {
+        "fr": "Copier un contrat client dans un chatbot public",
+        "en": "Pasting a client contract into a public chatbot"
+      },
+      {
+        "fr": "Publier une réponse inventée par l'IA sans vérification",
+        "en": "Publishing an AI-invented answer without checking it"
+      }
+    ]
   },
   {
     "id": "fuite-donnees",
-    "libelle": "Fuite et mauvaise gestion des données",
-    "description": "Divulgation involontaire de données personnelles ou confidentielles (mauvais destinataire, partage public, perte de support).",
+    "libelle": {
+      "fr": "Fuite et mauvaise gestion des données",
+      "en": "Data leaks and poor data handling"
+    },
+    "description": {
+      "fr": "Divulgation involontaire de données personnelles ou confidentielles (mauvais destinataire, partage public, perte de support).",
+      "en": "Accidental disclosure of personal or confidential data (wrong recipient, public sharing, lost storage device)."
+    },
     "categorie": "organisationnel",
     "emergent": false,
-    "exemples": ["Fichier client envoyé au mauvais destinataire", "Lien de partage « public » sur un document RH"]
+    "exemples": [
+      {
+        "fr": "Fichier client envoyé au mauvais destinataire",
+        "en": "Client file sent to the wrong recipient"
+      },
+      {
+        "fr": "Lien de partage « public » sur un document RH",
+        "en": "“Anyone with the link” sharing on an HR document"
+      }
+    ]
   },
   {
     "id": "mots-de-passe",
-    "libelle": "Mots de passe faibles ou réutilisés",
-    "description": "Mots de passe devinables, réutilisés d'un service à l'autre ou non protégés par une double authentification.",
+    "libelle": {
+      "fr": "Mots de passe faibles ou réutilisés",
+      "en": "Weak or reused passwords"
+    },
+    "description": {
+      "fr": "Mots de passe devinables, réutilisés d'un service à l'autre ou non protégés par une double authentification.",
+      "en": "Guessable passwords, reused across services or not protected by two-factor authentication."
+    },
     "categorie": "technique",
     "emergent": false,
-    "exemples": ["Même mot de passe pour la messagerie et un site de loisirs", "Mot de passe noté sur un post-it"]
+    "exemples": [
+      {
+        "fr": "Même mot de passe pour la messagerie et un site de loisirs",
+        "en": "Same password for work email and a leisure website"
+      },
+      {
+        "fr": "Mot de passe noté sur un post-it",
+        "en": "Password written on a sticky note"
+      }
+    ]
   },
   {
     "id": "rancongiciel",
-    "libelle": "Rançongiciel (ransomware)",
-    "description": "Logiciel malveillant qui chiffre les données et bloque l'activité en échange d'une rançon.",
+    "libelle": {
+      "fr": "Rançongiciel (ransomware)",
+      "en": "Ransomware"
+    },
+    "description": {
+      "fr": "Logiciel malveillant qui chiffre les données et bloque l'activité en échange d'une rançon.",
+      "en": "Malicious software that encrypts data and blocks activity in exchange for a ransom."
+    },
     "categorie": "technique",
     "emergent": false,
-    "exemples": ["Pièce jointe piégée qui chiffre le serveur de fichiers", "Accès distant compromis puis chiffrement de nuit"]
+    "exemples": [
+      {
+        "fr": "Pièce jointe piégée qui chiffre le serveur de fichiers",
+        "en": "Rigged attachment that encrypts the file server"
+      },
+      {
+        "fr": "Accès distant compromis puis chiffrement de nuit",
+        "en": "Compromised remote access followed by overnight encryption"
+      }
+    ]
   },
   {
     "id": "nomadisme",
-    "libelle": "Risques liés au télétravail et au nomadisme",
-    "description": "Réseaux Wi-Fi non maîtrisés, vol ou perte de matériel, écrans visibles en public, usage d'équipements personnels.",
+    "libelle": {
+      "fr": "Risques liés au télétravail et au nomadisme",
+      "en": "Remote and mobile working risks"
+    },
+    "description": {
+      "fr": "Réseaux Wi-Fi non maîtrisés, vol ou perte de matériel, écrans visibles en public, usage d'équipements personnels.",
+      "en": "Untrusted Wi-Fi networks, theft or loss of equipment, screens visible in public, use of personal devices."
+    },
     "categorie": "organisationnel",
     "emergent": false,
-    "exemples": ["Wi-Fi public d'un café", "Ordinateur volé dans un train", "Conversation confidentielle en open space ou en gare"]
+    "exemples": [
+      {
+        "fr": "Wi-Fi public d'un café",
+        "en": "Public Wi-Fi in a café"
+      },
+      {
+        "fr": "Ordinateur volé dans un train",
+        "en": "Laptop stolen on a train"
+      },
+      {
+        "fr": "Conversation confidentielle en open space ou en gare",
+        "en": "Confidential conversation in an open-plan office or a station"
+      }
+    ]
   },
   {
     "id": "privileges-admin",
-    "libelle": "Mauvaise gestion des privilèges d'administration",
-    "description": "Comptes à privilèges utilisés au quotidien, droits excessifs, correctifs non appliqués, absence de journalisation.",
+    "libelle": {
+      "fr": "Mauvaise gestion des privilèges d'administration",
+      "en": "Poor management of administrative privileges"
+    },
+    "description": {
+      "fr": "Comptes à privilèges utilisés au quotidien, droits excessifs, correctifs non appliqués, absence de journalisation.",
+      "en": "Privileged accounts used for daily tasks, excessive rights, unpatched systems, no logging."
+    },
     "categorie": "technique",
     "emergent": false,
-    "exemples": ["Navigation web avec un compte administrateur du domaine", "Compte d'un ancien prestataire toujours actif"]
+    "exemples": [
+      {
+        "fr": "Navigation web avec un compte administrateur du domaine",
+        "en": "Browsing the web with a domain administrator account"
+      },
+      {
+        "fr": "Compte d'un ancien prestataire toujours actif",
+        "en": "Former contractor's account still active"
+      }
+    ]
   },
   {
     "id": "shadow-it",
-    "libelle": "Informatique fantôme (shadow IT)",
-    "description": "Utilisation d'applications, de services cloud ou de matériels non validés par l'organisation.",
+    "libelle": {
+      "fr": "Informatique fantôme (shadow IT)",
+      "en": "Shadow IT"
+    },
+    "description": {
+      "fr": "Utilisation d'applications, de services cloud ou de matériels non validés par l'organisation.",
+      "en": "Use of applications, cloud services or devices not approved by the organisation."
+    },
     "categorie": "organisationnel",
     "emergent": false,
-    "exemples": ["Transfert de fichiers volumineux par un service gratuit", "Clé USB personnelle branchée sur un poste"]
+    "exemples": [
+      {
+        "fr": "Transfert de fichiers volumineux par un service gratuit",
+        "en": "Sending large files through a free service"
+      },
+      {
+        "fr": "Clé USB personnelle branchée sur un poste",
+        "en": "Personal USB stick plugged into a work computer"
+      }
+    ]
   }
 ]
