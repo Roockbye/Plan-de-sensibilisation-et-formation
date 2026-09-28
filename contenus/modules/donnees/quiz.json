@@ -1,0 +1,83 @@
+{
+  "pretest": [
+    {
+      "id": "pre-donnee-perso",
+      "enonce": "Une adresse e-mail professionnelle nominative (prenom.nom@…) est-elle une donnée personnelle ?",
+      "enonceFalc": "L'adresse e-mail d'un collègue avec son prénom et son nom est-elle une donnée personnelle ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui" },
+        { "id": "non", "texte": "Non, c'est une donnée professionnelle" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Elle permet d'identifier une personne : c'est une donnée personnelle, même dans un cadre professionnel."
+    },
+    {
+      "id": "pre-lien",
+      "enonce": "Quel partage est le plus sûr pour un document confidentiel ?",
+      "enonceFalc": "Comment partager un document secret ?",
+      "type": "unique",
+      "choix": [
+        { "id": "public", "texte": "Un lien accessible à toute personne disposant du lien" },
+        { "id": "restreint", "texte": "Un lien réservé à des personnes nommées" },
+        { "id": "piece-jointe", "texte": "Une pièce jointe dans un e-mail" }
+      ],
+      "bonnes": ["restreint"],
+      "explication": "Un lien restreint limite l'accès aux personnes autorisées et peut être révoqué."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-erreur-envoi",
+      "enonce": "Vous venez d'envoyer un fichier de paie au mauvais destinataire externe. Que faites-vous ?",
+      "enonceFalc": "Vous avez envoyé un fichier de salaires à la mauvaise personne. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "rappel", "texte": "Je tente de rappeler le message et je n'en parle pas" },
+        { "id": "signaler", "texte": "Je signale immédiatement l'erreur" },
+        { "id": "attendre", "texte": "J'attends de voir si le destinataire réagit" }
+      ],
+      "bonnes": ["signaler"],
+      "explication": "C'est une violation de données personnelles : l'organisation doit évaluer le risque et, le cas échéant, notifier la CNIL sous 72 heures."
+    },
+    {
+      "id": "post-sensibles",
+      "enonce": "Quelles données sont des données personnelles particulièrement sensibles ? (plusieurs réponses possibles)",
+      "enonceFalc": "Quelles informations sont très sensibles ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "sante", "texte": "Un arrêt maladie" },
+        { "id": "iban", "texte": "Des coordonnées bancaires" },
+        { "id": "plaquette", "texte": "La plaquette commerciale publiée sur le site web" },
+        { "id": "nir", "texte": "Un numéro de sécurité sociale" }
+      ],
+      "bonnes": ["sante", "iban", "nir"],
+      "explication": "La plaquette est une information publique. Santé, coordonnées bancaires et numéro de sécurité sociale exigent une protection renforcée."
+    },
+    {
+      "id": "post-transfert",
+      "enonce": "Pour envoyer un fichier volumineux à un partenaire, quelle solution privilégier ?",
+      "enonceFalc": "Vous devez envoyer un gros fichier à un partenaire. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "gratuit", "texte": "Un service de transfert gratuit trouvé en ligne" },
+        { "id": "officiel", "texte": "L'outil de partage fourni par l'organisation, avec date d'expiration" },
+        { "id": "usb", "texte": "Ma clé USB personnelle" }
+      ],
+      "bonnes": ["officiel"],
+      "explication": "Les outils fournis sont maîtrisés et journalisés. Les services gratuits et les clés personnelles relèvent de l'informatique fantôme."
+    },
+    {
+      "id": "post-minimisation",
+      "enonce": "Un prestataire a besoin des adresses de livraison de 20 clients. Que lui transmettez-vous ?",
+      "enonceFalc": "Un prestataire a besoin de l'adresse de 20 clients. Que lui envoyez-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "tout", "texte": "Le fichier client complet, il triera" },
+        { "id": "extrait", "texte": "Uniquement les 20 adresses nécessaires" }
+      ],
+      "bonnes": ["extrait"],
+      "explication": "C'est le principe de minimisation : ne transmettre que les données strictement nécessaires."
+    }
+  ]
+}

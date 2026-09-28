@@ -1,0 +1,43 @@
+---
+/**
+ * Média accessible : contrôles natifs du navigateur (utilisables au clavier), pas de lecture
+ * automatique, sous-titres WebVTT et transcription complète toujours disponible.
+ */
+import type { ModuleMeta } from '../lib/schemas.ts';
+import { tr } from '../lib/texte.ts';
+import { plateforme } from '../lib/contenus.ts';
+import { traducteur } from '../i18n/index.ts';
+import Markdown from './Markdown.astro';
+
+interface Props {
+  media: ModuleMeta['medias'][number];
+  transcription?: string;
+}
+const { media, transcription } = Astro.props;
+const { config } = plateforme();
+const langue = config.langues.defaut;
+const T = traducteur(langue);
+const titre = tr(media.titre, langue);
+const duree = `${Math.floor(media.dureeSecondes / 60)} min ${String(media.dureeSecondes % 60).padStart(2, '0')} s`;
+---
+<figure class="media">
+  <figcaption>
+    <strong>{titre}</strong> ({duree})
+    {media.mentionSynthetique && <span class="media__mention">{tr(media.mentionSynthetique, langue)}</span>}
+  </figcaption>
+  {media.type === 'audio' ? (
+    <audio controls preload="none" src={`/${media.fichier}`}>
+      <track kind="captions" src={`/${media.sousTitres}`} srclang={langue} label={langue === 'fr' ? 'Français' : 'English'} default />
+    </audio>
+  ) : (
+    <video controls preload="none" src={`/${media.fichier}`}>
+      <track kind="captions" src={`/${media.sousTitres}`} srclang={langue} label={langue === 'fr' ? 'Français' : 'English'} default />
+    </video>
+  )}
+  {transcription && (
+    <details class="media__transcription">
+      <summary>{T('module.transcription')} : {titre}</summary>
+      <Markdown source={transcription} />
+    </details>
+  )}
+</figure>

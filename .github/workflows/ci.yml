@@ -1,0 +1,50 @@
+name: Intégration continue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  qualite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Audit des dépendances (vulnérabilités hautes et critiques)
+        run: npm audit --audit-level=high
+      - name: Recherche de secrets dans l'historique
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Validation de la configuration et des contenus
+        run: npm run check
+      - name: Vérification des types
+        run: npm run typecheck
+      - name: Tests unitaires
+        run: npm test
+      - name: Construction du site
+        run: npm run build
+      - name: Installation de Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Tests d'accessibilité, de sécurité et au clavier
+        run: npm run test:e2e
+      - name: Export du plan de sensibilisation
+        run: npm run plan
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rapports
+          path: |
+            playwright-report/
+            exports/
+          retention-days: 14

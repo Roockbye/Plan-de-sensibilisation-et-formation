@@ -1,0 +1,83 @@
+{
+  "pretest": [
+    {
+      "id": "pre-eteindre",
+      "enonce": "Un message de rançon s'affiche sur votre écran. Faut-il éteindre l'ordinateur ?",
+      "enonceFalc": "Un message demande de payer une rançon. Faut-il éteindre l'ordinateur ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, tout de suite" },
+        { "id": "non", "texte": "Non, il faut l'isoler du réseau sans l'éteindre" }
+      ],
+      "bonnes": ["non"],
+      "explication": "Éteindre efface des traces utiles à l'enquête. On coupe le réseau pour stopper la propagation."
+    },
+    {
+      "id": "pre-doute",
+      "enonce": "Vous avez un doute sur un comportement étrange de votre ordinateur. Faut-il le signaler ?",
+      "enonceFalc": "Votre ordinateur fait quelque chose de bizarre. Vous n'êtes pas sûr. Faut-il prévenir ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, même en cas de doute" },
+        { "id": "non", "texte": "Non, seulement si je suis certain" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Un signalement rapide, même infondé, vaut mieux qu'une attaque détectée trop tard."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-gestes",
+      "enonce": "Vos fichiers deviennent illisibles et un message de rançon apparaît. Quels sont les bons gestes ? (plusieurs réponses possibles)",
+      "enonceFalc": "Vos fichiers ne s'ouvrent plus. Un message demande de l'argent. Que faites-vous ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "reseau", "texte": "Débrancher le câble réseau et couper le Wi-Fi" },
+        { "id": "alerter", "texte": "Appeler immédiatement le numéro d'urgence sécurité" },
+        { "id": "payer", "texte": "Payer la rançon pour récupérer vite les fichiers" },
+        { "id": "eteindre", "texte": "Éteindre l'ordinateur" }
+      ],
+      "bonnes": ["reseau", "alerter"],
+      "explication": "Isoler et alerter. Ne jamais payer (aucune garantie, et cela finance les attaquants) ni éteindre (perte de traces)."
+    },
+    {
+      "id": "post-numero",
+      "enonce": "Quel est le numéro d'urgence sécurité de votre organisation ?",
+      "enonceFalc": "Quel numéro appeler en cas d'attaque ?",
+      "type": "unique",
+      "choix": [
+        { "id": "bon", "texte": "{{contacts.telephoneUrgence}}" },
+        { "id": "17", "texte": "Le 17 (police secours)" },
+        { "id": "aucun", "texte": "Il n'y en a pas, j'envoie un e-mail à mon manager" }
+      ],
+      "bonnes": ["bon"],
+      "explication": "Le numéro d'urgence sécurité de l'organisation est le {{contacts.telephoneUrgence}}. Notez-le hors de votre ordinateur."
+    },
+    {
+      "id": "post-manager-comm",
+      "enonce": "Pendant une cyberattaque, un client demande à un manager ce qui se passe. Que doit faire le manager ?",
+      "enonceFalc": "Pendant une attaque, un client pose des questions à un manager. Que fait le manager ?",
+      "type": "unique",
+      "choix": [
+        { "id": "tout-dire", "texte": "Tout expliquer en détail pour rassurer le client" },
+        { "id": "cellule", "texte": "S'en tenir aux éléments validés par la cellule de crise" },
+        { "id": "nier", "texte": "Affirmer qu'il ne se passe rien" }
+      ],
+      "bonnes": ["cellule"],
+      "explication": "La communication externe est coordonnée par la cellule de crise, pour éviter erreurs, informations prématurées ou contradictoires."
+    },
+    {
+      "id": "post-cnil",
+      "enonce": "En cas de violation de données personnelles présentant un risque, dans quel délai l'organisation doit-elle notifier la CNIL ?",
+      "enonceFalc": "Des données personnelles ont été volées. En combien de temps faut-il prévenir la CNIL ?",
+      "type": "unique",
+      "choix": [
+        { "id": "24", "texte": "24 heures" },
+        { "id": "72", "texte": "72 heures" },
+        { "id": "30j", "texte": "30 jours" }
+      ],
+      "bonnes": ["72"],
+      "explication": "Le RGPD impose une notification dans les 72 heures après en avoir pris connaissance, d'où l'importance d'un signalement interne immédiat."
+    }
+  ]
+}

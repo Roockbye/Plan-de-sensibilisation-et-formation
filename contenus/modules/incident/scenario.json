@@ -1,0 +1,54 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : les 15 premières minutes",
+  "consigne": "Lundi, 9 h 02. Vous arrivez au bureau et allumez votre ordinateur. Choisissez vos réactions. Il n'y a pas de limite de temps.",
+  "depart": "decouverte",
+  "etapes": [
+    {
+      "id": "decouverte",
+      "titre": "9 h 02 : des fichiers étranges",
+      "texte": "Dans le dossier partagé de l'équipe, tous les fichiers portent l'extension « .lock3d ». Un fichier « LISEZ-MOI.txt » est apparu. Vous l'ouvrez : « Vos données sont chiffrées. Payez 2 bitcoins sous 72 h. »",
+      "choix": [
+        { "id": "eteindre", "texte": "J'éteins l'ordinateur immédiatement", "suivant": "alerte-tardive", "adapte": false, "retour": "Éteindre efface des traces en mémoire et ne stoppe pas la propagation aux autres postes, qui passe par le réseau." },
+        { "id": "isoler", "texte": "Je débranche le câble réseau et je coupe le Wi-Fi, sans éteindre", "suivant": "alerter", "adapte": true, "retour": "Parfait : vous stoppez la propagation depuis votre poste tout en préservant les traces." },
+        { "id": "collegue", "texte": "Je vais demander à un collègue s'il a le même problème", "suivant": "alerte-tardive", "adapte": false, "retour": "Pendant ce temps, le rançongiciel continue de chiffrer. Le premier geste est d'isoler, le second d'alerter l'équipe sécurité." }
+      ]
+    },
+    {
+      "id": "alerter",
+      "titre": "9 h 04 : prévenir",
+      "texte": "Votre poste est isolé. Qui prévenez-vous en premier ?",
+      "choix": [
+        { "id": "urgence", "texte": "J'appelle le numéro d'urgence sécurité ({{contacts.telephoneUrgence}})", "suivant": "consignes", "adapte": true, "retour": "C'est le canal le plus rapide. L'e-mail n'est pas fiable : la messagerie est peut-être compromise." },
+        { "id": "email", "texte": "J'envoie un e-mail détaillé au support", "suivant": "consignes", "adapte": false, "retour": "L'e-mail est lent et la messagerie est peut-être touchée. En urgence, on appelle." }
+      ]
+    },
+    {
+      "id": "alerte-tardive",
+      "titre": "9 h 20 : l'attaque s'étend",
+      "texte": "Plusieurs collègues signalent à leur tour des fichiers illisibles. Le serveur de fichiers commence à être chiffré.",
+      "choix": [
+        { "id": "appeler-maintenant", "texte": "J'appelle immédiatement le numéro d'urgence sécurité", "suivant": "consignes", "adapte": true, "retour": "Mieux vaut tard que jamais : l'équipe peut encore isoler le serveur et protéger les sauvegardes." }
+      ]
+    },
+    {
+      "id": "consignes",
+      "titre": "9 h 10 : les consignes de l'équipe sécurité",
+      "texte": "L'équipe sécurité vous demande de ne plus toucher à votre poste. Un message sur un réseau social vous propose l'aide d'un « expert en récupération de données » qui négocie avec les pirates.",
+      "choix": [
+        { "id": "contacter", "texte": "Je contacte cet expert pour gagner du temps", "suivant": "fin-risque", "adapte": false, "retour": "Ces offres sont souvent des arnaques, parfois liées aux attaquants. Seule la cellule de crise décide des prestataires." },
+        { "id": "noter", "texte": "Je note ce que j'ai vu et fait, avec les heures, et j'attends les consignes", "suivant": "fin-bonne", "adapte": true, "retour": "Exactement : votre chronologie aidera l'enquête." }
+      ]
+    },
+    {
+      "id": "fin-risque",
+      "titre": "Conséquence : des informations transmises à un inconnu",
+      "texte": "L'« expert » demande des accès et des informations sur l'organisation. Transmettre ces éléments à un tiers non mandaté peut aggraver l'attaque. Prévenez la cellule de crise de ce contact."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : propagation contenue",
+      "texte": "Grâce aux alertes rapides, l'équipe sécurité isole le serveur de fichiers avant qu'il ne soit entièrement chiffré. Les sauvegardes hors ligne sont intactes : l'activité reprend en mode dégradé dès l'après-midi."
+    }
+  ]
+}

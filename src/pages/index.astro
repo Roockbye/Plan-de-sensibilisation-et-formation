@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import { donnees } from '../lib/donnees.ts';
+import { traducteur } from '../i18n/index.ts';
+
+const d = donnees();
+const T = traducteur(d.langue);
+const org = d.config.organisation;
+---
+<Base titre={T('nav.accueil')}>
+  <h1>{T('site.titre')} : {org.nom}</h1>
+  <div class="lecture">
+    <Markdown source={d.pages.accueil ?? ''} />
+  </div>
+
+  <p class="encart" data-reprise hidden>
+    <span data-reprise-texte></span> <a href="/profils/" data-reprise-lien>Reprendre mon parcours</a>
+  </p>
+
+  <section aria-labelledby="titre-profils">
+    <h2 id="titre-profils">Choisissez votre profil</h2>
+    <p>Chaque profil dispose d'un parcours adapté à ses missions et aux risques prioritaires de {org.nom}.</p>
+    <ul class="grille">
+      {d.parcours.map((p) => (
+        <li>
+          <div class="carte">
+            <h3><a href={`/profils/${p.profil.id}/`}>{d.tr(p.profil.libelle)}</a></h3>
+            <p>{d.tr(p.profil.description)}</p>
+            <p>{p.etapes.length} modules, environ {p.dureeTotaleMinutes} minutes au total, dont {p.etapes.filter((e) => e.categorie === 'obligatoire').length} obligatoires.</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-deroule" class="lecture">
+    <h2 id="titre-deroule">Comment se déroule un module ?</h2>
+    <ol>
+      <li><strong>Pré-test</strong> : quelques questions pour mesurer ce que vous savez déjà.</li>
+      <li><strong>L'essentiel</strong> : un contenu court (10 minutes environ), en version standard ou facile à lire.</li>
+      <li><strong>Mise en situation</strong> : une simulation d'hameçonnage ou un scénario à choix, sans risque et sans limite de temps.</li>
+      <li><strong>Post-test</strong> : le module est validé à partir de {d.config.evaluation.seuilReussite} % de bonnes réponses.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="titre-accessibilite" class="lecture">
+    <h2 id="titre-accessibilite">Une plateforme pour toutes et tous</h2>
+    <ul>
+      <li>Chaque module existe en <strong>version facile à lire et à comprendre</strong> (FALC).</li>
+      <li>Vous pouvez agrandir le texte, choisir une police adaptée à la dyslexie ou à la basse vision, un thème sombre ou un contraste renforcé : <a href="/preferences/">{T('nav.preferences')}</a>.</li>
+      <li>Tout est utilisable au clavier et avec un lecteur d'écran. Aucune activité n'est chronométrée.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-pilotage" class="lecture">
+    <h2 id="titre-pilotage">Pour l'équipe sécurité et la direction</h2>
+    <ul>
+      <li><a href="/tableau-de-bord/">{T('nav.tableauDeBord')}</a> : complétion, scores et retards par profil.</li>
+      <li><a href="/calendrier/">{T('nav.calendrier')}</a> : actions de l'année et fréquences de renouvellement.</li>
+      <li><a href="/plan/">{T('nav.plan')}</a> : le plan de sensibilisation complet, exportable.</li>
+    </ul>
+  </section>
+</Base>
+
+<script>
+  import { lireProgression } from '../scripts/stockage.ts';
+
+  const zone = document.querySelector<HTMLElement>('[data-reprise]');
+  const p = lireProgression();
+  const carte = p.profil ? document.querySelector<HTMLAnchorElement>(`a[href="/profils/${p.profil}/"]`) : null;
+  if (zone && carte) {
+    zone.querySelector('[data-reprise-texte]')!.textContent = `Votre profil : ${carte.textContent}.`;
+    zone.querySelector<HTMLAnchorElement>('[data-reprise-lien]')!.href = carte.href;
+    zone.hidden = false;
+  }
+</script>

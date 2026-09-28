@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import { donnees } from '../../lib/donnees.ts';
+import { traducteur, type Cle } from '../../i18n/index.ts';
+
+const d = donnees();
+const T = traducteur(d.langue);
+const profilsActifs = new Set(d.config.profilsActifs);
+---
+<Base titre={T('nav.modules')} filAriane={[{ libelle: T('nav.modules') }]}>
+  <h1>{T('nav.modules')}</h1>
+  <p class="lecture">
+    {d.modules.length} modules courts, chacun composé d'un pré-test, d'un contenu essentiel, d'une mise en situation et d'un post-test.
+    Chaque module existe en version standard et en version facile à lire et à comprendre (FALC).
+  </p>
+
+  <ul class="grille">
+    {d.modules.map(({ meta }) => (
+      <li>
+        <section class="carte" aria-labelledby={`carte-${meta.id}`}>
+          <h2 id={`carte-${meta.id}`}><a href={`/modules/${meta.id}/`} data-lien-module={meta.id}>{meta.code} – {d.tr(meta.titre)}</a></h2>
+          <p>{d.tr(meta.resume)}</p>
+          <dl class="meta">
+            <dt>{T('commun.duree')}</dt>
+            <dd>{T('commun.minutes', { n: meta.dureeMinutes })}</dd>
+            <dt>{T('commun.niveau')}</dt>
+            <dd>{T(`niveau.${meta.niveau}` as Cle)}</dd>
+            <dt>{T('commun.formats')}</dt>
+            <dd>{meta.formats.map((f) => T(`format.${f}` as Cle)).join(', ')}</dd>
+            <dt>{T('commun.risques')}</dt>
+            <dd>
+              {meta.risques.map((r) => d.libelleRisque(r)).join(', ')}
+              {meta.risques.some((r) => d.risque(r)?.emergent) && <> <span class="etiquette etiquette--emergent">{T('commun.emergent')}</span></>}
+            </dd>
+            <dt>{T('commun.profils')}</dt>
+            <dd>{meta.profils.filter((p) => profilsActifs.has(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
+            <dt>Statut</dt>
+            <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
+          </dl>
+          <p><a href={`/modules/${meta.id}/facile/`}>Version facile à lire<span class="visuellement-masque"> : {meta.code}</span></a></p>
+        </section>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<script>
+  import '../../scripts/statuts.ts';
+</script>

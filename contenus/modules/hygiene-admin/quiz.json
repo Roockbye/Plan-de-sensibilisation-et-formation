@@ -1,0 +1,83 @@
+{
+  "pretest": [
+    {
+      "id": "pre-compte-admin",
+      "enonce": "Est-il acceptable de lire ses e-mails avec un compte administrateur du domaine si l'on est prudent ?",
+      "enonceFalc": "Peut-on lire ses e-mails avec son compte administrateur ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, si l'antivirus est à jour" },
+        { "id": "non", "texte": "Non, jamais" }
+      ],
+      "bonnes": ["non"],
+      "explication": "Un e-mail piégé ouvert avec un compte à privilèges donne immédiatement ces privilèges à l'attaquant."
+    },
+    {
+      "id": "pre-sauvegarde",
+      "enonce": "Pourquoi conserver une sauvegarde hors ligne ?",
+      "enonceFalc": "Pourquoi garder une sauvegarde débranchée ?",
+      "type": "unique",
+      "choix": [
+        { "id": "rancon", "texte": "Parce qu'un rançongiciel cible aussi les sauvegardes accessibles en ligne" },
+        { "id": "vitesse", "texte": "Parce que c'est plus rapide à restaurer" }
+      ],
+      "bonnes": ["rancon"],
+      "explication": "Les attaquants cherchent à détruire les sauvegardes en ligne avant de chiffrer, pour forcer le paiement."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-reset",
+      "enonce": "Un appelant se présentant comme un directeur en déplacement demande en urgence la réinitialisation de sa double authentification. Que faites-vous ?",
+      "enonceFalc": "Une personne dit qu'elle est directeur. Elle demande de changer sa double authentification. C'est urgent. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "executer", "texte": "Je réinitialise, c'est un directeur et c'est urgent" },
+        { "id": "procedure", "texte": "J'applique la procédure de vérification d'identité (rappel au numéro de l'annuaire, validation) avant toute action" },
+        { "id": "email", "texte": "Je lui demande de confirmer par e-mail" }
+      ],
+      "bonnes": ["procedure"],
+      "explication": "C'est un scénario d'attaque réel et fréquent. L'e-mail ne prouve rien si la messagerie est compromise."
+    },
+    {
+      "id": "post-priorite",
+      "enonce": "Quelle vulnérabilité corriger en premier ?",
+      "enonceFalc": "Quel problème faut-il réparer en premier ?",
+      "type": "unique",
+      "choix": [
+        { "id": "vpn", "texte": "Une faille activement exploitée sur la passerelle VPN exposée sur Internet" },
+        { "id": "interne", "texte": "Une faille non exploitée sur un poste interne isolé" },
+        { "id": "cosmetique", "texte": "Un défaut d'affichage sur l'intranet" }
+      ],
+      "bonnes": ["vpn"],
+      "explication": "Exposition sur Internet + exploitation active = priorité absolue."
+    },
+    {
+      "id": "post-signaux",
+      "enonce": "Quels événements doivent déclencher une investigation ? (plusieurs réponses possibles)",
+      "enonceFalc": "Quels signes sont inquiétants ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "groupe", "texte": "Un compte ajouté au groupe des administrateurs du domaine hors procédure" },
+        { "id": "nuit", "texte": "Une connexion d'un compte à privilèges à 3 h du matin depuis un poste bureautique" },
+        { "id": "sauvegardes", "texte": "La suppression de points de sauvegarde" },
+        { "id": "maj", "texte": "L'installation planifiée des mises à jour mensuelles" }
+      ],
+      "bonnes": ["groupe", "nuit", "sauvegardes"],
+      "explication": "Ce sont des étapes typiques de la préparation d'un rançongiciel. Les mises à jour planifiées sont normales."
+    },
+    {
+      "id": "post-secrets",
+      "enonce": "Où stocker le mot de passe d'un compte de service utilisé par un script ?",
+      "enonceFalc": "Où ranger le mot de passe utilisé par un programme ?",
+      "type": "unique",
+      "choix": [
+        { "id": "script", "texte": "En clair dans le script, sur un partage réservé à l'équipe" },
+        { "id": "coffre", "texte": "Dans le coffre-fort de secrets de l'organisation" },
+        { "id": "wiki", "texte": "Sur la page wiki de l'équipe informatique" }
+      ],
+      "bonnes": ["coffre"],
+      "explication": "Les attaquants recherchent systématiquement les secrets en clair dans les scripts, partages et wikis."
+    }
+  ]
+}

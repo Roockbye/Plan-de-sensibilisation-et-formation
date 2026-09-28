@@ -1,0 +1,27 @@
+{
+  "id": "mots-de-passe",
+  "code": "M2",
+  "titre": "Mots de passe, gestionnaire et double authentification",
+  "resume": "Créer des phrases de passe robustes, ne jamais les réutiliser, s'appuyer sur un gestionnaire et déjouer les attaques contre la double authentification.",
+  "risques": ["mots-de-passe", "hameconnage"],
+  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "obligatoirePour": ["utilisateur", "admin-it", "nouvel-arrivant"],
+  "dureeMinutes": 8,
+  "niveau": "decouverte",
+  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "objectifs": [
+    "Construire une phrase de passe longue et mémorisable",
+    "Expliquer pourquoi réutiliser un mot de passe est dangereux",
+    "Utiliser un gestionnaire de mots de passe validé par l'organisation",
+    "Refuser une demande de double authentification que l'on n'a pas initiée"
+  ],
+  "reglementations": [],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-09-28",
+  "sources": [
+    { "titre": "ANSSI – Recommandations relatives à l'authentification multifacteur et aux mots de passe", "url": "https://cyber.gouv.fr/" },
+    { "titre": "CNIL – Mots de passe : une nouvelle recommandation", "url": "https://www.cnil.fr/" }
+  ],
+  "ordre": 20
+}

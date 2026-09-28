@@ -1,0 +1,27 @@
+{
+  "id": "hygiene-admin",
+  "code": "M8",
+  "titre": "Hygiène d'administration du système d'information",
+  "resume": "Appliquer les règles essentielles d'administration sécurisée : moindre privilège, comptes dédiés, correctifs, journalisation, et résister à l'ingénierie sociale ciblant le support.",
+  "risques": ["privileges-admin", "rancongiciel", "ingenierie-sociale", "shadow-it"],
+  "profils": ["admin-it"],
+  "obligatoirePour": ["admin-it"],
+  "dureeMinutes": 15,
+  "niveau": "avance",
+  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "objectifs": [
+    "Séparer strictement comptes d'administration et comptes bureautiques",
+    "Appliquer le moindre privilège et revoir régulièrement les droits",
+    "Prioriser les correctifs selon l'exposition et l'exploitation active",
+    "Vérifier l'identité d'un demandeur avant toute réinitialisation d'accès"
+  ],
+  "reglementations": ["nis2", "iso27001"],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-09-28",
+  "sources": [
+    { "titre": "ANSSI – Guide d'hygiène informatique (42 mesures)", "url": "https://cyber.gouv.fr/" },
+    { "titre": "ANSSI – Recommandations relatives à l'administration sécurisée des SI", "url": "https://cyber.gouv.fr/" }
+  ],
+  "ordre": 80
+}

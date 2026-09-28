@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import { traducteur, type Cle } from '../i18n/index.ts';
+
+const d = donnees();
+const T = traducteur(d.langue);
+
+const groupes: { cle: string; titre: Cle; options: { valeur: string; libelle: string }[]; defaut: string }[] = [
+  { cle: 'taille', titre: 'prefs.taille', defaut: '100', options: ['100', '125', '150', '200'].map((v) => ({ valeur: v, libelle: `${v} %` })) },
+  { cle: 'police', titre: 'prefs.police', defaut: 'standard', options: [
+    { valeur: 'standard', libelle: T('prefs.police.standard') },
+    { valeur: 'hyperlegible', libelle: T('prefs.police.hyperlegible') },
+    { valeur: 'dyslexie', libelle: T('prefs.police.dyslexie') },
+  ] },
+  { cle: 'theme', titre: 'prefs.theme', defaut: 'auto', options: [
+    { valeur: 'auto', libelle: T('prefs.theme.auto') },
+    { valeur: 'clair', libelle: T('prefs.theme.clair') },
+    { valeur: 'sombre', libelle: T('prefs.theme.sombre') },
+    { valeur: 'contraste', libelle: T('prefs.theme.contraste') },
+  ] },
+  { cle: 'espacement', titre: 'prefs.espacement', defaut: 'normal', options: [
+    { valeur: 'normal', libelle: T('prefs.espacement.normal') },
+    { valeur: 'augmente', libelle: T('prefs.espacement.augmente') },
+  ] },
+  { cle: 'animations', titre: 'prefs.animations', defaut: 'auto', options: [
+    { valeur: 'auto', libelle: T('prefs.animations.auto') },
+    { valeur: 'reduites', libelle: T('prefs.animations.reduites') },
+  ] },
+  { cle: 'version', titre: 'prefs.version', defaut: 'standard', options: [
+    { valeur: 'standard', libelle: T('prefs.version.standard') },
+    { valeur: 'falc', libelle: T('prefs.version.falc') },
+  ] },
+];
+---
+<Base titre={T('prefs.titre')} filAriane={[{ libelle: T('prefs.titre') }]}>
+  <div class="lecture">
+    <h1>{T('prefs.titre')}</h1>
+    <p>{T('prefs.intro')}</p>
+
+    <form class="preferences" data-preferences data-libelle-ok={T('prefs.enregistre')} data-libelle-ko={T('prefs.stockageIndisponible')}>
+      {groupes.map((g) => (
+        <fieldset class="preferences__groupe">
+          <legend>{T(g.titre)}</legend>
+          {g.options.map((o) => (
+            <div class="preferences__option">
+              <input type="radio" name={g.cle} id={`pref-${g.cle}-${o.valeur}`} value={o.valeur} checked={o.valeur === g.defaut} data-defaut={o.valeur === g.defaut ? '' : undefined} />
+              <label for={`pref-${g.cle}-${o.valeur}`}>{o.libelle}</label>
+            </div>
+          ))}
+        </fieldset>
+      ))}
+      <p class="groupe-boutons">
+        <button type="button" class="bouton--secondaire" data-reinitialiser>{T('prefs.reinitialiser')}</button>
+      </p>
+      <p role="status" data-statut-prefs></p>
+    </form>
+
+    <section class="carte" aria-labelledby="titre-apercu">
+      <h2 id="titre-apercu">Aperçu</h2>
+      <p>{T('prefs.apercu')} <a href="/modules/">{T('nav.modules')}</a></p>
+      <p><button type="button" class="bouton--secondaire">Bouton d'exemple</button></p>
+    </section>
+
+    <h2>Autres réglages utiles</h2>
+    <ul>
+      <li>Le zoom du navigateur (<kbd>Ctrl</kbd> et <kbd>+</kbd>, ou <kbd>Cmd</kbd> et <kbd>+</kbd> sur Mac) fonctionne sur toutes les pages, jusqu'à 400 %.</li>
+      <li>Les réglages d'accessibilité de votre système (taille du texte, réduction des animations, thème sombre) sont respectés lorsque l'option « Selon le réglage de l'appareil » est choisie.</li>
+    </ul>
+  </div>
+</Base>
+
+<script>
+  const CLE = 'ssi:preferences';
+  const form = document.querySelector<HTMLFormElement>('[data-preferences]')!;
+  const statut = form.querySelector<HTMLElement>('[data-statut-prefs]')!;
+  const racine = document.documentElement;
+  const noms = ['taille', 'police', 'theme', 'espacement', 'animations', 'version'];
+
+  function lire(): Record<string, string> {
+    try {
+      return JSON.parse(localStorage.getItem(CLE) ?? '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  // État initial : cases cochées selon les préférences enregistrées.
+  const prefs = lire();
+  for (const nom of noms) {
+    const input = form.querySelector<HTMLInputElement>(`input[name="${nom}"][value="${CSS.escape(prefs[nom] ?? '')}"]`);
+    if (input) input.checked = true;
+  }
+
+  function appliquer(annonce: boolean) {
+    const valeurs: Record<string, string> = {};
+    for (const nom of noms) {
+      const v = form.querySelector<HTMLInputElement>(`input[name="${nom}"]:checked`)?.value;
+      if (v) {
+        valeurs[nom] = v;
+        racine.setAttribute(`data-${nom}`, v);
+      }
+    }
+    let ok = true;
+    try {
+      localStorage.setItem(CLE, JSON.stringify(valeurs));
+    } catch {
+      ok = false;
+    }
+    if (annonce) statut.textContent = ok ? form.dataset.libelleOk ?? '' : form.dataset.libelleKo ?? '';
+  }
+
+  form.addEventListener('change', () => appliquer(true));
+  form.querySelector('[data-reinitialiser]')!.addEventListener('click', () => {
+    for (const input of form.querySelectorAll<HTMLInputElement>('input[data-defaut]')) input.checked = true;
+    appliquer(true);
+  });
+</script>

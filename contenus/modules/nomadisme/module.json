@@ -1,0 +1,27 @@
+{
+  "id": "nomadisme",
+  "code": "M6",
+  "titre": "Télétravail et déplacements en sécurité",
+  "resume": "Se connecter de façon sûre hors des locaux, protéger son matériel et la confidentialité de ses échanges, réagir à une perte ou un vol.",
+  "risques": ["nomadisme", "fuite-donnees", "quishing"],
+  "profils": ["nomade", "manager", "utilisateur", "admin-it"],
+  "obligatoirePour": ["nomade"],
+  "dureeMinutes": 9,
+  "niveau": "decouverte",
+  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "objectifs": [
+    "Choisir une connexion de confiance et utiliser le VPN de l'organisation",
+    "Protéger la confidentialité de son écran et de ses conversations en public",
+    "Ne jamais laisser son matériel sans surveillance ni le prêter",
+    "Déclarer immédiatement la perte ou le vol d'un équipement"
+  ],
+  "reglementations": [],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-09-28",
+  "sources": [
+    { "titre": "ANSSI – Recommandations sur le nomadisme numérique", "url": "https://cyber.gouv.fr/" },
+    { "titre": "Cybermalveillance.gouv.fr – Sécurité du télétravail", "url": "https://www.cybermalveillance.gouv.fr/" }
+  ],
+  "ordre": 60
+}

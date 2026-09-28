@@ -1,0 +1,173 @@
+---
+/**
+ * Quiz accessible : chaque question est un groupe (fieldset/legend), sans limite de temps,
+ * erreurs listées avec liens, correction textuelle (jamais par la seule couleur).
+ */
+import type { Question } from '../lib/schemas.ts';
+import { tr } from '../lib/texte.ts';
+import { plateforme } from '../lib/contenus.ts';
+import { traducteur } from '../i18n/index.ts';
+
+interface Props {
+  module: string;
+  phase: 'pretest' | 'posttest';
+  questions: Question[];
+  falc?: boolean;
+}
+const { module, phase, questions, falc = false } = Astro.props;
+const { config } = plateforme();
+const langue = config.langues.defaut;
+const T = traducteur(langue);
+const prefixe = `${phase}-${module}${falc ? '-falc' : ''}`;
+const seuil = config.evaluation.seuilReussite;
+
+const textes = {
+  manquantes: T('quiz.manquantes'),
+  correct: T('quiz.correct'),
+  incorrect: T('quiz.incorrect'),
+  resultat: T('quiz.resultat'),
+  valide: T('quiz.valide'),
+  nonValide: T('quiz.nonValide', { seuil }),
+  pretestFait: T('quiz.pretestFait'),
+};
+---
+<form class="quiz" data-quiz data-module={module} data-phase={phase} data-seuil={seuil} data-libelles={JSON.stringify(textes)} novalidate>
+  <div class="quiz__erreurs message-retour message-retour--erreur" data-erreurs tabindex="-1" hidden></div>
+  <ol class="quiz__questions">
+    {questions.map((q, i) => {
+      const id = `${prefixe}-${q.id}`;
+      const enonce = tr(falc && q.enonceFalc ? q.enonceFalc : q.enonce, langue);
+      const bonnes = q.choix.filter((c) => q.bonnes.includes(c.id)).map((c) => tr(c.texte, langue));
+      return (
+        <li>
+          <fieldset class="quiz__question" id={id} data-bonnes={q.bonnes.join(' ')}>
+            <legend>
+              <span class="quiz__numero">{T('quiz.question', { n: i + 1, total: questions.length })}</span>
+              <span class="quiz__enonce">{enonce}</span>
+              {q.type === 'multiple' && <span class="quiz__consigne">{T('quiz.plusieurs')}</span>}
+            </legend>
+            <ul class="quiz__choix">
+              {q.choix.map((c) => (
+                <li>
+                  <input type={q.type === 'unique' ? 'radio' : 'checkbox'} name={id} id={`${id}-${c.id}`} value={c.id} />
+                  <label for={`${id}-${c.id}`}>{tr(c.texte, langue)}</label>
+                </li>
+              ))}
+            </ul>
+            <div class="message-retour" data-retour hidden>
+              <p class="message-retour__titre" data-verdict></p>
+              <p data-attendue hidden>{T('quiz.bonneReponse')} {bonnes.join(' ; ')}</p>
+              <p>{tr(q.explication, langue)}</p>
+            </div>
+          </fieldset>
+        </li>
+      );
+    })}
+  </ol>
+  <div class="groupe-boutons">
+    <button type="submit" data-valider>{T('quiz.valider')}</button>
+    <button type="button" class="bouton--secondaire" data-recommencer hidden>{T('quiz.recommencer')}</button>
+  </div>
+  <div class="quiz__resultat message-retour" data-resultat tabindex="-1" hidden></div>
+  <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
+</form>
+
+<script>
+  import { majModule, libelles, formater, resultat } from '../scripts/stockage.ts';
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('form[data-quiz]')) {
+    const L = libelles(form);
+    const module = form.dataset.module!;
+    const phase = form.dataset.phase as 'pretest' | 'posttest';
+    const seuil = Number(form.dataset.seuil);
+    const questions = [...form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-bonnes]')];
+    const zoneErreurs = form.querySelector<HTMLElement>('[data-erreurs]')!;
+    const zoneResultat = form.querySelector<HTMLElement>('[data-resultat]')!;
+    const boutonValider = form.querySelector<HTMLButtonElement>('[data-valider]')!;
+    const boutonRecommencer = form.querySelector<HTMLButtonElement>('[data-recommencer]')!;
+
+    const reponses = (q: HTMLFieldSetElement) =>
+      [...q.querySelectorAll<HTMLInputElement>('input')].filter((i) => i.checked).map((i) => i.value);
+
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      const sansReponse = questions.filter((q) => reponses(q).length === 0);
+      if (sansReponse.length) {
+        zoneErreurs.replaceChildren();
+        const p = document.createElement('p');
+        p.textContent = L.manquantes ?? '';
+        const ul = document.createElement('ul');
+        for (const q of sansReponse) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#${q.id}`;
+          a.textContent = q.querySelector('.quiz__numero')?.textContent ?? q.id;
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            q.querySelector<HTMLInputElement>('input')?.focus();
+          });
+          li.append(a);
+          ul.append(li);
+        }
+        zoneErreurs.append(p, ul);
+        zoneErreurs.hidden = false;
+        zoneErreurs.focus();
+        return;
+      }
+      zoneErreurs.hidden = true;
+
+      let score = 0;
+      for (const q of questions) {
+        const attendues = (q.dataset.bonnes ?? '').split(' ').sort();
+        const donnees = reponses(q).sort();
+        const juste = attendues.length === donnees.length && attendues.every((v, i) => v === donnees[i]);
+        if (juste) score++;
+        const retour = q.querySelector<HTMLElement>('[data-retour]')!;
+        retour.classList.toggle('message-retour--succes', juste);
+        retour.classList.toggle('message-retour--erreur', !juste);
+        retour.querySelector('[data-verdict]')!.textContent = juste ? L.correct ?? '' : L.incorrect ?? '';
+        retour.querySelector<HTMLElement>('[data-attendue]')!.hidden = juste;
+        retour.hidden = false;
+        q.disabled = true;
+      }
+
+      const r = resultat(score, questions.length);
+      const valide = phase === 'posttest' && r.pourcent >= seuil;
+      majModule(module, (s) => {
+        if (phase === 'pretest') {
+          s.pretest = r;
+        } else {
+          s.posttest = r;
+          if (!s.meilleurPosttest || r.pourcent >= s.meilleurPosttest.pourcent) s.meilleurPosttest = r;
+          s.valide = s.valide || valide;
+        }
+      });
+
+      zoneResultat.replaceChildren();
+      const titre = document.createElement('p');
+      titre.className = 'message-retour__titre';
+      titre.textContent = formater(L.resultat, { score, total: questions.length, pourcent: r.pourcent });
+      const suite = document.createElement('p');
+      suite.textContent = phase === 'pretest' ? L.pretestFait ?? '' : valide ? L.valide ?? '' : L.nonValide ?? '';
+      zoneResultat.classList.toggle('message-retour--succes', phase === 'pretest' || valide);
+      zoneResultat.append(titre, suite);
+      zoneResultat.hidden = false;
+      boutonValider.hidden = true;
+      boutonRecommencer.hidden = false;
+      zoneResultat.focus();
+      document.dispatchEvent(new CustomEvent('ssi:progression'));
+    });
+
+    boutonRecommencer.addEventListener('click', () => {
+      form.reset();
+      for (const q of questions) {
+        q.disabled = false;
+        q.querySelector<HTMLElement>('[data-retour]')!.hidden = true;
+      }
+      zoneResultat.hidden = true;
+      boutonRecommencer.hidden = true;
+      boutonValider.hidden = false;
+      questions[0]?.querySelector<HTMLInputElement>('input')?.focus();
+    });
+  }
+</script>

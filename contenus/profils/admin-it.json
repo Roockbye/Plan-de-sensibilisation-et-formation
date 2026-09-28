@@ -1,0 +1,23 @@
+{
+  "id": "admin-it",
+  "libelle": "Administrateur informatique",
+  "description": "Personnes disposant de privilèges élevés sur le système d'information (internes ou prestataires) : leur compte est la cible la plus recherchée par un attaquant.",
+  "besoins": [
+    "Appliquer les règles d'hygiène d'administration (moindre privilège, comptes dédiés)",
+    "Maintenir les systèmes à jour et journaliser les actions",
+    "Détecter les signaux faibles d'une compromission",
+    "Encadrer techniquement l'usage de l'IA générative et des services cloud"
+  ],
+  "objectifs": [
+    { "id": "moindre-privilege", "texte": "Appliquer le principe du moindre privilège et utiliser des comptes d'administration dédiés, jamais pour naviguer ou lire ses e-mails", "niveau": "appliquer", "modules": ["hygiene-admin"] },
+    { "id": "correctifs", "texte": "Prioriser l'application des correctifs de sécurité selon l'exposition et la criticité", "niveau": "evaluer", "modules": ["hygiene-admin"] },
+    { "id": "detection", "texte": "Identifier dans les journaux les signes d'une escalade de privilèges ou d'un accès anormal", "niveau": "analyser", "modules": ["hygiene-admin", "incident"] },
+    { "id": "ia-technique", "texte": "Évaluer les risques d'un outil d'IA générative avant son intégration au SI", "niveau": "evaluer", "modules": ["ia-generative"] },
+    { "id": "comptes-proteges", "texte": "Protéger les comptes à privilèges par des secrets robustes et une authentification forte", "niveau": "appliquer", "modules": ["mots-de-passe"] }
+  ],
+  "exposition": ["privileges-admin", "rancongiciel", "shadow-it"],
+  "contraintes": ["Public expert : éviter les rappels trop basiques", "Astreintes et interventions imprévues"],
+  "dureeAnnuelleCibleMinutes": 180,
+  "partEffectif": 0.05,
+  "ordre": 30
+}

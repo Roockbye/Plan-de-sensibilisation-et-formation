@@ -1,0 +1,21 @@
+{
+  "id": "nomade",
+  "libelle": "Télétravailleur et nomade",
+  "description": "Personnes qui travaillent régulièrement hors des locaux (domicile, déplacements, sites clients) avec du matériel mobile.",
+  "besoins": [
+    "Se connecter de façon sûre depuis un réseau non maîtrisé",
+    "Protéger son matériel et la confidentialité de son écran et de ses conversations",
+    "Savoir réagir en cas de perte ou de vol d'un équipement"
+  ],
+  "objectifs": [
+    { "id": "connexion-sure", "texte": "Utiliser systématiquement le VPN de l'organisation et choisir un réseau de confiance (partage de connexion plutôt que Wi-Fi public)", "niveau": "appliquer", "modules": ["nomadisme"] },
+    { "id": "confidentialite", "texte": "Protéger la confidentialité de son écran, de ses documents et de ses échanges en public", "niveau": "appliquer", "modules": ["nomadisme"] },
+    { "id": "perte-vol", "texte": "Déclarer immédiatement la perte ou le vol d'un équipement en suivant la procédure", "niveau": "appliquer", "modules": ["nomadisme", "incident"] },
+    { "id": "qr-deplacement", "texte": "Se méfier des QR codes rencontrés en déplacement (parkings, restaurants, bornes)", "niveau": "analyser", "modules": ["hameconnage"] }
+  ],
+  "exposition": ["nomadisme", "quishing", "fuite-donnees"],
+  "contraintes": ["Connexion parfois lente : contenus légers, transcriptions disponibles", "Consultation fréquente sur mobile"],
+  "dureeAnnuelleCibleMinutes": 90,
+  "partEffectif": 0.18,
+  "ordre": 50
+}

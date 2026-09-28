@@ -1,0 +1,149 @@
+---
+/** Page d'un module : pré-test → essentiel → mise en situation → post-test. Versions standard et FALC. */
+import Base from '../layouts/Base.astro';
+import Markdown from './Markdown.astro';
+import Quiz from './Quiz.astro';
+import Scenario from './Scenario.astro';
+import BoiteMail from './BoiteMail.astro';
+import Media from './Media.astro';
+import { donnees, formaterDate, FREQUENCE_LIBELLE } from '../lib/donnees.ts';
+import { traducteur } from '../i18n/index.ts';
+import type { Cle } from '../i18n/index.ts';
+
+interface Props {
+  id: string;
+  falc: boolean;
+}
+const { id, falc } = Astro.props;
+const d = donnees();
+const T = traducteur(d.langue);
+const m = d.module(id);
+const meta = m.meta;
+const titre = `${meta.code} – ${d.tr(meta.titre)}`;
+const base = `/modules/${meta.id}/`;
+const lienFalc = `${base}facile/`;
+
+const index = d.modules.findIndex((x) => x.meta.id === id);
+const precedent = d.modules[index - 1]?.meta;
+const suivant = d.modules[index + 1]?.meta;
+
+const mediasScenario = new Set(m.scenario?.type === 'embranchements' ? m.scenario.etapes.flatMap((e) => (e.media ? [e.media] : [])) : []);
+const mediasLibres = meta.medias.filter((x) => !mediasScenario.has(x.id));
+const lien = (autre: typeof meta) => (falc ? `/modules/${autre.id}/facile/` : `/modules/${autre.id}/`);
+---
+<Base
+  titre={falc ? `${titre} (${T('module.versionFalc')})` : titre}
+  description={d.tr(meta.resume)}
+  filAriane={[{ libelle: T('nav.modules'), href: '/modules/' }, falc ? { libelle: meta.code, href: base } : { libelle: meta.code }, ...(falc ? [{ libelle: 'FALC' }] : [])]}
+>
+  <article class="module lecture" data-page-module={meta.id}>
+    <h1>{titre}</h1>
+
+    {falc ? (
+      <p class="encart">
+        <strong>{T('module.versionFalc')}.</strong> <a href={base}>{T('module.lienStandard')}</a>
+      </p>
+    ) : (
+      <>
+        <p class="encart suggestion-falc">
+          {T('module.suggestionFalc')} <a href={lienFalc}>{T('module.lienFalc')}</a>
+        </p>
+        <p><a class="lien-falc" href={lienFalc}>{T('module.lienFalc')}</a></p>
+      </>
+    )}
+
+    <p class="module__resume">{d.tr(meta.resume)}</p>
+
+    <dl class="meta">
+      <dt>{T('commun.duree')}</dt>
+      <dd>{T('commun.minutes', { n: meta.dureeMinutes })}</dd>
+      <dt>{T('commun.niveau')}</dt>
+      <dd>{T(`niveau.${meta.niveau}` as Cle)}</dd>
+      <dt>{T('commun.formats')}</dt>
+      <dd>{meta.formats.map((f) => T(`format.${f}` as Cle)).join(', ')}</dd>
+      <dt>{T('commun.risques')}</dt>
+      <dd>
+        <ul class="etiquettes">
+          {meta.risques.map((r) => (
+            <li>
+              {d.libelleRisque(r)}
+              {d.risque(r)?.emergent && <span class="etiquette etiquette--emergent">{T('commun.emergent')}</span>}
+            </li>
+          ))}
+        </ul>
+      </dd>
+      <dt>{T('commun.profils')}</dt>
+      <dd>{meta.profils.filter((p) => d.config.profilsActifs.includes(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
+      <dt>Statut</dt>
+      <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
+    </dl>
+
+    <h2>{T('commun.objectifs')}</h2>
+    <ul>
+      {meta.objectifs.map((o) => <li>{d.tr(o)}</li>)}
+    </ul>
+
+    <nav class="module__etapes" aria-labelledby="titre-etapes">
+      <h2 id="titre-etapes">{T('module.etapes')}</h2>
+      <ol>
+        <li><a href="#pretest">{T('module.etape1')}</a></li>
+        <li><a href="#essentiel">{T('module.etape2')}</a></li>
+        {m.scenario && <li><a href="#situation">{T('module.etape3')}</a></li>}
+        <li><a href="#posttest">{T('module.etape4')}</a></li>
+      </ol>
+    </nav>
+
+    <section id="pretest" aria-labelledby="titre-pretest">
+      <h2 id="titre-pretest">1. {T('module.etape1')}</h2>
+      <p>{T('module.pretestIntro')}</p>
+      <Quiz module={meta.id} phase="pretest" questions={m.quiz.pretest} falc={falc} />
+    </section>
+
+    <section id="essentiel" aria-labelledby="titre-essentiel">
+      <h2 id="titre-essentiel">2. {T('module.etape2')}</h2>
+      <Markdown source={falc ? m.falc : m.standard} decalageTitres={1} />
+      {mediasLibres.map((x) => <Media media={x} transcription={m.transcriptions[x.id]} />)}
+    </section>
+
+    {m.scenario && (
+      <section id="situation" aria-labelledby="titre-situation">
+        <h2 id="titre-situation">3. {T('module.etape3')} : {d.tr(m.scenario.titre)}</h2>
+        {m.scenario.type === 'boite-mail' ? (
+          <BoiteMail module={meta} scenario={m.scenario} />
+        ) : (
+          <Scenario module={meta} scenario={m.scenario} transcriptions={m.transcriptions} />
+        )}
+      </section>
+    )}
+
+    <section id="posttest" aria-labelledby="titre-posttest">
+      <h2 id="titre-posttest">{m.scenario ? 4 : 3}. {T('module.etape4')}</h2>
+      <p>{T('module.posttestIntro', { seuil: d.config.evaluation.seuilReussite })}</p>
+      <Quiz module={meta.id} phase="posttest" questions={m.quiz.posttest} falc={falc} />
+    </section>
+
+    {meta.sources.length > 0 && (
+      <section aria-labelledby="titre-sources">
+        <h2 id="titre-sources">{T('commun.sources')}</h2>
+        <ul>
+          {meta.sources.map((s) => (
+            <li><a href={s.url} rel="noopener noreferrer">{s.titre}<span class="visuellement-masque"> (site externe)</span></a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <p class="module__version">Version {meta.version}, revue le {formaterDate(meta.derniereRevue)}. Renouvellement préconisé : {FREQUENCE_LIBELLE[meta.renouvellement].toLowerCase()}.</p>
+
+    <nav class="module__navigation" aria-label="Modules précédent et suivant">
+      <ul>
+        {precedent && <li><a href={lien(precedent)} rel="prev">{T('module.precedent')} : {precedent.code} – {d.tr(precedent.titre)}</a></li>}
+        {suivant && <li><a href={lien(suivant)} rel="next">{T('module.suivant')} : {suivant.code} – {d.tr(suivant.titre)}</a></li>}
+      </ul>
+    </nav>
+  </article>
+</Base>
+
+<script>
+  import '../scripts/statuts.ts';
+</script>

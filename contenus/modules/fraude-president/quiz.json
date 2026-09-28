@@ -1,0 +1,81 @@
+{
+  "pretest": [
+    {
+      "id": "pre-voix",
+      "enonce": "Reconnaître la voix de votre directeur au téléphone suffit-il à confirmer que c'est bien lui ?",
+      "enonceFalc": "Vous reconnaissez la voix de votre directeur au téléphone. Est-ce forcément lui ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, une voix ne s'imite pas" },
+        { "id": "non", "texte": "Non, une voix peut être clonée par IA" }
+      ],
+      "bonnes": ["non"],
+      "explication": "Quelques secondes d'enregistrement suffisent pour cloner une voix de façon convaincante."
+    },
+    {
+      "id": "pre-leviers",
+      "enonce": "Quels leviers sont typiques d'une fraude au président ? (plusieurs réponses possibles)",
+      "enonceFalc": "Qu'est-ce que dit souvent le voleur ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "urgence", "texte": "L'urgence" },
+        { "id": "confidentialite", "texte": "La confidentialité" },
+        { "id": "procedure", "texte": "Le respect de la procédure habituelle" }
+      ],
+      "bonnes": ["urgence", "confidentialite"],
+      "explication": "Le fraudeur cherche au contraire à vous faire contourner la procédure habituelle."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-rappel",
+      "enonce": "Un appel de la « directrice financière » vous demande un virement urgent. Elle vous donne un numéro pour la rappeler. Que faites-vous ?",
+      "enonceFalc": "La directrice appelle. Elle demande un virement urgent. Elle vous donne un numéro. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "numero-donne", "texte": "Je la rappelle au numéro qu'elle m'a donné" },
+        { "id": "annuaire", "texte": "Je la rappelle au numéro de l'annuaire interne" },
+        { "id": "virement", "texte": "Je fais le virement, c'est urgent" }
+      ],
+      "bonnes": ["annuaire"],
+      "explication": "Le numéro fourni par l'appelant peut être celui du fraudeur. Seul un numéro que vous connaissiez déjà est fiable."
+    },
+    {
+      "id": "post-visio",
+      "enonce": "En visioconférence, votre dirigeant, caméra floue, vous demande de payer une facture en dehors du circuit habituel. Que faites-vous ?",
+      "enonceFalc": "En vidéo, votre directeur demande de payer une facture. Ce n'est pas la façon habituelle. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "payer", "texte": "Je paie : je le vois, c'est bien lui" },
+        { "id": "verifier", "texte": "J'applique la double validation et je contre-vérifie par un autre canal" }
+      ],
+      "bonnes": ["verifier"],
+      "explication": "Une vidéo peut être truquée. La procédure (double validation, contre-appel) est la seule protection fiable."
+    },
+    {
+      "id": "post-rib",
+      "enonce": "Un fournisseur habituel vous informe par e-mail d'un changement de coordonnées bancaires. Que faites-vous ?",
+      "enonceFalc": "Un fournisseur envoie un e-mail. Il dit qu'il a changé de compte bancaire. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "maj", "texte": "Je mets à jour le RIB dans le logiciel de paiement" },
+        { "id": "appel", "texte": "J'appelle mon contact habituel chez le fournisseur, au numéro déjà connu, pour confirmer" },
+        { "id": "repondre", "texte": "Je réponds à l'e-mail pour demander confirmation" }
+      ],
+      "bonnes": ["appel"],
+      "explication": "La messagerie du fournisseur peut être piratée : répondre à l'e-mail revient à interroger le fraudeur."
+    },
+    {
+      "id": "post-tentative",
+      "enonce": "Vous avez déjoué une tentative de fraude. Faut-il la signaler ?",
+      "enonceFalc": "Vous n'êtes pas tombé dans le piège. Faut-il quand même prévenir ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, d'autres collègues sont peut-être ciblés" },
+        { "id": "non", "texte": "Non, puisqu'il n'y a pas eu de dommage" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Les fraudeurs visent souvent plusieurs personnes. Votre signalement ({{contacts.signalement}}) permet d'alerter les autres."
+    }
+  ]
+}

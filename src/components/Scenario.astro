@@ -1,0 +1,138 @@
+---
+/**
+ * Mise en situation à embranchements. Les étapes apparaissent dans l'ordre du parcours
+ * choisi ; le focus est déplacé vers chaque nouveau contenu (lecteurs d'écran, clavier).
+ * Aucune limite de temps.
+ */
+import type { ModuleMeta, ScenarioEmbranchements } from '../lib/schemas.ts';
+import { tr } from '../lib/texte.ts';
+import { plateforme } from '../lib/contenus.ts';
+import { traducteur } from '../i18n/index.ts';
+import Markdown from './Markdown.astro';
+import Media from './Media.astro';
+
+interface Props {
+  module: ModuleMeta;
+  scenario: ScenarioEmbranchements;
+  transcriptions: Record<string, string>;
+  niveauTitre?: 3 | 4;
+}
+const { module, scenario, transcriptions, niveauTitre = 3 } = Astro.props;
+const { config } = plateforme();
+const langue = config.langues.defaut;
+const T = traducteur(langue);
+const Titre = `h${niveauTitre}` as "h3" | "h4";
+const textes = { fin: T('scenario.fin') };
+---
+<div class="scenario" data-scenario data-module={module.id} data-depart={scenario.depart} data-libelles={JSON.stringify(textes)}>
+  <Markdown source={tr(scenario.consigne, langue)} />
+  <div class="scenario__fil" data-fil>
+    {scenario.etapes.map((e) => {
+      const media = e.media ? module.medias.find((m) => m.id === e.media) : undefined;
+      return (
+        <section class="scenario__etape carte" data-etape={e.id} aria-labelledby={`etape-${module.id}-${e.id}`} hidden={e.id !== scenario.depart}>
+          <Titre id={`etape-${module.id}-${e.id}`} tabindex="-1">{tr(e.titre, langue)}</Titre>
+          <Markdown source={tr(e.texte, langue)} />
+          {media && <Media media={media} transcription={transcriptions[media.id]} />}
+          {e.choix.length > 0 ? (
+            <div class="scenario__choix">
+              <p class="scenario__question" id={`q-${module.id}-${e.id}`}>{T('scenario.question')}</p>
+              <ul class="scenario__options" aria-labelledby={`q-${module.id}-${e.id}`}>
+                {e.choix.map((c) => (
+                  <li>
+                    <button type="button" class="bouton--secondaire" data-choix={c.id} data-suivant={c.suivant} data-adapte={String(c.adapte)} aria-pressed="false">
+                      <Markdown source={tr(c.texte, langue)} enLigne />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {e.choix.map((c) => (
+                <div class:list={['message-retour', c.adapte ? 'message-retour--succes' : 'message-retour--erreur']} data-retour-pour={c.id} tabindex="-1" hidden>
+                  <p class="message-retour__titre">{c.adapte ? T('scenario.adapte') : T('scenario.inadapte')}</p>
+                  <Markdown source={tr(c.retour, langue)} />
+                  {c.suivant && <button type="button" data-continuer={c.suivant}>{T('scenario.continuer')}</button>}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="scenario__fin-marqueur" data-fin></p>
+          )}
+        </section>
+      );
+    })}
+  </div>
+  <div class="message-retour message-retour--succes" data-bilan tabindex="-1" hidden></div>
+  <button type="button" class="bouton--secondaire" data-recommencer hidden>{T('scenario.recommencer')}</button>
+  <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
+</div>
+
+<script>
+  import { majModule, libelles, formater, resultat } from '../scripts/stockage.ts';
+
+  for (const racine of document.querySelectorAll<HTMLElement>('[data-scenario]')) {
+    const L = libelles(racine);
+    const fil = racine.querySelector<HTMLElement>('[data-fil]')!;
+    const etapes = new Map([...racine.querySelectorAll<HTMLElement>('[data-etape]')].map((s) => [s.dataset.etape!, s]));
+    const bilan = racine.querySelector<HTMLElement>('[data-bilan]')!;
+    const recommencer = racine.querySelector<HTMLButtonElement>('[data-recommencer]')!;
+    let adaptes = 0;
+    let total = 0;
+
+    const titreDe = (s: HTMLElement) => s.querySelector<HTMLElement>('h3, h4');
+
+    function afficher(id: string, focus = true) {
+      const s = etapes.get(id);
+      if (!s) return;
+      fil.append(s); // l'ordre du DOM suit le chemin réellement parcouru
+      s.hidden = false;
+      if (focus) titreDe(s)?.focus();
+      if (s.querySelector('[data-fin]')) terminer();
+    }
+
+    function terminer() {
+      bilan.textContent = formater(L.fin, { adaptes, total });
+      bilan.hidden = false;
+      recommencer.hidden = false;
+      majModule(racine.dataset.module!, (s) => {
+        s.scenario = resultat(adaptes, total);
+      });
+      document.dispatchEvent(new CustomEvent('ssi:progression'));
+    }
+
+    racine.addEventListener('click', (evt) => {
+      const cible = (evt.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!cible || !racine.contains(cible)) return;
+
+      if (cible.dataset.choix) {
+        const etape = cible.closest<HTMLElement>('[data-etape]')!;
+        for (const b of etape.querySelectorAll<HTMLButtonElement>('[data-choix]')) {
+          b.disabled = true;
+          b.setAttribute('aria-pressed', String(b === cible));
+        }
+        total++;
+        if (cible.dataset.adapte === 'true') adaptes++;
+        const retour = etape.querySelector<HTMLElement>(`[data-retour-pour="${cible.dataset.choix}"]`)!;
+        retour.hidden = false;
+        retour.focus();
+      } else if (cible.dataset.continuer) {
+        cible.hidden = true;
+        afficher(cible.dataset.continuer);
+      } else if (cible.hasAttribute('data-recommencer')) {
+        adaptes = 0;
+        total = 0;
+        for (const s of etapes.values()) {
+          s.hidden = true;
+          for (const b of s.querySelectorAll<HTMLButtonElement>('[data-choix]')) {
+            b.disabled = false;
+            b.setAttribute('aria-pressed', 'false');
+          }
+          for (const r of s.querySelectorAll<HTMLElement>('[data-retour-pour]')) r.hidden = true;
+          for (const c of s.querySelectorAll<HTMLButtonElement>('[data-continuer]')) c.hidden = false;
+        }
+        bilan.hidden = true;
+        recommencer.hidden = true;
+        afficher(racine.dataset.depart!);
+      }
+    });
+  }
+</script>

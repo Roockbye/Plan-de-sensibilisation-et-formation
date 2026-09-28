@@ -1,0 +1,49 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : un appel au support",
+  "consigne": "Vous êtes d'astreinte au support informatique. Choisissez vos réactions. Il n'y a pas de limite de temps.",
+  "depart": "appel",
+  "etapes": [
+    {
+      "id": "appel",
+      "titre": "Vendredi, 18 h 50 : un appel pressant",
+      "texte": "« Bonjour, Claire Martin, directrice commerciale. Je suis à l'aéroport, j'ai changé de téléphone et je n'ai plus accès à ma double authentification. J'ai une présentation client dans une heure, il faut me réinitialiser tout de suite ! » Le nom correspond bien à l'annuaire.",
+      "choix": [
+        { "id": "reset", "texte": "Je réinitialise et j'envoie un lien d'enrôlement à l'adresse qu'elle me donne", "suivant": "compromission", "adapte": false, "retour": "Le nom figure dans l'annuaire, mais rien ne prouve que l'appelante est bien Claire Martin. Urgence et autorité sont des leviers classiques." },
+        { "id": "verifier", "texte": "J'applique la procédure : je la rappelle sur son numéro de l'annuaire et je demande une validation par son manager", "suivant": "rappel", "adapte": true, "retour": "C'est la procédure qui protège, quel que soit le rang de la personne." }
+      ]
+    },
+    {
+      "id": "rappel",
+      "titre": "18 h 55 : le rappel",
+      "texte": "Vous appelez le numéro de l'annuaire. La vraie Claire Martin décroche… depuis son bureau. Elle n'a jamais appelé le support.",
+      "choix": [
+        { "id": "alerter", "texte": "Je déclare un incident de sécurité et je surveille le compte de Claire Martin", "suivant": "fin-bonne", "adapte": true, "retour": "Excellent : quelqu'un cible activement ce compte, il faut le protéger et prévenir l'équipe sécurité." },
+        { "id": "classer", "texte": "Je raccroche, fausse alerte", "suivant": "fin-moyenne", "adapte": false, "retour": "Ce n'est pas une fausse alerte : c'est une tentative d'intrusion ciblée qui doit être déclarée." }
+      ]
+    },
+    {
+      "id": "compromission",
+      "titre": "Lundi : un accès administrateur créé",
+      "texte": "Le compte de Claire Martin a été utilisé tout le week-end. L'attaquant a trouvé dans sa messagerie un fichier contenant des identifiants techniques et a créé un nouveau compte d'administration.",
+      "choix": [
+        { "id": "declarer", "texte": "Je déclare immédiatement l'incident et je désactive les comptes concernés en coordination avec l'équipe sécurité", "suivant": "fin-crise", "adapte": true, "retour": "La priorité est de contenir : désactiver les accès malveillants et déclencher la gestion de crise." }
+      ]
+    },
+    {
+      "id": "fin-crise",
+      "titre": "Conséquence : gestion de crise",
+      "texte": "L'équipe sécurité lance une investigation complète : revue de tous les comptes à privilèges, réinitialisation des secrets exposés, analyse des journaux. Un simple rappel au numéro de l'annuaire aurait évité l'incident."
+    },
+    {
+      "id": "fin-moyenne",
+      "titre": "Conséquence : une menace ignorée",
+      "texte": "Le lundi suivant, un collègue du support reçoit le même appel et, lui, réinitialise le compte. Une tentative déjouée doit toujours être déclarée pour que toute l'équipe soit prévenue."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : attaque déjouée",
+      "texte": "L'équipe sécurité alerte l'ensemble du support et renforce la surveillance des comptes de la direction. Votre respect de la procédure a évité une intrusion."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "pretest": [
+    {
+      "id": "pre-fautes",
+      "enonce": "Un e-mail rédigé sans aucune faute d'orthographe est-il forcément légitime ?",
+      "enonceFalc": "Un message sans fautes est-il forcément un vrai message ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, les pirates font toujours des fautes" },
+        { "id": "non", "texte": "Non, l'IA permet aux pirates d'écrire des messages parfaits" }
+      ],
+      "bonnes": ["non"],
+      "explication": "Grâce à l'IA générative, les messages frauduleux sont désormais soignés et personnalisés. L'absence de fautes ne prouve rien."
+    },
+    {
+      "id": "pre-qr",
+      "enonce": "Un QR code peut-il vous conduire vers un site frauduleux ?",
+      "enonceFalc": "Un QR code peut-il ouvrir un faux site ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui" },
+        { "id": "non", "texte": "Non, les QR codes sont sûrs" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Un QR code n'est qu'un lien caché. On parle de « quishing » quand il mène à une page frauduleuse."
+    },
+    {
+      "id": "pre-reflexe",
+      "enonce": "Vous recevez un message suspect. Quel est le meilleur réflexe ?",
+      "enonceFalc": "Vous recevez un message bizarre. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "supprimer", "texte": "Le supprimer sans rien dire" },
+        { "id": "signaler", "texte": "Le signaler à l'équipe sécurité" },
+        { "id": "transferer", "texte": "Le transférer à des collègues pour avoir leur avis" }
+      ],
+      "bonnes": ["signaler"],
+      "explication": "Le signalement permet à l'équipe sécurité de bloquer la campagne pour tout le monde. Transférer le message propage le risque."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-domaine",
+      "enonce": "Quel lien mène réellement au domaine {{organisation.domaine}} ?",
+      "enonceFalc": "Quel lien est le vrai site de l'organisation ?",
+      "type": "unique",
+      "choix": [
+        { "id": "a", "texte": "https://{{organisation.domaine}}.connexion-verif.co/login" },
+        { "id": "b", "texte": "https://messagerie.{{organisation.domaine}}/login" },
+        { "id": "c", "texte": "https://{{organisation.domaine}}-securite.com/login" }
+      ],
+      "bonnes": ["b"],
+      "explication": "On lit le domaine de droite à gauche à partir du premier « / » : seul le lien b se termine par {{organisation.domaine}}."
+    },
+    {
+      "id": "post-indices",
+      "enonce": "Parmi ces éléments, lesquels sont des indices d'hameçonnage ? (plusieurs réponses possibles)",
+      "enonceFalc": "Quels signes montrent un faux message ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "urgence", "texte": "Une menace de suppression du compte sous 24 heures" },
+        { "id": "mdp", "texte": "Une demande de saisir son mot de passe" },
+        { "id": "prenom", "texte": "Le message est adressé à votre nom" },
+        { "id": "expediteur", "texte": "Une adresse d'expéditeur qui imite celle de l'organisation" }
+      ],
+      "bonnes": ["urgence", "mdp", "expediteur"],
+      "explication": "L'urgence, la demande d'identifiants et l'expéditeur imité sont des indices classiques. Être appelé par son nom ne prouve rien : ces informations sont faciles à trouver."
+    },
+    {
+      "id": "post-qr-email",
+      "enonce": "Un e-mail vous demande de scanner un QR code pour « réactiver votre double authentification ». Que faites-vous ?",
+      "enonceFalc": "Un e-mail vous demande de scanner un QR code. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "scanner", "texte": "Je scanne avec mon téléphone personnel, c'est moins risqué" },
+        { "id": "signaler", "texte": "Je ne scanne pas et je signale l'e-mail" },
+        { "id": "repondre", "texte": "Je réponds à l'expéditeur pour vérifier" }
+      ],
+      "bonnes": ["signaler"],
+      "explication": "Scanner avec un téléphone personnel est même plus risqué : il est moins protégé. Répondre à l'expéditeur, c'est dialoguer avec le fraudeur."
+    },
+    {
+      "id": "post-clic",
+      "enonce": "Vous avez saisi votre mot de passe sur une page qui vous semble finalement suspecte. Que faites-vous ?",
+      "enonceFalc": "Vous avez donné votre mot de passe sur un faux site. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "rien", "texte": "Rien, pour ne pas avoir d'ennuis" },
+        { "id": "prevenir", "texte": "Je préviens immédiatement l'équipe sécurité" },
+        { "id": "attendre", "texte": "J'attends de voir si quelque chose se passe" }
+      ],
+      "bonnes": ["prevenir"],
+      "explication": "Chaque minute compte : l'équipe sécurité peut bloquer le compte et changer le mot de passe avant que l'attaquant ne s'en serve. Contact : {{contacts.securite}}."
+    },
+    {
+      "id": "post-affiche",
+      "enonce": "Sur un parcmètre, un QR code est collé sur une étiquette par-dessus l'affiche officielle. Quelle est la bonne attitude ?",
+      "enonceFalc": "Un QR code est collé sur une affiche. Il a l'air ajouté. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "scanner", "texte": "Je le scanne, c'est plus rapide" },
+        { "id": "eviter", "texte": "Je ne le scanne pas et j'utilise l'application ou le site officiel" }
+      ],
+      "bonnes": ["eviter"],
+      "explication": "Un autocollant ajouté par-dessus une affiche officielle est un signe classique de quishing."
+    }
+  ]
+}

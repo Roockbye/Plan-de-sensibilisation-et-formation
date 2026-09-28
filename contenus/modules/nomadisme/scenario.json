@@ -1,0 +1,59 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : une journée en déplacement",
+  "consigne": "Vous partez voir un client dans une autre ville. Faites vos choix à chaque étape. Il n'y a pas de limite de temps.",
+  "depart": "gare",
+  "etapes": [
+    {
+      "id": "gare",
+      "titre": "7 h 45 : en gare",
+      "texte": "Vous devez envoyer un devis avant de monter dans le train. Deux réseaux sont disponibles : « Gare-WiFi-Gratuit » et le partage de connexion de votre téléphone.",
+      "choix": [
+        { "id": "wifi", "texte": "Je me connecte au Wi-Fi gratuit, c'est plus rapide", "suivant": "train", "adapte": false, "retour": "N'importe qui peut créer un réseau nommé « Gare-WiFi-Gratuit » et observer le trafic. Si vous le faites malgré tout, le VPN est indispensable." },
+        { "id": "partage", "texte": "J'utilise le partage de connexion et j'active le VPN", "suivant": "train", "adapte": true, "retour": "Bon réflexe : connexion de confiance et flux chiffré." }
+      ]
+    },
+    {
+      "id": "train",
+      "titre": "9 h 10 : dans le train",
+      "texte": "Votre client vous appelle pour discuter des tarifs. Le wagon est plein.",
+      "choix": [
+        { "id": "repondre", "texte": "Je réponds et je discute des chiffres à ma place", "suivant": "hotel", "adapte": false, "retour": "Vos voisins entendent le nom du client et les tarifs : c'est une fuite d'informations." },
+        { "id": "reporter", "texte": "Je propose de rappeler depuis un lieu calme, ou je parle sans citer de noms ni de chiffres", "suivant": "hotel", "adapte": true, "retour": "Exactement : la confidentialité s'applique aussi à l'oral." }
+      ]
+    },
+    {
+      "id": "hotel",
+      "titre": "19 h 30 : à l'hôtel",
+      "texte": "Vous descendez dîner au restaurant de l'hôtel. Votre ordinateur est dans la chambre.",
+      "choix": [
+        { "id": "laisser", "texte": "Je le laisse ouvert sur le bureau de la chambre", "suivant": "vol", "adapte": false, "retour": "Une chambre d'hôtel n'est pas un lieu sûr : le personnel et d'autres personnes peuvent y accéder." },
+        { "id": "proteger", "texte": "Je l'éteins et je le range dans le coffre, ou je le garde avec moi", "suivant": "fin-bonne", "adapte": true, "retour": "Bon réflexe : un appareil éteint et chiffré, hors de vue, limite fortement le risque." }
+      ]
+    },
+    {
+      "id": "vol",
+      "titre": "21 h : l'ordinateur a disparu",
+      "texte": "De retour dans votre chambre, votre ordinateur n'est plus là.",
+      "choix": [
+        { "id": "appeler", "texte": "J'appelle immédiatement le numéro d'urgence sécurité ({{contacts.telephoneUrgence}})", "suivant": "fin-reactive", "adapte": true, "retour": "C'est la bonne réaction : chaque minute compte pour bloquer les accès." },
+        { "id": "attendre", "texte": "Je préviendrai à mon retour, dans deux jours", "suivant": "fin-tardive", "adapte": false, "retour": "Pendant deux jours, les sessions ouvertes et les données restent exposées." }
+      ]
+    },
+    {
+      "id": "fin-reactive",
+      "titre": "Conséquence : incident limité",
+      "texte": "L'équipe sécurité bloque vos comptes, révoque les sessions et déclenche l'effacement à distance. Le disque étant chiffré, les données sont protégées. Il reste à déposer plainte et à récupérer un poste de remplacement."
+    },
+    {
+      "id": "fin-tardive",
+      "titre": "Conséquence : accès exposés pendant deux jours",
+      "texte": "Pendant ce délai, votre messagerie est restée ouverte sur l'ordinateur volé. L'équipe sécurité doit désormais vérifier qu'aucun e-mail frauduleux n'a été envoyé en votre nom."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : journée sans incident",
+      "texte": "Vos choix ont protégé votre connexion, vos échanges et votre matériel. Ce sont ces gestes simples, répétés à chaque déplacement, qui font la différence."
+    }
+  ]
+}

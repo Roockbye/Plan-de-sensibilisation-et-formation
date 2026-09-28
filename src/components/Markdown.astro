@@ -1,0 +1,14 @@
+---
+/** Rendu d'un contenu Markdown (HTML brut échappé par construction, voir personnalisation.ts). */
+import { markdownEnLigne, markdownVersHtml } from '../lib/personnalisation.ts';
+
+interface Props {
+  source: string;
+  enLigne?: boolean;
+  decalageTitres?: number;
+  class?: string;
+}
+const { source, enLigne = false, decalageTitres = 0, class: classe } = Astro.props;
+const html = enLigne ? markdownEnLigne(source) : markdownVersHtml(source, decalageTitres);
+---
+{enLigne ? <Fragment set:html={html} /> : <div class:list={['contenu', classe]} set:html={html} />}

@@ -1,0 +1,104 @@
+{
+  "type": "boite-mail",
+  "titre": "Simulation : votre boîte de réception",
+  "consigne": "Voici six messages reçus ce matin. Pour chacun, décidez s'il faut le signaler ou s'il est légitime. Utilisez le bouton « Vérifier le lien » pour voir où mène réellement un lien. Rien n'est envoyé : c'est une mise en situation.",
+  "messages": [
+    {
+      "id": "expiration-mdp",
+      "canal": "email",
+      "expediteur": { "nom": "Service informatique", "adresse": "support@{{organisation.domaine}}-helpdesk.com" },
+      "objet": "Action requise : votre mot de passe expire aujourd'hui",
+      "date": "Lundi 08:12",
+      "corps": "Cher utilisateur,\n\nVotre mot de passe expire dans **2 heures**. Sans action de votre part, l'accès à votre messagerie sera suspendu.\n\nCliquez sur le lien ci-dessous pour conserver votre mot de passe actuel.",
+      "liens": [{ "texteAffiche": "https://messagerie.{{organisation.domaine}}/conserver", "destination": "http://messagerie-{{organisation.domaine}}.verif-compte.co/login.php" }],
+      "nature": "malveillant",
+      "indices": [
+        "Adresse d'expéditeur hors du domaine {{organisation.domaine}}",
+        "Urgence et menace de suspension",
+        "Formule générique « Cher utilisateur »",
+        "Le lien mène vers verif-compte.co, pas vers {{organisation.domaine}}"
+      ],
+      "explication": "Hameçonnage classique : un vrai service informatique ne vous demande jamais de « conserver » votre mot de passe via un lien."
+    },
+    {
+      "id": "conges-rh",
+      "canal": "email",
+      "expediteur": { "nom": "Ressources humaines", "adresse": "rh@{{organisation.domaine}}" },
+      "objet": "Rappel : saisie des congés d'été avant le 30 avril",
+      "date": "Lundi 08:45",
+      "corps": "Bonjour à toutes et à tous,\n\nPour organiser les plannings, merci de saisir vos souhaits de congés d'été dans l'intranet avant le 30 avril.\n\nL'équipe RH",
+      "liens": [{ "texteAffiche": "https://intranet.{{organisation.domaine}}/conges", "destination": "https://intranet.{{organisation.domaine}}/conges" }],
+      "nature": "legitime",
+      "indices": [
+        "Expéditeur interne au bon domaine",
+        "Demande habituelle, sans urgence excessive",
+        "Le lien mène bien à l'intranet de l'organisation",
+        "Aucune demande de mot de passe ni de paiement"
+      ],
+      "explication": "Message légitime : expéditeur et lien cohérents, demande attendue. Même ici, en cas de doute, on peut ouvrir l'intranet par ses favoris plutôt que par le lien."
+    },
+    {
+      "id": "sms-colis",
+      "canal": "sms",
+      "expediteur": { "nom": "+33 7 55 01 23 45", "adresse": "SMS" },
+      "date": "Lundi 09:03",
+      "corps": "Votre colis n'a pas pu être livré. Frais de réexpédition : 1,99 €. Réglez sous 48h :",
+      "liens": [{ "texteAffiche": "https://livraison-suivi.info/fr", "destination": "https://livraison-suivi.info/fr/paiement" }],
+      "nature": "malveillant",
+      "indices": [
+        "Numéro de téléphone inconnu",
+        "Petite somme pour obtenir vos coordonnées bancaires",
+        "Délai court pour vous presser",
+        "Site qui n'appartient à aucun transporteur connu"
+      ],
+      "explication": "Smishing : la petite somme sert à voler votre numéro de carte bancaire. Les transporteurs ne demandent pas de frais par SMS."
+    },
+    {
+      "id": "qr-mfa",
+      "canal": "email",
+      "expediteur": { "nom": "Sécurité de votre compte", "adresse": "no-reply@securite-compte-cloud.com" },
+      "objet": "Réactivez votre double authentification avant vendredi",
+      "date": "Lundi 09:30",
+      "corps": "Une mise à jour de sécurité nécessite de réactiver votre double authentification.\n\nScannez le QR code ci-dessous avec votre téléphone pour finaliser la procédure.",
+      "qrCode": { "description": "QR code sans texte explicatif", "destination": "https://securite-compte-cloud.com/auth/reactivation" },
+      "nature": "malveillant",
+      "indices": [
+        "Domaine d'expéditeur sans rapport avec l'éditeur",
+        "QR code dans un e-mail : il échappe aux filtres de sécurité",
+        "Oblige à utiliser un téléphone, souvent moins protégé",
+        "Échéance pour vous presser"
+      ],
+      "explication": "Quishing : le QR code cache l'adresse du faux site. La double authentification se gère uniquement depuis les outils officiels communiqués par {{organisation.nom}}."
+    },
+    {
+      "id": "equipe-securite",
+      "canal": "email",
+      "expediteur": { "nom": "Équipe sécurité", "adresse": "{{contacts.securite}}" },
+      "objet": "Vague de faux SMS de livraison : restez vigilants",
+      "date": "Lundi 10:15",
+      "corps": "Bonjour,\n\nPlusieurs collègues ont reçu ce matin de faux SMS de livraison demandant 1,99 €. Ne cliquez pas et signalez-les.\n\nMerci à celles et ceux qui ont déjà signalé : c'est grâce à vous que nous avons pu réagir.\n\nL'équipe sécurité",
+      "nature": "legitime",
+      "indices": [
+        "Expéditeur : le contact sécurité officiel",
+        "Aucun lien, aucune pièce jointe, aucune demande d'action risquée",
+        "Message d'information cohérent avec l'actualité"
+      ],
+      "explication": "Message légitime : il informe sans rien demander de sensible. Un message d'alerte qui vous demanderait de cliquer ou de saisir un mot de passe serait, lui, suspect."
+    },
+    {
+      "id": "affiche-parking",
+      "canal": "affiche-qr",
+      "expediteur": { "nom": "Parking du site", "adresse": "Affiche sur l'horodateur" },
+      "date": "Lundi 12:40",
+      "corps": "« Payez votre stationnement en ligne : scannez-moi ! » Le QR code est imprimé sur un autocollant collé par-dessus l'affiche officielle de la mairie.",
+      "qrCode": { "description": "QR code sur autocollant ajouté", "destination": "https://paiement-stationnement-rapide.net/carte" },
+      "nature": "malveillant",
+      "indices": [
+        "Autocollant ajouté par-dessus l'affichage officiel",
+        "Adresse sans rapport avec la commune ou l'opérateur officiel",
+        "Demande de paiement par carte bancaire"
+      ],
+      "explication": "Quishing physique, fréquent sur les parcmètres et bornes de recharge. Utilisez l'application ou le site officiel que vous connaissez."
+    }
+  ]
+}

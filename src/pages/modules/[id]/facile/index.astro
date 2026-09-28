@@ -1,0 +1,9 @@
+---
+import PageModule from '../../../../components/PageModule.astro';
+import { plateforme } from '../../../../lib/contenus.ts';
+
+export function getStaticPaths() {
+  return plateforme().modules.map((m) => ({ params: { id: m.meta.id } }));
+}
+---
+<PageModule id={Astro.params.id!} falc={true} />

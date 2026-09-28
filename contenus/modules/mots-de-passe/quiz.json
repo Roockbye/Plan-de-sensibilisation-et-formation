@@ -1,0 +1,82 @@
+{
+  "pretest": [
+    {
+      "id": "pre-robuste",
+      "enonce": "Quel mot de passe est le plus robuste ?",
+      "enonceFalc": "Quel mot de passe est le plus solide ?",
+      "type": "unique",
+      "choix": [
+        { "id": "a", "texte": "P@ssw0rd2027" },
+        { "id": "b", "texte": "Girafe-Cadenas-Violon-Marée" },
+        { "id": "c", "texte": "Azerty!1" }
+      ],
+      "bonnes": ["b"],
+      "explication": "La longueur fait la robustesse. Les substitutions (@ pour a, 0 pour o) sont connues des outils des attaquants."
+    },
+    {
+      "id": "pre-reutilisation",
+      "enonce": "Réutiliser le même mot de passe sur plusieurs sites, c'est :",
+      "enonceFalc": "Avoir le même mot de passe sur plusieurs sites, c'est :",
+      "type": "unique",
+      "choix": [
+        { "id": "ok", "texte": "Acceptable s'il est complexe" },
+        { "id": "risque", "texte": "Dangereux : une seule fuite compromet tous les comptes" }
+      ],
+      "bonnes": ["risque"],
+      "explication": "Les attaquants testent automatiquement les identifiants volés sur de nombreux services."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-notif",
+      "enonce": "À 23 h, votre téléphone affiche une demande de validation de connexion que vous n'avez pas faite. Que faites-vous ?",
+      "enonceFalc": "Le soir, votre téléphone demande de valider une connexion. Vous ne vous connectiez pas. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "accepter", "texte": "J'accepte pour que les notifications s'arrêtent" },
+        { "id": "refuser-signaler", "texte": "Je refuse et je signale à l'équipe sécurité" },
+        { "id": "ignorer", "texte": "J'ignore et je me rendors" }
+      ],
+      "bonnes": ["refuser-signaler"],
+      "explication": "Quelqu'un connaît probablement votre mot de passe. Refuser bloque la connexion ; signaler permet de changer le mot de passe et d'enquêter."
+    },
+    {
+      "id": "post-code",
+      "enonce": "Une personne se présentant comme le support informatique vous appelle et vous demande le code reçu par SMS. Que faites-vous ?",
+      "enonceFalc": "Une personne vous appelle. Elle dit travailler au service informatique. Elle demande votre code reçu par SMS. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "donner", "texte": "Je lui donne, c'est le support" },
+        { "id": "refuser", "texte": "Je refuse et je rappelle le support au numéro officiel" }
+      ],
+      "bonnes": ["refuser"],
+      "explication": "Un code de validation ne se communique jamais, à personne. Le vrai support n'en a pas besoin."
+    },
+    {
+      "id": "post-gestionnaire",
+      "enonce": "Quels sont les avantages d'un gestionnaire de mots de passe ? (plusieurs réponses possibles)",
+      "enonceFalc": "Pourquoi utiliser un gestionnaire de mots de passe ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "unique", "texte": "Avoir un mot de passe unique et robuste pour chaque service" },
+        { "id": "memoire", "texte": "N'avoir qu'une seule phrase de passe à retenir" },
+        { "id": "partage", "texte": "Pouvoir partager son mot de passe principal avec ses collègues" }
+      ],
+      "bonnes": ["unique", "memoire"],
+      "explication": "Le gestionnaire génère et retient des mots de passe uniques. Le mot de passe principal, lui, ne se partage jamais."
+    },
+    {
+      "id": "post-fuite",
+      "enonce": "Vous apprenez que le mot de passe de votre compte sur un site de loisirs a fuité. Vous l'utilisiez aussi au travail. Que faites-vous ? (plusieurs réponses possibles)",
+      "enonceFalc": "Un site a perdu votre mot de passe. Vous utilisez le même au travail. Que faites-vous ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "changer", "texte": "Je change ce mot de passe partout où je l'ai utilisé" },
+        { "id": "prevenir", "texte": "Je préviens l'équipe sécurité" },
+        { "id": "attendre", "texte": "J'attends de voir s'il y a un problème" }
+      ],
+      "bonnes": ["changer", "prevenir"],
+      "explication": "Le mot de passe est probablement déjà testé par des robots. Il faut le changer partout et prévenir ({{contacts.securite}})."
+    }
+  ]
+}

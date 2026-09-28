@@ -1,0 +1,106 @@
+---
+/**
+ * Barres horizontales (une ou plusieurs séries), en SVG statique.
+ * Accessibilité : le SVG est décoratif pour les lecteurs d'écran (aria-hidden) car un
+ * tableau de données équivalent est TOUJOURS rendu juste après (RGAA 1.3 / 1.8).
+ * L'identité des séries ne repose pas sur la couleur seule : légende + motif hachuré
+ * sur la série 2 + valeur écrite au bout de chaque barre.
+ */
+interface Serie {
+  nom: string;
+  valeurs: number[];
+}
+interface Props {
+  id: string;
+  titre: string;
+  categories: string[];
+  series: Serie[];
+  max?: number;
+  unite?: string;
+  enteteCategorie: string;
+}
+const { id, titre, categories, series, max = 100, unite = ' %', enteteCategorie } = Astro.props;
+
+const LARGEUR = 640;
+const MARGE_G = 210;
+const MARGE_D = 56;
+const EP = 18; // épaisseur de barre (<= 24px)
+const ESPACE = 2; // espace de surface entre barres adjacentes
+const BANDE = series.length * EP + (series.length - 1) * ESPACE + 20;
+const HAUT_AXE = 24;
+const hauteur = categories.length * BANDE + HAUT_AXE;
+const largeurUtile = LARGEUR - MARGE_G - MARGE_D;
+const x = (v: number) => (Math.max(0, v) / max) * largeurUtile;
+const graduations = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(f * max));
+
+/** Barre ancrée à la ligne de base, extrémité arrondie de 4px. */
+function barre(x0: number, y: number, l: number, h: number): string {
+  if (l <= 0) return '';
+  const r = Math.min(4, l, h / 2);
+  return `M${x0},${y}h${l - r}a${r},${r} 0 0 1 ${r},${r}v${h - 2 * r}a${r},${r} 0 0 1 -${r},${r}h-${l - r}z`;
+}
+---
+<figure class="graphique" aria-labelledby={`${id}-titre`}>
+  <figcaption id={`${id}-titre`} class="graphique__titre">{titre}</figcaption>
+  {series.length > 1 && (
+    <ul class="graphique__legende" aria-hidden="true">
+      {series.map((s, i) => (
+        <li><span class:list={['pastille', `serie-${i + 1}`]}></span>{s.nom}</li>
+      ))}
+    </ul>
+  )}
+  <svg class="graphique__svg" viewBox={`0 0 ${LARGEUR} ${hauteur}`} width="100%" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id={`${id}-hachures`} patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+        <rect width="6" height="6" class="serie-2" />
+        <line x1="0" y1="0" x2="0" y2="6" class="hachure" stroke-width="2" />
+      </pattern>
+    </defs>
+    {graduations.map((g) => (
+      <g>
+        <line class="grille" x1={MARGE_G + x(g)} x2={MARGE_G + x(g)} y1="0" y2={hauteur - HAUT_AXE} />
+        <text class="axe" x={MARGE_G + x(g)} y={hauteur - 6} text-anchor="middle">{g}{unite.trim()}</text>
+      </g>
+    ))}
+    {categories.map((c, i) => {
+      const y0 = i * BANDE + 10;
+      return (
+        <g>
+          <text class="etiquette-cat" x={MARGE_G - 10} y={y0 + (BANDE - 20) / 2 + 5} text-anchor="end">{c}</text>
+          {series.map((s, j) => {
+            const y = y0 + j * (EP + ESPACE);
+            const v = s.valeurs[i];
+            return (
+              <g>
+                <path d={barre(MARGE_G, y, x(v), EP)} class={`serie-${j + 1}`} fill={j === 1 ? `url(#${id}-hachures)` : undefined}>
+                  <title>{c} – {s.nom} : {v}{unite}</title>
+                </path>
+                <text class="valeur" x={MARGE_G + x(v) + 6} y={y + EP / 2 + 5}>{v}{unite}</text>
+              </g>
+            );
+          })}
+        </g>
+      );
+    })}
+    <line class="ligne-base" x1={MARGE_G} x2={MARGE_G} y1="0" y2={hauteur - HAUT_AXE} />
+  </svg>
+</figure>
+<div class="tableau-defilant" tabindex="0" role="region" aria-labelledby={`${id}-tab`}>
+  <table>
+    <caption id={`${id}-tab`}>Données du graphique : {titre}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{enteteCategorie}</th>
+        {series.map((s) => <th scope="col" class="nombre">{s.nom}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {categories.map((c, i) => (
+        <tr>
+          <th scope="row">{c}</th>
+          {series.map((s) => <td class="nombre">{s.valeurs[i]}{unite}</td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,42 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : un compte rendu à rendre ce soir",
+  "consigne": "Vous devez envoyer ce soir la synthèse d'une réunion client de deux heures. Choisissez comment vous vous y prenez. Il n'y a pas de limite de temps.",
+  "depart": "choix-outil",
+  "etapes": [
+    {
+      "id": "choix-outil",
+      "titre": "17 h 30 : pas le temps de tout relire",
+      "texte": "Vos notes brutes font six pages. Elles contiennent les noms des participants, les tarifs négociés et un problème technique confidentiel du client.",
+      "choix": [
+        { "id": "public", "texte": "Je colle mes notes dans l'agent conversationnel gratuit que j'utilise chez moi", "suivant": "fuite", "adapte": false, "retour": "Les notes quittent l'organisation vers un service non encadré : données personnelles et informations commerciales exposées." },
+        { "id": "autorise", "texte": "J'utilise l'outil d'IA autorisé par l'organisation", "suivant": "relecture", "adapte": true, "retour": "Bon choix : l'outil autorisé est encadré par un contrat et des règles de conservation." },
+        { "id": "anonymiser", "texte": "Je n'ai pas d'outil autorisé : je retire noms, tarifs et détails sensibles avant d'utiliser une IA pour la mise en forme", "suivant": "relecture", "adapte": true, "retour": "Démarche acceptable : sans données sensibles, le risque est fortement réduit. Signalez aussi le besoin d'un outil autorisé." }
+      ]
+    },
+    {
+      "id": "relecture",
+      "titre": "18 h 10 : la synthèse est prête",
+      "texte": "L'IA a produit une synthèse claire. Elle mentionne une « remise de 15 % accordée » dont vous ne vous souvenez pas.",
+      "choix": [
+        { "id": "envoyer", "texte": "J'envoie tel quel, l'IA a dû le lire dans mes notes", "suivant": "erreur", "adapte": false, "retour": "L'IA peut inventer des éléments plausibles. Une remise inventée peut engager l'organisation." },
+        { "id": "verifier", "texte": "Je vérifie chaque chiffre dans mes notes avant d'envoyer", "suivant": "fin-bonne", "adapte": true, "retour": "Exactement : vous restez responsable du contenu, pas l'IA." }
+      ]
+    },
+    {
+      "id": "fuite",
+      "titre": "Conséquence : des données hors de contrôle",
+      "texte": "Les tarifs négociés et le problème technique du client sont désormais stockés chez un éditeur sans contrat avec {{organisation.nom}}. Si ce client l'apprend, la confiance est rompue ; s'il s'agit de données personnelles, c'est aussi un manquement au RGPD. Prévenez {{contacts.securite}} : l'équipe évaluera l'incident."
+    },
+    {
+      "id": "erreur",
+      "titre": "Conséquence : une erreur envoyée au client",
+      "texte": "Le client répond : « Parfait, nous prenons note de la remise de 15 %. » Il faut maintenant revenir sur un engagement qui n'a jamais été pris."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : gain de temps maîtrisé",
+      "texte": "Vous avez gagné du temps sans exposer de données et en gardant la maîtrise du contenu. C'est l'usage attendu de l'IA."
+    }
+  ]
+}

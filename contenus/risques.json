@@ -1,0 +1,98 @@
+[
+  {
+    "id": "hameconnage",
+    "libelle": "Hameçonnage (phishing, smishing)",
+    "description": "Message frauduleux (e-mail, SMS, messagerie) qui pousse à cliquer, ouvrir une pièce jointe ou donner ses identifiants.",
+    "categorie": "humain",
+    "emergent": false,
+    "exemples": ["Faux e-mail de livraison de colis", "SMS de faux remboursement", "Fausse page de connexion à la messagerie"]
+  },
+  {
+    "id": "quishing",
+    "libelle": "Hameçonnage par QR code (quishing)",
+    "description": "QR code piégé (affiche, courrier, e-mail) qui renvoie vers un faux site. L'adresse n'est pas visible avant le scan.",
+    "categorie": "humain",
+    "emergent": true,
+    "exemples": ["Faux QR code collé sur un parcmètre", "QR code dans un e-mail « réactivez votre double authentification »"]
+  },
+  {
+    "id": "ingenierie-sociale",
+    "libelle": "Ingénierie sociale",
+    "description": "Manipulation psychologique (urgence, autorité, flatterie) pour obtenir une information ou une action.",
+    "categorie": "humain",
+    "emergent": false,
+    "exemples": ["Faux technicien du support au téléphone", "Faux prestataire qui demande l'accès à un local"]
+  },
+  {
+    "id": "fraude-president",
+    "libelle": "Fraude au président et faux ordres de virement",
+    "description": "Un escroc se fait passer pour un dirigeant ou un fournisseur afin d'obtenir un virement urgent et confidentiel.",
+    "categorie": "humain",
+    "emergent": false,
+    "exemples": ["E-mail « du directeur » demandant un virement confidentiel", "Changement de RIB d'un fournisseur"]
+  },
+  {
+    "id": "deepfake",
+    "libelle": "Hypertrucages (deepfakes) voix et vidéo",
+    "description": "Voix ou visage imités par intelligence artificielle pour rendre crédible une demande frauduleuse (appel, visioconférence).",
+    "categorie": "humain",
+    "emergent": true,
+    "exemples": ["Appel avec la voix clonée d'un dirigeant", "Visioconférence avec de faux participants générés par IA"]
+  },
+  {
+    "id": "ia-generative",
+    "libelle": "Usages risqués de l'IA générative",
+    "description": "Saisie de données confidentielles dans des outils d'IA non autorisés, confiance excessive dans les réponses, code généré non vérifié.",
+    "categorie": "organisationnel",
+    "emergent": true,
+    "exemples": ["Copier un contrat client dans un chatbot public", "Publier une réponse inventée par l'IA sans vérification"]
+  },
+  {
+    "id": "fuite-donnees",
+    "libelle": "Fuite et mauvaise gestion des données",
+    "description": "Divulgation involontaire de données personnelles ou confidentielles (mauvais destinataire, partage public, perte de support).",
+    "categorie": "organisationnel",
+    "emergent": false,
+    "exemples": ["Fichier client envoyé au mauvais destinataire", "Lien de partage « public » sur un document RH"]
+  },
+  {
+    "id": "mots-de-passe",
+    "libelle": "Mots de passe faibles ou réutilisés",
+    "description": "Mots de passe devinables, réutilisés d'un service à l'autre ou non protégés par une double authentification.",
+    "categorie": "technique",
+    "emergent": false,
+    "exemples": ["Même mot de passe pour la messagerie et un site de loisirs", "Mot de passe noté sur un post-it"]
+  },
+  {
+    "id": "rancongiciel",
+    "libelle": "Rançongiciel (ransomware)",
+    "description": "Logiciel malveillant qui chiffre les données et bloque l'activité en échange d'une rançon.",
+    "categorie": "technique",
+    "emergent": false,
+    "exemples": ["Pièce jointe piégée qui chiffre le serveur de fichiers", "Accès distant compromis puis chiffrement de nuit"]
+  },
+  {
+    "id": "nomadisme",
+    "libelle": "Risques liés au télétravail et au nomadisme",
+    "description": "Réseaux Wi-Fi non maîtrisés, vol ou perte de matériel, écrans visibles en public, usage d'équipements personnels.",
+    "categorie": "organisationnel",
+    "emergent": false,
+    "exemples": ["Wi-Fi public d'un café", "Ordinateur volé dans un train", "Conversation confidentielle en open space ou en gare"]
+  },
+  {
+    "id": "privileges-admin",
+    "libelle": "Mauvaise gestion des privilèges d'administration",
+    "description": "Comptes à privilèges utilisés au quotidien, droits excessifs, correctifs non appliqués, absence de journalisation.",
+    "categorie": "technique",
+    "emergent": false,
+    "exemples": ["Navigation web avec un compte administrateur du domaine", "Compte d'un ancien prestataire toujours actif"]
+  },
+  {
+    "id": "shadow-it",
+    "libelle": "Informatique fantôme (shadow IT)",
+    "description": "Utilisation d'applications, de services cloud ou de matériels non validés par l'organisation.",
+    "categorie": "organisationnel",
+    "emergent": false,
+    "exemples": ["Transfert de fichiers volumineux par un service gratuit", "Clé USB personnelle branchée sur un poste"]
+  }
+]

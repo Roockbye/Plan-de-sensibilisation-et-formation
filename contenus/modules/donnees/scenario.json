@@ -1,0 +1,36 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : un envoi de trop",
+  "consigne": "Vous préparez l'envoi d'un tableau de suivi à un partenaire. Choisissez vos actions. Il n'y a pas de limite de temps.",
+  "depart": "preparation",
+  "etapes": [
+    {
+      "id": "preparation",
+      "titre": "Le tableau à envoyer",
+      "texte": "Le partenaire a besoin du nombre de commandes par région. Votre tableau contient aussi, dans d'autres onglets, les noms, téléphones et adresses des clients.",
+      "choix": [
+        { "id": "tout", "texte": "J'envoie le fichier complet, il ne regardera que ce qui l'intéresse", "suivant": "destinataire", "adapte": false, "retour": "Vous transmettez des données personnelles inutiles : c'est contraire au principe de minimisation." },
+        { "id": "extrait", "texte": "Je crée un fichier ne contenant que les chiffres par région", "suivant": "destinataire", "adapte": true, "retour": "Exactement : on ne partage que ce qui est nécessaire." }
+      ]
+    },
+    {
+      "id": "destinataire",
+      "titre": "L'envoi",
+      "texte": "Vous tapez « Mar » dans le champ destinataire. La messagerie propose « Marc Petit (partenaire) » et « Marc Petitjean (ancien client) ». Vous cliquez et envoyez. En relisant, vous voyez que c'est Marc Petitjean qui l'a reçu.",
+      "choix": [
+        { "id": "silence", "texte": "Je n'en parle à personne, ce n'est qu'un tableau", "suivant": "silence", "adapte": false, "retour": "Si le fichier contient des données personnelles, c'est une violation de données. La cacher peut aggraver la situation." },
+        { "id": "signaler", "texte": "Je signale tout de suite l'erreur à l'équipe sécurité", "suivant": "fin-bonne", "adapte": true, "retour": "Bon réflexe : l'équipe peut contacter le destinataire, évaluer le risque et, si besoin, notifier la CNIL dans les délais." }
+      ]
+    },
+    {
+      "id": "silence",
+      "titre": "Conséquence : une violation découverte trop tard",
+      "texte": "Trois semaines plus tard, un client se plaint d'avoir été démarché. L'enquête remonte à votre envoi. Le délai de 72 heures pour notifier la CNIL est largement dépassé, ce qui aggrave la situation de l'organisation."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : incident maîtrisé",
+      "texte": "L'équipe sécurité demande au destinataire de supprimer le fichier et obtient une confirmation écrite. Le risque est évalué et documenté dans le registre des violations. Grâce à votre réactivité, l'incident est clos rapidement."
+    }
+  ]
+}

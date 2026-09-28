@@ -1,0 +1,395 @@
+{
+  "title": "Configuration de l'organisation",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "organisation": {
+      "type": "object",
+      "properties": {
+        "nom": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "nomCourt": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 20
+        },
+        "logo": {
+          "type": "string",
+          "pattern": "^organisation\\/[a-z0-9._-]+\\.(svg|png|webp)$"
+        },
+        "logoAlt": {
+          "type": "string",
+          "minLength": 2
+        },
+        "secteur": {
+          "type": "string",
+          "enum": [
+            "generique",
+            "sante",
+            "industrie",
+            "finance",
+            "collectivite",
+            "education",
+            "commerce"
+          ]
+        },
+        "taille": {
+          "type": "string",
+          "enum": [
+            "tpe",
+            "pme",
+            "eti",
+            "ge"
+          ]
+        },
+        "effectif": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500000
+        },
+        "typeSI": {
+          "type": "string",
+          "enum": [
+            "cloud",
+            "sur-site",
+            "hybride"
+          ]
+        }
+      },
+      "required": [
+        "nom",
+        "secteur",
+        "taille",
+        "effectif",
+        "typeSI"
+      ],
+      "additionalProperties": false
+    },
+    "contacts": {
+      "type": "object",
+      "properties": {
+        "securite": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        },
+        "signalement": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200
+        },
+        "telephoneUrgence": {
+          "type": "string",
+          "pattern": "^[0-9 +().-]{4,20}$"
+        },
+        "accessibilite": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        }
+      },
+      "required": [
+        "securite",
+        "signalement",
+        "telephoneUrgence",
+        "accessibilite"
+      ],
+      "additionalProperties": false
+    },
+    "charte": {
+      "type": "object",
+      "properties": {
+        "couleurPrimaire": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "couleurSecondaire": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "correctionContrasteAuto": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "couleurPrimaire",
+        "couleurSecondaire"
+      ],
+      "additionalProperties": false
+    },
+    "langues": {
+      "default": {
+        "defaut": "fr",
+        "disponibles": [
+          "fr"
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "defaut": {
+          "default": "fr",
+          "type": "string",
+          "enum": [
+            "fr",
+            "en"
+          ]
+        },
+        "disponibles": {
+          "default": [
+            "fr"
+          ],
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "profilsActifs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "risquesPrioritaires": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "priorite": {
+            "anyOf": [
+              {
+                "type": "number",
+                "const": 1
+              },
+              {
+                "type": "number",
+                "const": 2
+              },
+              {
+                "type": "number",
+                "const": 3
+              }
+            ]
+          },
+          "justification": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "fr": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "fr"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "priorite"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reglementations": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "rgpd",
+          "nis2",
+          "iso27001",
+          "dora",
+          "hds",
+          "pgssi-s",
+          "lpm",
+          "rgs",
+          "pci-dss"
+        ]
+      }
+    },
+    "modulesSectoriels": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "sante",
+          "industrie",
+          "finance",
+          "collectivite",
+          "education",
+          "commerce"
+        ]
+      }
+    },
+    "campagnes": {
+      "type": "object",
+      "properties": {
+        "debut": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "onboardingDelaiJours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90
+        },
+        "simulationPhishing": {
+          "type": "string",
+          "enum": [
+            "mensuelle",
+            "trimestrielle",
+            "semestrielle",
+            "annuelle"
+          ]
+        },
+        "rappelModules": {
+          "type": "string",
+          "enum": [
+            "mensuelle",
+            "trimestrielle",
+            "semestrielle",
+            "annuelle"
+          ]
+        },
+        "veilleNouvellesMenaces": {
+          "type": "string",
+          "enum": [
+            "mensuelle",
+            "trimestrielle",
+            "semestrielle",
+            "annuelle"
+          ]
+        },
+        "exerciceCrise": {
+          "default": "annuelle",
+          "type": "string",
+          "enum": [
+            "mensuelle",
+            "trimestrielle",
+            "semestrielle",
+            "annuelle"
+          ]
+        }
+      },
+      "required": [
+        "debut",
+        "onboardingDelaiJours",
+        "simulationPhishing",
+        "rappelModules",
+        "veilleNouvellesMenaces"
+      ],
+      "additionalProperties": false
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "seuilReussite": {
+          "type": "integer",
+          "minimum": 50,
+          "maximum": 100
+        },
+        "delaiRetardJours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365
+        }
+      },
+      "required": [
+        "seuilReussite",
+        "delaiRetardJours"
+      ],
+      "additionalProperties": false
+    },
+    "accessibilite": {
+      "default": {
+        "etatConformite": "partiellement conforme"
+      },
+      "type": "object",
+      "properties": {
+        "dateAudit": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "etatConformite": {
+          "default": "partiellement conforme",
+          "type": "string",
+          "enum": [
+            "totalement conforme",
+            "partiellement conforme",
+            "non conforme"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "demo": {
+      "default": {
+        "graine": 2027
+      },
+      "type": "object",
+      "properties": {
+        "graine": {
+          "default": 2027,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "dateReference": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "organisation",
+    "contacts",
+    "charte",
+    "profilsActifs",
+    "risquesPrioritaires",
+    "campagnes",
+    "evaluation"
+  ],
+  "additionalProperties": false
+}

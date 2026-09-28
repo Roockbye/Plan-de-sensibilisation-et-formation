@@ -1,0 +1,81 @@
+{
+  "pretest": [
+    {
+      "id": "pre-wifi",
+      "enonce": "Dans un café, quelle connexion est la plus sûre pour travailler ?",
+      "enonceFalc": "Dans un café, quelle connexion internet utiliser ?",
+      "type": "unique",
+      "choix": [
+        { "id": "wifi-cafe", "texte": "Le Wi-Fi gratuit du café" },
+        { "id": "partage", "texte": "Le partage de connexion de mon téléphone, avec le VPN" }
+      ],
+      "bonnes": ["partage"],
+      "explication": "Un Wi-Fi public peut être espionné ou imité. Le partage de connexion associé au VPN est bien plus sûr."
+    },
+    {
+      "id": "pre-verrouiller",
+      "enonce": "Vous vous levez 30 secondes pour prendre un café dans un espace de coworking. Faut-il verrouiller votre session ?",
+      "enonceFalc": "Vous partez 30 secondes. Faut-il verrouiller votre ordinateur ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, toujours" },
+        { "id": "non", "texte": "Non, c'est trop court" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Quelques secondes suffisent pour brancher une clé ou lire un écran."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-vol",
+      "enonce": "Samedi soir, vous constatez le vol de votre ordinateur professionnel. Que faites-vous ?",
+      "enonceFalc": "Samedi soir, on vous a volé votre ordinateur de travail. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "lundi", "texte": "Je préviens lundi matin en arrivant" },
+        { "id": "immediat", "texte": "J'appelle immédiatement le numéro d'urgence sécurité" },
+        { "id": "plainte-seule", "texte": "Je dépose plainte, cela suffit" }
+      ],
+      "bonnes": ["immediat"],
+      "explication": "L'équipe peut bloquer les comptes et effacer l'appareil à distance. Le dépôt de plainte est utile en complément, pas à la place. Numéro : {{contacts.telephoneUrgence}}."
+    },
+    {
+      "id": "post-usb",
+      "enonce": "Lors d'un salon, on vous offre une clé USB promotionnelle. Que faites-vous ?",
+      "enonceFalc": "Dans un salon, on vous donne une clé USB. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "brancher", "texte": "Je la branche sur mon ordinateur professionnel pour voir son contenu" },
+        { "id": "pas-brancher", "texte": "Je ne la branche pas sur un poste de l'organisation" }
+      ],
+      "bonnes": ["pas-brancher"],
+      "explication": "Une clé USB peut contenir un logiciel malveillant qui s'exécute dès le branchement."
+    },
+    {
+      "id": "post-train",
+      "enonce": "Dans le train, quelles précautions prenez-vous ? (plusieurs réponses possibles)",
+      "enonceFalc": "Dans le train, que faites-vous ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "filtre", "texte": "J'utilise un filtre de confidentialité sur l'écran" },
+        { "id": "appel", "texte": "Je passe mon appel client confidentiel à ma place" },
+        { "id": "surveillance", "texte": "Je garde mon ordinateur avec moi quand je vais au wagon-bar" },
+        { "id": "vpn", "texte": "J'active le VPN" }
+      ],
+      "bonnes": ["filtre", "surveillance", "vpn"],
+      "explication": "Un appel confidentiel dans un lieu public expose des informations à tous les voisins."
+    },
+    {
+      "id": "post-recharge",
+      "enonce": "Votre téléphone est déchargé dans un aéroport. Quelle solution est la plus sûre ?",
+      "enonceFalc": "Votre téléphone n'a plus de batterie à l'aéroport. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "usb-public", "texte": "Le port USB d'une borne publique" },
+        { "id": "chargeur", "texte": "Mon propre chargeur branché sur une prise électrique" }
+      ],
+      "bonnes": ["chargeur"],
+      "explication": "Un port USB peut transférer des données. Une prise électrique avec votre chargeur ne transporte que du courant."
+    }
+  ]
+}

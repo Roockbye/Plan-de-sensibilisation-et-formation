@@ -1,0 +1,90 @@
+{
+  "$schema": "../organisation.schema.json",
+  "organisation": {
+    "nom": "Clinique des Tilleuls (exemple)",
+    "nomCourt": "Tilleuls",
+    "secteur": "sante",
+    "taille": "eti",
+    "effectif": 650,
+    "typeSI": "sur-site"
+  },
+  "contacts": {
+    "securite": "rssi@tilleuls.example",
+    "signalement": "le numéro interne 4444 ou rssi@tilleuls.example",
+    "telephoneUrgence": "01 23 45 67 89",
+    "accessibilite": "handicap@tilleuls.example"
+  },
+  "charte": {
+    "couleurPrimaire": "#4FB3A9",
+    "couleurSecondaire": "#F2A541",
+    "correctionContrasteAuto": true
+  },
+  "langues": {
+    "defaut": "fr",
+    "disponibles": [
+      "fr"
+    ]
+  },
+  "profilsActifs": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant"
+  ],
+  "risquesPrioritaires": [
+    {
+      "id": "rancongiciel",
+      "priorite": 3,
+      "justification": "Arrêt des soins en cas de chiffrement du SI (scénario n° 1 de l'analyse de risques)."
+    },
+    {
+      "id": "fuite-donnees",
+      "priorite": 3,
+      "justification": "Données de santé : catégorie particulière au sens du RGPD."
+    },
+    {
+      "id": "hameconnage",
+      "priorite": 3
+    },
+    {
+      "id": "ia-generative",
+      "priorite": 2,
+      "justification": "Usage d'assistants d'IA pour rédiger des comptes rendus médicaux."
+    },
+    {
+      "id": "mots-de-passe",
+      "priorite": 2
+    },
+    {
+      "id": "privileges-admin",
+      "priorite": 2
+    }
+  ],
+  "reglementations": [
+    "rgpd",
+    "nis2",
+    "hds",
+    "pgssi-s"
+  ],
+  "modulesSectoriels": [],
+  "campagnes": {
+    "debut": "2027-01-04",
+    "onboardingDelaiJours": 7,
+    "simulationPhishing": "mensuelle",
+    "rappelModules": "semestrielle",
+    "veilleNouvellesMenaces": "semestrielle",
+    "exerciceCrise": "annuelle"
+  },
+  "evaluation": {
+    "seuilReussite": 80,
+    "delaiRetardJours": 21
+  },
+  "accessibilite": {
+    "dateAudit": "2026-09-28",
+    "etatConformite": "partiellement conforme"
+  },
+  "demo": {
+    "graine": 42,
+    "dateReference": "2027-06-15"
+  }
+}

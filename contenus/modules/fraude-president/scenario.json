@@ -1,0 +1,60 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : l'appel du directeur général",
+  "consigne": "Vous travaillez au service comptabilité. Lisez la situation et choisissez votre réaction. Tous les noms sont fictifs. Il n'y a pas de limite de temps.",
+  "depart": "appel",
+  "etapes": [
+    {
+      "id": "appel",
+      "titre": "Vendredi, 15 h 20 : un appel",
+      "texte": "Votre téléphone sonne. Numéro masqué. Vous reconnaissez la voix du directeur général :\n\n« Bonjour, c'est Paul. Je suis en rendez-vous, je ne peux pas être long. Nous finalisons le rachat d'une société, c'est **strictement confidentiel**. Il faut faire partir un acompte de 48 000 € **avant 16 h**, sinon l'opération tombe. Maître Durand va vous envoyer les coordonnées bancaires. Je compte sur vous, n'en parlez à personne pour l'instant. »",
+      "choix": [
+        { "id": "executer", "texte": "Je prépare le virement dès réception des coordonnées", "suivant": "email-avocat", "adapte": false, "retour": "Autorité, urgence, confidentialité : les trois leviers de la fraude sont réunis. Reconnaître la voix ne suffit plus, elle peut être clonée." },
+        { "id": "rappeler", "texte": "Je réponds : « Je vous rappelle tout de suite sur votre portable », je raccroche et j'appelle le numéro de l'annuaire", "suivant": "contre-appel", "adapte": true, "retour": "Bon réflexe : vous reprenez le contrôle de l'échange en utilisant un canal que vous connaissez." },
+        { "id": "questions", "texte": "Je pose des questions pour vérifier que c'est bien lui", "suivant": "questions", "adapte": false, "retour": "C'est mieux que d'exécuter, mais un fraudeur bien préparé connaît souvent des détails internes (organigramme, projets en cours)." }
+      ]
+    },
+    {
+      "id": "questions",
+      "titre": "Des réponses convaincantes",
+      "texte": "La voix répond sans hésiter : elle cite le nom de votre responsable et un projet en cours. Elle s'agace : « Nous n'avons pas le temps, faites-moi confiance. »",
+      "choix": [
+        { "id": "ceder", "texte": "Je suis rassuré(e), j'exécute", "suivant": "email-avocat", "adapte": false, "retour": "Ces informations sont souvent trouvées sur les réseaux sociaux ou dans des e-mails piratés. L'agacement est une technique de pression." },
+        { "id": "rappeler-2", "texte": "Je raccroche poliment et je rappelle au numéro de l'annuaire", "suivant": "contre-appel", "adapte": true, "retour": "Exactement : la contre-vérification par un canal connu est la seule protection fiable." }
+      ]
+    },
+    {
+      "id": "email-avocat",
+      "titre": "15 h 35 : l'e-mail de l'avocat",
+      "texte": "Vous recevez un e-mail de « Maître Durand » avec un RIB d'une banque étrangère et la mention « Confidentiel – opération de croissance externe ». La double validation n'est pas encore faite.",
+      "choix": [
+        { "id": "virer", "texte": "Je fais le virement seul(e) pour tenir le délai", "suivant": "perte", "adapte": false, "retour": "Contourner la double validation est exactement ce que cherche le fraudeur." },
+        { "id": "double-validation", "texte": "J'applique la double validation : je sollicite ma responsable et nous contre-appelons le directeur", "suivant": "contre-appel", "adapte": true, "retour": "La procédure vous protège, même si vous avez commencé à préparer l'opération." }
+      ]
+    },
+    {
+      "id": "contre-appel",
+      "titre": "Le contre-appel",
+      "texte": "Le directeur général décroche sur son numéro habituel. Il est surpris : il n'a jamais appelé et aucun rachat n'est en cours. Il vous remercie d'avoir vérifié.",
+      "choix": [
+        { "id": "signaler", "texte": "Je signale immédiatement la tentative à l'équipe sécurité", "suivant": "fin-bonne", "adapte": true, "retour": "Parfait : d'autres collègues sont peut-être ciblés en ce moment même." },
+        { "id": "oublier", "texte": "Tout est rentré dans l'ordre, je passe à autre chose", "suivant": "fin-moyenne", "adapte": false, "retour": "La fraude est déjouée pour vous, mais le fraudeur va probablement essayer avec un autre collègue." }
+      ]
+    },
+    {
+      "id": "perte",
+      "titre": "Conséquence : 48 000 € perdus",
+      "texte": "Lundi, le directeur général découvre le virement. Les fonds ont déjà été transférés vers d'autres comptes. Plus le signalement à la banque est rapide, plus il y a de chances de bloquer les fonds : prévenez immédiatement votre banque, l'équipe sécurité ({{contacts.telephoneUrgence}}) et déposez plainte."
+    },
+    {
+      "id": "fin-moyenne",
+      "titre": "Conséquence : une alerte manquée",
+      "texte": "Une heure plus tard, une collègue d'une autre équipe reçoit le même appel. Sans alerte, elle n'est pas prévenue. Signaler une tentative, même déjouée, protège tout le monde."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : fraude déjouée",
+      "texte": "L'équipe sécurité diffuse une alerte à toutes les personnes habilitées à faire des paiements. Deux autres tentatives sont bloquées dans l'après-midi. Votre vérification a protégé l'organisation."
+    }
+  ]
+}

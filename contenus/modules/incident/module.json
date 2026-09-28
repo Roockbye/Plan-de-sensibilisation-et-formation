@@ -1,0 +1,27 @@
+{
+  "id": "incident",
+  "code": "M7",
+  "titre": "Réagir à un incident : les bons réflexes face au rançongiciel",
+  "resume": "Reconnaître un incident de sécurité, adopter les premiers gestes qui limitent les dégâts et alerter sans délai. Volet crise pour les managers.",
+  "risques": ["rancongiciel", "fuite-donnees", "hameconnage"],
+  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "obligatoirePour": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "dureeMinutes": 10,
+  "niveau": "decouverte",
+  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "objectifs": [
+    "Reconnaître les signes d'un incident de sécurité",
+    "Appliquer les premiers gestes : isoler du réseau sans éteindre, ne rien supprimer",
+    "Alerter immédiatement par le canal d'urgence",
+    "Décrire le rôle d'un manager dans les premières heures d'une crise"
+  ],
+  "reglementations": ["rgpd", "nis2"],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-09-28",
+  "sources": [
+    { "titre": "17Cyber – Assistance aux victimes de cybermalveillance", "url": "https://17cyber.gouv.fr/" },
+    { "titre": "ANSSI – Attaques par rançongiciels, tous concernés", "url": "https://cyber.gouv.fr/" }
+  ],
+  "ordre": 70
+}

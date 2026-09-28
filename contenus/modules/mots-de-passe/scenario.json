@@ -1,0 +1,43 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : des notifications en pleine soirée",
+  "consigne": "Lisez la situation et choisissez ce que vous feriez. Chaque choix est expliqué. Il n'y a pas de limite de temps.",
+  "depart": "notification",
+  "etapes": [
+    {
+      "id": "notification",
+      "titre": "23 h 04 : une notification",
+      "texte": "Vous regardez un film chez vous. Votre téléphone affiche : « Demande de connexion à votre compte professionnel. **Approuver** / **Refuser** ». Vous n'êtes pas en train de vous connecter.",
+      "choix": [
+        { "id": "approuver", "texte": "J'approuve, c'est sûrement une mise à jour automatique", "suivant": "compromis", "adapte": false, "retour": "Une demande de validation n'est jamais « automatique » : elle signifie que quelqu'un vient de saisir votre mot de passe." },
+        { "id": "refuser", "texte": "Je refuse", "suivant": "insistance", "adapte": true, "retour": "Bon réflexe : la connexion est bloquée. Mais l'attaquant connaît probablement votre mot de passe." },
+        { "id": "ignorer", "texte": "Je laisse la notification sans répondre", "suivant": "insistance", "adapte": false, "retour": "Ignorer ne bloque pas l'attaquant, qui va insister. Il vaut mieux refuser explicitement." }
+      ]
+    },
+    {
+      "id": "insistance",
+      "titre": "23 h 06 : les notifications s'enchaînent",
+      "texte": "Dix nouvelles demandes arrivent en deux minutes. Puis un SMS : « Service informatique : nous effectuons une maintenance, merci d'approuver la prochaine demande pour éviter le blocage de votre compte. »",
+      "choix": [
+        { "id": "approuver-sms", "texte": "J'approuve, le SMS explique la situation", "suivant": "compromis", "adapte": false, "retour": "C'est exactement le piège du bombardement de notifications : l'attaquant se fait passer pour le support pour obtenir votre validation." },
+        { "id": "signaler", "texte": "Je refuse tout, puis j'appelle le numéro d'urgence sécurité ({{contacts.telephoneUrgence}})", "suivant": "bonne-fin", "adapte": true, "retour": "Excellent : vous bloquez l'attaque et vous déclenchez la réaction de l'équipe sécurité." },
+        { "id": "eteindre", "texte": "J'éteins mon téléphone et j'en parlerai demain", "suivant": "fin-tardive", "adapte": false, "retour": "Vous avez évité le piège, mais l'attaquant garde votre mot de passe toute la nuit et peut essayer ailleurs." }
+      ]
+    },
+    {
+      "id": "compromis",
+      "titre": "Conséquence : le compte est compromis",
+      "texte": "L'attaquant est connecté à votre messagerie. Il peut lire vos e-mails, envoyer des messages piégés à vos collègues en votre nom ou préparer une fraude.\n\nMême dans ce cas, **prévenez immédiatement** l'équipe sécurité : elle peut couper la session et changer le mot de passe."
+    },
+    {
+      "id": "fin-tardive",
+      "titre": "Conséquence : une alerte trop tardive",
+      "texte": "Le lendemain matin, l'équipe sécurité découvre que votre mot de passe a été testé sur d'autres services pendant la nuit. Une alerte immédiate aurait permis de le changer plus tôt."
+    },
+    {
+      "id": "bonne-fin",
+      "titre": "Conséquence : attaque stoppée",
+      "texte": "L'équipe sécurité réinitialise votre mot de passe, déconnecte toutes les sessions et vérifie qu'aucune connexion n'a abouti. Votre signalement permet aussi d'alerter vos collègues visés par la même campagne."
+    }
+  ]
+}

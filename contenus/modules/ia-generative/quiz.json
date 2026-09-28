@@ -1,0 +1,80 @@
+{
+  "pretest": [
+    {
+      "id": "pre-conservation",
+      "enonce": "Les informations saisies dans un service d'IA grand public gratuit peuvent-elles être conservées et réutilisées par l'éditeur ?",
+      "enonceFalc": "Ce que vous écrivez dans une IA gratuite peut-il être gardé ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui, selon les conditions d'utilisation du service" },
+        { "id": "non", "texte": "Non, tout est effacé à la fin de la conversation" }
+      ],
+      "bonnes": ["oui"],
+      "explication": "Beaucoup de services conservent les conversations et peuvent les utiliser pour améliorer leurs modèles."
+    },
+    {
+      "id": "pre-fiabilite",
+      "enonce": "Une réponse d'IA générative rédigée avec assurance est-elle forcément exacte ?",
+      "enonceFalc": "Une IA qui répond avec assurance a-t-elle toujours raison ?",
+      "type": "unique",
+      "choix": [
+        { "id": "oui", "texte": "Oui" },
+        { "id": "non", "texte": "Non, elle peut inventer des informations" }
+      ],
+      "bonnes": ["non"],
+      "explication": "Les IA génératives peuvent produire des « hallucinations » : des faits ou des références inventés mais plausibles."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-saisie",
+      "enonce": "Quelles informations ne doivent jamais être saisies dans un outil d'IA non autorisé ? (plusieurs réponses possibles)",
+      "enonceFalc": "Qu'est-ce qu'on ne doit jamais écrire dans une IA non autorisée ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        { "id": "clients", "texte": "La liste des clients avec leurs coordonnées" },
+        { "id": "contrat", "texte": "Un contrat en cours de négociation" },
+        { "id": "question", "texte": "« Comment rédiger une invitation à un séminaire ? »" },
+        { "id": "cle", "texte": "Une clé d'API ou un mot de passe" }
+      ],
+      "bonnes": ["clients", "contrat", "cle"],
+      "explication": "Une question générale sans donnée sensible ne pose pas de problème. Données personnelles, contrats et secrets techniques ne doivent jamais sortir."
+    },
+    {
+      "id": "post-shadow",
+      "enonce": "Un collègue utilise un service d'IA gratuit trouvé en ligne pour traduire des contrats clients. Qu'est-ce que cela représente ?",
+      "enonceFalc": "Un collègue utilise une IA gratuite pour traduire des contrats. Est-ce un problème ?",
+      "type": "unique",
+      "choix": [
+        { "id": "ok", "texte": "Une bonne initiative pour gagner du temps" },
+        { "id": "shadow", "texte": "De l'informatique fantôme exposant des données confidentielles" }
+      ],
+      "bonnes": ["shadow"],
+      "explication": "Utiliser un outil non validé pour des données confidentielles expose l'organisation. La bonne démarche : demander un outil autorisé."
+    },
+    {
+      "id": "post-verification",
+      "enonce": "L'IA vous fournit un article de loi précis pour appuyer une note. Que faites-vous ?",
+      "enonceFalc": "L'IA vous donne une référence de loi. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        { "id": "copier", "texte": "Je le cite tel quel" },
+        { "id": "verifier", "texte": "Je vérifie sur une source officielle avant de l'utiliser" }
+      ],
+      "bonnes": ["verifier"],
+      "explication": "Les références juridiques inventées sont un cas fréquent d'hallucination."
+    },
+    {
+      "id": "post-injection",
+      "enonce": "Vous demandez à un assistant d'IA de résumer un document reçu d'un inconnu. Quel risque spécifique existe ?",
+      "enonceFalc": "Vous demandez à une IA de résumer un document inconnu. Quel est le danger ?",
+      "type": "unique",
+      "choix": [
+        { "id": "injection", "texte": "Le document peut contenir des consignes cachées qui détournent l'assistant" },
+        { "id": "aucun", "texte": "Aucun, l'IA ne fait que lire" }
+      ],
+      "bonnes": ["injection"],
+      "explication": "C'est l'injection de consignes (prompt injection) : du texte caché peut pousser l'assistant à divulguer des informations ou à agir à votre place."
+    }
+  ]
+}

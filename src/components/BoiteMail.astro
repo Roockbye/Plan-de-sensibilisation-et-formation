@@ -1,0 +1,204 @@
+---
+/**
+ * Simulation d'hameçonnage PÉDAGOGIQUE : les messages sont affichés dans la page,
+ * aucun message réel n'est envoyé et aucun lien n'est cliquable.
+ * « Vérifier le lien » est l'équivalent accessible (clavier, lecteur d'écran, tactile) du survol à la souris.
+ */
+import type { ModuleMeta, ScenarioBoiteMail } from '../lib/schemas.ts';
+import { tr } from '../lib/texte.ts';
+import { plateforme } from '../lib/contenus.ts';
+import { traducteur } from '../i18n/index.ts';
+import Markdown from './Markdown.astro';
+
+interface Props {
+  module: ModuleMeta;
+  scenario: ScenarioBoiteMail;
+  niveauTitre?: 3 | 4;
+}
+const { module, scenario, niveauTitre = 3 } = Astro.props;
+const { config } = plateforme();
+const langue = config.langues.defaut;
+const T = traducteur(langue);
+const Titre = `h${niveauTitre}` as "h3" | "h4";
+const total = scenario.messages.length;
+const textes = {
+  compteur: T('boite.messagesTraites'),
+  bonne: T('boite.bonneDecision'),
+  mauvaise: T('boite.mauvaiseDecision'),
+  bilan: T('boite.bilan'),
+};
+
+/** Motif décoratif imitant un QR code (non scannable), déterministe. */
+function motifQr(graine: string): { x: number; y: number }[] {
+  let h = 2166136261;
+  for (const c of graine) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  const cases: { x: number; y: number }[] = [];
+  const dansRepere = (x: number, y: number) => (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12);
+  for (let y = 0; y < 21; y++) {
+    for (let x = 0; x < 21; x++) {
+      if (dansRepere(x, y)) continue;
+      h = Math.imul(h ^ (h >>> 13), 1274126177);
+      if ((h >>> 0) % 2) cases.push({ x, y });
+    }
+  }
+  for (const [ox, oy] of [[0, 0], [14, 0], [0, 14]]) {
+    for (let y = 0; y < 7; y++) {
+      for (let x = 0; x < 7; x++) {
+        const bord = x === 0 || y === 0 || x === 6 || y === 6;
+        const centre = x >= 2 && x <= 4 && y >= 2 && y <= 4;
+        if (bord || centre) cases.push({ x: ox + x, y: oy + y });
+      }
+    }
+  }
+  return cases;
+}
+---
+<div class="boite" data-boite data-module={module.id} data-total={total} data-libelles={JSON.stringify(textes)}>
+  <Markdown source={tr(scenario.consigne, langue)} />
+  <p class="boite__compteur" data-compteur aria-live="polite">{T('boite.messagesTraites', { n: 0, total })}</p>
+  <ol class="boite__liste">
+    {scenario.messages.map((m, i) => {
+      const id = `msg-${module.id}-${m.id}`;
+      const titre = m.objet ?? `${T(`boite.canal.${m.canal}` as any)} – ${m.expediteur.nom}`;
+      return (
+        <li>
+          <article class="message carte" data-message data-nature={m.nature} aria-labelledby={`${id}-titre`}>
+            <header class="message__entete">
+              <p class="message__canal"><span class="etiquette">{T(`boite.canal.${m.canal}` as any)}</span> <span class="visuellement-masque">{i + 1} / {total}</span></p>
+              <Titre id={`${id}-titre`}>{titre}</Titre>
+              <dl class="meta">
+                <dt>{T('boite.expediteur')}</dt>
+                <dd>{m.expediteur.nom} <code>{m.expediteur.adresse}</code></dd>
+                <dt>{T('boite.date')}</dt>
+                <dd>{m.date}</dd>
+                {m.pieceJointe && (<><dt>{T('boite.pieceJointe')}</dt><dd><code>{m.pieceJointe}</code></dd></>)}
+              </dl>
+            </header>
+            <div class="message__corps">
+              <Markdown source={tr(m.corps, langue)} />
+              {m.liens.map((l, j) => (
+                <div class="message__lien">
+                  <p>
+                    {T('boite.lien')} : <span class="faux-lien">{l.texteAffiche}</span>
+                  </p>
+                  <button type="button" class="bouton--secondaire" aria-expanded="false" aria-controls={`${id}-lien-${j}`} data-reveler>
+                    {T('boite.verifierLien')}<span class="visuellement-masque"> : {l.texteAffiche}</span>
+                  </button>
+                  <p id={`${id}-lien-${j}`} class="message__destination" hidden>
+                    {T('boite.destination')} <code>{l.destination}</code>
+                  </p>
+                </div>
+              ))}
+              {m.qrCode && (
+                <div class="message__qr">
+                  <svg class="qr" viewBox="-1 -1 23 23" width="110" height="110" aria-hidden="true" focusable="false">
+                    <rect x="-1" y="-1" width="23" height="23" fill="#FFFFFF" />
+                    {motifQr(m.qrCode.destination).map((c) => <rect x={c.x} y={c.y} width="1" height="1" fill="#000000" />)}
+                  </svg>
+                  <p>{T('boite.qr')} : {tr(m.qrCode.description, langue)}</p>
+                  <button type="button" class="bouton--secondaire" aria-expanded="false" aria-controls={`${id}-qr`} data-reveler>
+                    {T('boite.verifierQr')}
+                  </button>
+                  <p id={`${id}-qr`} class="message__destination" hidden>
+                    {T('boite.destination')} <code>{m.qrCode.destination}</code>
+                  </p>
+                </div>
+              )}
+            </div>
+            <div class="message__decision">
+              <p class="message__decision-titre" id={`${id}-decision`}>{T('boite.decision')}</p>
+              <div class="groupe-boutons" role="group" aria-labelledby={`${id}-decision`}>
+                <button type="button" data-decision="malveillant" aria-pressed="false">{T('boite.signaler')}<span class="visuellement-masque"> : {titre}</span></button>
+                <button type="button" class="bouton--secondaire" data-decision="legitime" aria-pressed="false">{T('boite.legitime')}<span class="visuellement-masque"> : {titre}</span></button>
+              </div>
+            </div>
+            <div class="message-retour" data-retour tabindex="-1" hidden>
+              <p class="message-retour__titre" data-verdict></p>
+              <p>{m.nature === 'malveillant' ? T('boite.etaitMalveillant') : T('boite.etaitLegitime')}</p>
+              {m.indices.length > 0 && (
+                <>
+                  <p>{T('boite.indices')} :</p>
+                  <ul>{m.indices.map((ind) => <li>{tr(ind, langue)}</li>)}</ul>
+                </>
+              )}
+              <Markdown source={tr(m.explication, langue)} />
+            </div>
+          </article>
+        </li>
+      );
+    })}
+  </ol>
+  <div class="message-retour message-retour--succes" data-bilan tabindex="-1" hidden></div>
+  <button type="button" class="bouton--secondaire" data-recommencer hidden>{T('boite.recommencer')}</button>
+  <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
+</div>
+
+<script>
+  import { majModule, libelles, formater, resultat } from '../scripts/stockage.ts';
+
+  for (const boite of document.querySelectorAll<HTMLElement>('[data-boite]')) {
+    const L = libelles(boite);
+    const total = Number(boite.dataset.total);
+    const compteur = boite.querySelector<HTMLElement>('[data-compteur]')!;
+    const bilan = boite.querySelector<HTMLElement>('[data-bilan]')!;
+    const recommencer = boite.querySelector<HTMLButtonElement>('[data-recommencer]')!;
+    let traites = 0;
+    let bons = 0;
+
+    boite.addEventListener('click', (evt) => {
+      const bouton = (evt.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!bouton || !boite.contains(bouton)) return;
+
+      if (bouton.hasAttribute('data-reveler')) {
+        const cible = document.getElementById(bouton.getAttribute('aria-controls')!)!;
+        const ouvert = bouton.getAttribute('aria-expanded') === 'true';
+        bouton.setAttribute('aria-expanded', String(!ouvert));
+        cible.hidden = ouvert;
+        return;
+      }
+
+      if (bouton.dataset.decision) {
+        const message = bouton.closest<HTMLElement>('[data-message]')!;
+        const juste = bouton.dataset.decision === message.dataset.nature;
+        for (const b of message.querySelectorAll<HTMLButtonElement>('[data-decision]')) {
+          b.disabled = true;
+          b.setAttribute('aria-pressed', String(b === bouton));
+        }
+        traites++;
+        if (juste) bons++;
+        const retour = message.querySelector<HTMLElement>('[data-retour]')!;
+        retour.classList.toggle('message-retour--succes', juste);
+        retour.classList.toggle('message-retour--erreur', !juste);
+        retour.querySelector('[data-verdict]')!.textContent = juste ? L.bonne ?? '' : L.mauvaise ?? '';
+        retour.hidden = false;
+        compteur.textContent = formater(L.compteur, { n: traites, total });
+        if (traites === total) {
+          bilan.textContent = formater(L.bilan, { bons, total });
+          bilan.hidden = false;
+          recommencer.hidden = false;
+          majModule(boite.dataset.module!, (s) => {
+            s.scenario = resultat(bons, total);
+          });
+          document.dispatchEvent(new CustomEvent('ssi:progression'));
+        }
+        retour.focus();
+        return;
+      }
+
+      if (bouton.hasAttribute('data-recommencer')) {
+        traites = 0;
+        bons = 0;
+        for (const b of boite.querySelectorAll<HTMLButtonElement>('[data-decision]')) {
+          b.disabled = false;
+          b.setAttribute('aria-pressed', 'false');
+        }
+        for (const r of boite.querySelectorAll<HTMLElement>('[data-retour]')) r.hidden = true;
+        bilan.hidden = true;
+        recommencer.hidden = true;
+        compteur.textContent = formater(L.compteur, { n: 0, total });
+        boite.querySelector<HTMLElement>('[data-message] h3, [data-message] h4')?.setAttribute('tabindex', '-1');
+        boite.querySelector<HTMLElement>('[data-message] h3, [data-message] h4')?.focus();
+      }
+    });
+  }
+</script>

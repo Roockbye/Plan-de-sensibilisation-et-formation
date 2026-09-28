@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+exports/
+test-results/
+playwright-report/
+*.tmp.*
+.env
+.env.*
+!.env.example
+.DS_Store

@@ -1,0 +1,21 @@
+{
+  "id": "nouvel-arrivant",
+  "libelle": "Nouvel arrivant",
+  "description": "Salarié, stagiaire, alternant ou prestataire qui rejoint l'organisation : il ne connaît ni les règles internes ni les interlocuteurs, et reçoit beaucoup de messages qu'il ne sait pas encore trier.",
+  "besoins": [
+    "Connaître les règles essentielles de la charte informatique",
+    "Identifier ses interlocuteurs sécurité et le canal de signalement",
+    "Acquérir le socle de bons réflexes dès la première semaine"
+  ],
+  "objectifs": [
+    { "id": "socle-hameconnage", "texte": "Reconnaître un message d'hameçonnage, y compris un faux message « de bienvenue » ou « du service informatique »", "niveau": "analyser", "modules": ["hameconnage"] },
+    { "id": "socle-comptes", "texte": "Sécuriser ses nouveaux comptes dès leur création (phrase de passe, double authentification)", "niveau": "appliquer", "modules": ["mots-de-passe"] },
+    { "id": "socle-signalement", "texte": "Citer le canal de signalement et le contact sécurité de l'organisation", "niveau": "connaitre", "modules": ["incident"] },
+    { "id": "socle-donnees", "texte": "Appliquer les règles de partage des documents de l'organisation", "niveau": "appliquer", "modules": ["donnees"] }
+  ],
+  "exposition": ["hameconnage", "ingenierie-sociale", "shadow-it"],
+  "contraintes": ["Parcours à terminer dans le délai d'accueil défini par la configuration", "Beaucoup d'informations reçues en même temps : aller à l'essentiel"],
+  "dureeAnnuelleCibleMinutes": 60,
+  "partEffectif": 0.1,
+  "ordre": 40
+}
