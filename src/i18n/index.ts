@@ -2,8 +2,8 @@
  * Textes de l'interface. Le français est la référence ; une clé absente d'une autre
  * langue retombe sur le français. Pour traduire : compléter en.json (mêmes clés).
  */
-import fr from './fr.json';
-import en from './en.json';
+import fr from './fr.json' with { type: 'json' };
+import en from './en.json' with { type: 'json' };
 import type { Langue } from '../lib/texte.ts';
 
 export type Cle = keyof typeof fr;

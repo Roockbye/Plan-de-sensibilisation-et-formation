@@ -1,27 +1,32 @@
 ---
 /**
- * Gabarit commun : en-tête, navigation, fil d'Ariane, pied de page.
+ * Gabarit commun : en-tête, navigation, sélecteur de langue, fil d'Ariane, pied de page.
  * Structure conforme RGAA : langue, titre de page unique, liens d'évitement,
  * landmarks (banner, navigation, main, contentinfo), deux systèmes de navigation.
  */
 import '../styles/global.css';
 import { plateforme } from '../lib/contenus.ts';
+import { cheminSansLangue, languesPubliees, lienLangue } from '../lib/donnees.ts';
 import { traducteur } from '../i18n/index.ts';
+import type { Langue } from '../lib/texte.ts';
+import { variables } from '../lib/personnalisation.ts';
 
 interface Props {
   titre: string;
+  langue: Langue;
   description?: string;
-  filAriane?: { libelle: string; href?: string }[];
+  filAriane?: { libelle: string; href?: string; lang?: string }[];
 }
 
-const { titre, description, filAriane = [] } = Astro.props;
+const { titre, langue, description, filAriane = [] } = Astro.props;
 const { config } = plateforme();
-const langue = config.langues.defaut;
 const T = traducteur(langue);
 const org = config.organisation;
 const idOrg = (org.nomCourt ?? org.nom).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const lien = (c: string) => lienLangue(langue, c);
 
 const chemin = Astro.url.pathname;
+const cheminNeutre = cheminSansLangue(chemin);
 const liens = [
   { href: '/', libelle: T('nav.accueil') },
   { href: '/profils/', libelle: T('nav.profils') },
@@ -31,14 +36,22 @@ const liens = [
   { href: '/tableau-de-bord/', libelle: T('nav.tableauDeBord') },
   { href: '/plan/', libelle: T('nav.plan') },
 ];
-const estActif = (href: string) => (href === '/' ? chemin === '/' : chemin.startsWith(href));
+const estActif = (href: string) => (href === '/' ? cheminNeutre === '/' : cheminNeutre.startsWith(href));
 const titreComplet = `${titre} – ${T('site.titre')} – ${org.nom}`;
+
+// Autres versions linguistiques de la même page.
+const { defaut, autres } = languesPubliees();
+const versions = [defaut, ...autres].filter((l) => l !== langue);
+const NOM_LANGUE: Record<Langue, string> = { fr: 'Français', en: 'English' };
+
+// Libellés utilisés par les scripts du navigateur (statuts, liens vers les modules).
+const libellesNavigateur = { aFaire: T('statut.aFaire'), enCours: T('statut.enCours'), valide: T('statut.valide'), posttest: T('statut.posttest') };
 
 // En production, la CSP est aussi posée par une balise meta (utile si l'hébergeur ne gère pas les en-têtes).
 const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
 ---
 <!doctype html>
-<html lang={langue} data-org={idOrg}>
+<html lang={langue} data-org={idOrg} data-prefixe={langue === defaut ? '' : `/${langue}`}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -47,11 +60,12 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
     <title>{titreComplet}</title>
     <meta name="description" content={description ?? T('site.description')} />
     <meta name="robots" content="noindex" />
+    {[defaut, ...autres].length > 1 && [defaut, ...autres].map((l) => <link rel="alternate" hreflang={l} href={lienLangue(l, cheminNeutre)} />)}
     <link rel="icon" href={org.logo ? `/${org.logo}` : '/favicon.svg'} />
     <script is:inline src="/prefs-init.js"></script>
     <link rel="stylesheet" href="/theme.css" />
   </head>
-  <body>
+  <body data-libelles-statut={JSON.stringify(libellesNavigateur)}>
     <ul class="evitement">
       <li><a href="#contenu">{T('evitement.contenu')}</a></li>
       <li><a href="#menu">{T('evitement.menu')}</a></li>
@@ -62,22 +76,29 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
         <p class="conteneur">{T('site.bandeauDemo')}</p>
       </div>
       <div class="entete__haut conteneur">
-        <a class="marque" href="/">
+        <a class="marque" href={lien('/')}>
           {org.logo && <img src={`/${org.logo}`} alt="" width="44" height="44" />}
           <span class="marque__texte">
             <span>{T('site.titre')}</span>
             <span class="marque__org">{org.nom}</span>
           </span>
         </a>
-        <a class="lien-preferences" href="/preferences/" aria-current={chemin.startsWith('/preferences/') ? 'page' : undefined}>
-          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
-          {T('nav.preferences')}
-        </a>
+        <div class="entete__outils">
+          {versions.map((l) => (
+            <a class="lien-langue" href={lienLangue(l, cheminNeutre)} hreflang={l} lang={l}>
+              <span class="visuellement-masque">{T('langue.changer')} : </span>{NOM_LANGUE[l]}
+            </a>
+          ))}
+          <a class="lien-preferences" href={lien('/preferences/')} aria-current={cheminNeutre.startsWith('/preferences/') ? 'page' : undefined}>
+            <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+            {T('nav.preferences')}
+          </a>
+        </div>
       </div>
       <nav class="nav-principale conteneur" id="menu" aria-label={T('nav.label')} tabindex="-1">
         <ul>
           {liens.map((l) => (
-            <li><a href={l.href} aria-current={estActif(l.href) ? 'page' : undefined}>{l.libelle}</a></li>
+            <li><a href={lien(l.href)} aria-current={estActif(l.href) ? 'page' : undefined}>{l.libelle}</a></li>
           ))}
         </ul>
       </nav>
@@ -88,9 +109,9 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
         {filAriane.length > 0 && (
           <nav class="fil-ariane" aria-label={T('nav.filAriane')}>
             <ol>
-              <li><a href="/">{T('nav.accueil')}</a></li>
+              <li><a href={lien('/')}>{T('nav.accueil')}</a></li>
               {filAriane.map((e) => (
-                <li>{e.href ? <a href={e.href}>{e.libelle}</a> : <span aria-current="page">{e.libelle}</span>}</li>
+                <li lang={e.lang}>{e.href ? <a href={e.href}>{e.libelle}</a> : <span aria-current="page">{e.libelle}</span>}</li>
               ))}
             </ol>
           </nav>
@@ -103,10 +124,10 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
       <div class="conteneur">
         <nav aria-label={T('pied.label')}>
           <ul>
-            <li><a href="/accessibilite/">{T('pied.accessibilite', { etat: config.accessibilite.etatConformite })}</a></li>
-            <li><a href="/confidentialite/">{T('pied.confidentialite')}</a></li>
-            <li><a href="/plan-du-site/">{T('pied.planDuSite')}</a></li>
-            <li><a href="/preferences/">{T('nav.preferences')}</a></li>
+            <li><a href={lien('/accessibilite/')}>{T('pied.accessibilite', { etat: variables(config, langue)['accessibilite.etatConformite'] })}</a></li>
+            <li><a href={lien('/confidentialite/')}>{T('pied.confidentialite')}</a></li>
+            <li><a href={lien('/plan-du-site/')}>{T('pied.planDuSite')}</a></li>
+            <li><a href={lien('/preferences/')}>{T('nav.preferences')}</a></li>
           </ul>
         </nav>
         <p>{T('pied.contact', { email: config.contacts.securite })} – {T('pied.signalement', { tel: config.contacts.telephoneUrgence })}</p>

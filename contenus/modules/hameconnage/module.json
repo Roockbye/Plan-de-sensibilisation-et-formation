@@ -1,27 +1,72 @@
 {
   "id": "hameconnage",
   "code": "M1",
-  "titre": "Hameçonnage : e-mails, SMS et QR codes piégés",
-  "resume": "Reconnaître un message frauduleux, y compris par SMS ou QR code, et prendre le réflexe de le signaler.",
-  "risques": ["hameconnage", "quishing", "ingenierie-sociale"],
-  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
-  "obligatoirePour": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "titre": {
+    "fr": "Hameçonnage : e-mails, SMS et QR codes piégés",
+    "en": "Phishing: rigged emails, text messages and QR codes"
+  },
+  "resume": {
+    "fr": "Reconnaître un message frauduleux, y compris par SMS ou QR code, et prendre le réflexe de le signaler.",
+    "en": "Recognise a fraudulent message, including by text message or QR code, and get into the habit of reporting it."
+  },
+  "risques": [
+    "hameconnage",
+    "quishing",
+    "ingenierie-sociale"
+  ],
+  "profils": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
+  "obligatoirePour": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
   "dureeMinutes": 10,
   "niveau": "decouverte",
-  "formats": ["micro-module", "quiz", "simulation-hameconnage", "fiche-reflexe"],
+  "formats": [
+    "micro-module",
+    "quiz",
+    "simulation-hameconnage",
+    "fiche-reflexe"
+  ],
   "objectifs": [
-    "Citer les principaux indices d'un message d'hameçonnage",
-    "Vérifier la destination réelle d'un lien avant de cliquer",
-    "Se méfier d'un QR code dont on ne connaît pas l'origine",
-    "Signaler un message suspect par le canal de l'organisation"
+    {
+      "fr": "Citer les principaux indices d'un message d'hameçonnage",
+      "en": "Name the main signs of a phishing message"
+    },
+    {
+      "fr": "Vérifier la destination réelle d'un lien avant de cliquer",
+      "en": "Check where a link really leads before clicking"
+    },
+    {
+      "fr": "Se méfier d'un QR code dont on ne connaît pas l'origine",
+      "en": "Be wary of a QR code of unknown origin"
+    },
+    {
+      "fr": "Signaler un message suspect par le canal de l'organisation",
+      "en": "Report a suspicious message through the organisation's channel"
+    }
   ],
   "reglementations": [],
   "renouvellement": "annuelle",
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "Cybermalveillance.gouv.fr – Hameçonnage", "url": "https://www.cybermalveillance.gouv.fr/" },
-    { "titre": "ANSSI – Panorama de la cybermenace", "url": "https://cyber.gouv.fr/" }
+    {
+      "titre": "Cybermalveillance.gouv.fr – Hameçonnage",
+      "url": "https://www.cybermalveillance.gouv.fr/"
+    },
+    {
+      "titre": "ANSSI – Panorama de la cybermenace",
+      "url": "https://cyber.gouv.fr/"
+    }
   ],
   "ordre": 10
 }

@@ -1,27 +1,69 @@
 {
   "id": "mots-de-passe",
   "code": "M2",
-  "titre": "Mots de passe, gestionnaire et double authentification",
-  "resume": "Créer des phrases de passe robustes, ne jamais les réutiliser, s'appuyer sur un gestionnaire et déjouer les attaques contre la double authentification.",
-  "risques": ["mots-de-passe", "hameconnage"],
-  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
-  "obligatoirePour": ["utilisateur", "admin-it", "nouvel-arrivant"],
+  "titre": {
+    "fr": "Mots de passe, gestionnaire et double authentification",
+    "en": "Passwords, password managers and two-factor authentication"
+  },
+  "resume": {
+    "fr": "Créer des phrases de passe robustes, ne jamais les réutiliser, s'appuyer sur un gestionnaire et déjouer les attaques contre la double authentification.",
+    "en": "Create strong passphrases, never reuse them, rely on a password manager and thwart attacks on two-factor authentication."
+  },
+  "risques": [
+    "mots-de-passe",
+    "hameconnage"
+  ],
+  "profils": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
+  "obligatoirePour": [
+    "utilisateur",
+    "admin-it",
+    "nouvel-arrivant"
+  ],
   "dureeMinutes": 8,
   "niveau": "decouverte",
-  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "fiche-reflexe"
+  ],
   "objectifs": [
-    "Construire une phrase de passe longue et mémorisable",
-    "Expliquer pourquoi réutiliser un mot de passe est dangereux",
-    "Utiliser un gestionnaire de mots de passe validé par l'organisation",
-    "Refuser une demande de double authentification que l'on n'a pas initiée"
+    {
+      "fr": "Construire une phrase de passe longue et mémorisable",
+      "en": "Build a long, memorable passphrase"
+    },
+    {
+      "fr": "Expliquer pourquoi réutiliser un mot de passe est dangereux",
+      "en": "Explain why reusing a password is dangerous"
+    },
+    {
+      "fr": "Utiliser un gestionnaire de mots de passe validé par l'organisation",
+      "en": "Use a password manager approved by the organisation"
+    },
+    {
+      "fr": "Refuser une demande de double authentification que l'on n'a pas initiée",
+      "en": "Deny a two-factor authentication request you did not initiate"
+    }
   ],
   "reglementations": [],
   "renouvellement": "annuelle",
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "ANSSI – Recommandations relatives à l'authentification multifacteur et aux mots de passe", "url": "https://cyber.gouv.fr/" },
-    { "titre": "CNIL – Mots de passe : une nouvelle recommandation", "url": "https://www.cnil.fr/" }
+    {
+      "titre": "ANSSI – Recommandations relatives à l'authentification multifacteur et aux mots de passe",
+      "url": "https://cyber.gouv.fr/"
+    },
+    {
+      "titre": "CNIL – Mots de passe : une nouvelle recommandation",
+      "url": "https://www.cnil.fr/"
+    }
   ],
   "ordre": 20
 }

@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+import GraphiqueBarres from '../components/GraphiqueBarres.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const tdb = d.tableauDeBord();
+const libelles = tdb.parProfil.map((p) => d.libelleProfil(p.profil));
+const seuil = d.config.evaluation.seuilReussite;
+const retard = d.config.evaluation.delaiRetardJours;
+const numero = (id: string) => T('tdb.simulationN', { n: id.replace('simulation-', '') });
+---
+<Base titre={T('nav.tableauDeBord')} langue={d.langue} filAriane={[{ libelle: T('nav.tableauDeBord') }]}>
+  <h1>{T('tdb.titre')}</h1>
+  <p class="encart encart--attention lecture">
+    <strong>{T('tdb.fictif')}</strong> {T('tdb.fictifDetail', { n: tdb.effectifTotal, date: d.date(tdb.dateReference) })}
+  </p>
+
+  <h2>{T('tdb.indicateurs')}</h2>
+  <ul class="indicateurs">
+    <li class="carte indicateur">
+      <p class="indicateur__valeur">{tdb.global.tauxCompletion} %</p>
+      <p class="indicateur__libelle">{T('tdb.kpiCompletion')}</p>
+    </li>
+    <li class="carte indicateur">
+      <p class="indicateur__valeur">{tdb.global.scorePreMoyen} % → {tdb.global.scorePostMoyen} %</p>
+      <p class="indicateur__libelle">{T('tdb.kpiScores')}</p>
+    </li>
+    <li class="carte indicateur">
+      <p class="indicateur__valeur">{tdb.global.tauxReussite} %</p>
+      <p class="indicateur__libelle">{T('tdb.kpiReussite', { seuil })}</p>
+    </li>
+    <li class="carte indicateur">
+      <p class="indicateur__valeur">{tdb.global.personnesEnRetard}</p>
+      <p class="indicateur__libelle">{T('tdb.kpiRetard', { jours: retard })}</p>
+    </li>
+  </ul>
+
+  <h2>{T('tdb.parProfil')}</h2>
+  <GraphiqueBarres
+    id="completion"
+    titre={T('tdb.graphCompletion')}
+    enteteCategorie={T('commun.profil')}
+    legendeDonnees={T('tdb.donneesGraphique')}
+    categories={libelles}
+    series={[{ nom: T('tdb.modulesTermines'), valeurs: tdb.parProfil.map((p) => p.tauxCompletion) }]}
+  />
+  <GraphiqueBarres
+    id="scores"
+    titre={T('tdb.graphScores')}
+    enteteCategorie={T('commun.profil')}
+    legendeDonnees={T('tdb.donneesGraphique')}
+    categories={libelles}
+    series={[
+      { nom: T('module.etape1'), valeurs: tdb.parProfil.map((p) => p.scorePreMoyen) },
+      { nom: T('module.etape4'), valeurs: tdb.parProfil.map((p) => p.scorePostMoyen) },
+    ]}
+  />
+
+  <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-profils">
+    <table>
+      <caption id="legende-profils">{T('tdb.synthese')}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{T('commun.profil')}</th>
+          <th scope="col" class="nombre">{T('tdb.effectif')}</th>
+          <th scope="col" class="nombre">{T('tdb.modulesTermines')}</th>
+          <th scope="col" class="nombre">{T('tdb.completion')}</th>
+          <th scope="col" class="nombre">{T('tdb.reussite')}</th>
+          <th scope="col" class="nombre">{T('tdb.enRetard')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tdb.parProfil.map((p, i) => (
+          <tr>
+            <th scope="row"><a href={d.lien(`/profils/${p.profil}/`)}>{libelles[i]}</a></th>
+            <td class="nombre">{p.effectif}</td>
+            <td class="nombre">{p.modulesTermines} / {p.modulesAssignes}</td>
+            <td class="nombre">{p.tauxCompletion} %</td>
+            <td class="nombre">{p.tauxReussite} %</td>
+            <td class="nombre">{p.personnesEnRetard}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>{T('tdb.simulations')}</h2>
+  <p class="lecture">{T('tdb.simulationsIntro')}</p>
+  {tdb.simulations.length > 0 ? (
+    <GraphiqueBarres
+      id="simulations"
+      titre={T('tdb.graphSimulations')}
+      enteteCategorie={T('tdb.campagne')}
+      legendeDonnees={T('tdb.donneesGraphique')}
+      categories={tdb.simulations.map((s) => `${numero(s.id)} (${d.date(s.date, { day: 'numeric', month: 'short' })})`)}
+      series={[
+        { nom: T('tdb.tauxClic'), valeurs: tdb.simulations.map((s) => s.tauxClic) },
+        { nom: T('tdb.tauxSignalement'), valeurs: tdb.simulations.map((s) => s.tauxSignalement) },
+      ]}
+    />
+  ) : (
+    <p>{T('tdb.aucuneSimulation')}</p>
+  )}
+
+  <h2>{T('tdb.retards')}</h2>
+  {tdb.retards.length > 0 ? (
+    <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-retards">
+      <table>
+        <caption id="legende-retards">{T('tdb.retardsLegende', { jours: retard })}</caption>
+        <thead>
+          <tr><th scope="col">{T('commun.module')}</th><th scope="col">{T('commun.profil')}</th><th scope="col" class="nombre">{T('tdb.enRetard')}</th></tr>
+        </thead>
+        <tbody>
+          {tdb.retards.slice(0, 12).map((r) => (
+            <tr>
+              <th scope="row"><a href={d.lien(`/modules/${r.module}/`)}>{d.libelleModule(r.module)}</a></th>
+              <td>{d.libelleProfil(r.profil)}</td>
+              <td class="nombre">{r.personnes}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p>{T('tdb.aucunRetard')}</p>
+  )}
+
+  <h2>{T('tdb.prochaines')}</h2>
+  <ul class="lecture">
+    {tdb.prochainesActions.map((a) => (
+      <li>
+        <time datetime={a.date}>{d.date(a.date)}</time> – <strong>{d.typeAction(a)}</strong> : {d.texteAction(a).titre}
+      </li>
+    ))}
+  </ul>
+  <p><a href={d.lien('/calendrier/')}>{T('tdb.voirCalendrier')}</a></p>
+</Base>

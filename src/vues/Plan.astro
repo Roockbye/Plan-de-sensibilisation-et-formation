@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import { donnees } from '../lib/donnees.ts';
+import { genererPlan } from '../lib/plan.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+// Le plan est un document de référence rédigé en français ; son titre de niveau 1 devient celui de la page.
+const plan = genererPlan(d, d.parcours, d.calendrier, new Date().toISOString().slice(0, 10));
+---
+<Base titre={T('nav.plan')} langue={d.langue} filAriane={[{ libelle: T('nav.plan') }]}>
+  {d.langue !== 'fr' && <p class="encart encart--attention lecture pas-impression">{T('plan.enFrancais')}</p>}
+  <p class="groupe-boutons pas-impression">
+    <a class="bouton" href="/plan-sensibilisation.md" download="plan-sensibilisation.md">{T('commun.telecharger')} (Markdown)</a>
+    <button type="button" class="bouton--secondaire" data-imprimer hidden>{T('commun.imprimer')}</button>
+  </p>
+  <div class="plan" lang={d.langue !== 'fr' ? 'fr' : undefined}>
+    <Markdown source={plan} />
+  </div>
+</Base>
+
+<script>
+  const bouton = document.querySelector<HTMLButtonElement>('[data-imprimer]');
+  if (bouton) {
+    bouton.hidden = false;
+    bouton.addEventListener('click', () => window.print());
+  }
+</script>

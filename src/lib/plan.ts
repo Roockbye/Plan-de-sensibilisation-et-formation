@@ -5,7 +5,7 @@
  */
 import type { Plateforme } from './contenus.ts';
 import type { Parcours } from './parcours.ts';
-import { LIBELLES_TYPE, type Action } from './calendrier.ts';
+import { libelleType, texteAction, type Action } from './calendrier.ts';
 import { tr, type Texte } from './texte.ts';
 import { FORMATS } from './schemas.ts';
 
@@ -153,14 +153,14 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   ]));
   s.push(tableau(['Module', 'Renouvellement préconisé'], p.modules.map(({ meta }) => [`${meta.code} – ${t(meta.titre)}`, FREQ[meta.renouvellement]])));
   s.push('### Calendrier de l\'année');
-  s.push(tableau(['Date', 'Type', 'Action', 'Public'], calendrier.map((a) => [dateFr(a.date), LIBELLES_TYPE[a.type], a.titre, a.profils.length ? a.profils.map(libProfil).join(', ') : 'Tous'])));
+  s.push(tableau(['Date', 'Type', 'Action', 'Public'], calendrier.map((a) => [dateFr(a.date), libelleType(a.type), texteAction(a).titre, a.profils.length ? a.profils.map(libProfil).join(', ') : 'Tous'])));
 
   s.push('## 10. Pilotage et amélioration continue');
   s.push([
     `- **Pilotage** : équipe sécurité (${config.contacts.securite}), avec l'appui des managers pour les relances et de la direction pour le portage.`,
     '- **Revue annuelle** : mise à jour de l\'analyse de risques, des profils, des contenus et des fréquences, à partir des indicateurs et des incidents de l\'année.',
     '- **Veille** : intégration des nouvelles menaces (publications de l\'ANSSI, de Cybermalveillance.gouv.fr, retours d\'incidents).',
-    `- **Signalement** : ${config.contacts.signalement} ; urgence : ${config.contacts.telephoneUrgence}.`,
+    `- **Signalement** : ${t(config.contacts.signalement)} ; urgence : ${config.contacts.telephoneUrgence}.`,
   ].join('\n'));
 
   return s.join('\n\n') + '\n';

@@ -1,0 +1,143 @@
+{
+  "type": "boite-mail",
+  "titre": "Simulation: your inbox",
+  "consigne": "Here are six messages received this morning. For each one, decide whether to report it or whether it is legitimate. Use the “Check the link” button to see where a link really leads. Nothing is sent: this is a simulation.",
+  "messages": [
+    {
+      "id": "expiration-mdp",
+      "canal": "email",
+      "expediteur": {
+        "nom": "IT department",
+        "adresse": "support@{{organisation.domaine}}-helpdesk.com"
+      },
+      "objet": "Action required: your password expires today",
+      "date": "Monday 08:12",
+      "corps": "Dear user,\n\nYour password expires in **2 hours**. Without action on your part, access to your mailbox will be suspended.\n\nClick the link below to keep your current password.",
+      "liens": [
+        {
+          "texteAffiche": "https://messagerie.{{organisation.domaine}}/conserver",
+          "destination": "http://messagerie-{{organisation.domaine}}.verif-compte.co/login.php"
+        }
+      ],
+      "nature": "malveillant",
+      "indices": [
+        "Sender address outside the {{organisation.domaine}} domain",
+        "Urgency and threat of suspension",
+        "Generic greeting “Dear user”",
+        "The link leads to verif-compte.co, not to {{organisation.domaine}}"
+      ],
+      "explication": "Classic phishing: a real IT department never asks you to “keep” your password through a link."
+    },
+    {
+      "id": "conges-rh",
+      "canal": "email",
+      "expediteur": {
+        "nom": "Human resources",
+        "adresse": "rh@{{organisation.domaine}}"
+      },
+      "objet": "Reminder: enter your summer leave before 30 April",
+      "date": "Monday 08:45",
+      "corps": "Hello everyone,\n\nTo organise schedules, please enter your summer leave requests on the intranet before 30 April.\n\nThe HR team",
+      "liens": [
+        {
+          "texteAffiche": "https://intranet.{{organisation.domaine}}/conges",
+          "destination": "https://intranet.{{organisation.domaine}}/conges"
+        }
+      ],
+      "nature": "legitime",
+      "indices": [
+        "Internal sender with the right domain",
+        "Usual request, without excessive urgency",
+        "The link really leads to the organisation's intranet",
+        "No request for a password or payment"
+      ],
+      "explication": "Legitimate message: consistent sender and link, expected request. Even here, when in doubt, you can open the intranet from your bookmarks rather than the link."
+    },
+    {
+      "id": "sms-colis",
+      "canal": "sms",
+      "expediteur": {
+        "nom": "+33 7 55 01 23 45",
+        "adresse": "SMS"
+      },
+      "date": "Monday 09:03",
+      "corps": "Your parcel could not be delivered. Redelivery fee: €1.99. Pay within 48h:",
+      "liens": [
+        {
+          "texteAffiche": "https://livraison-suivi.info/fr",
+          "destination": "https://livraison-suivi.info/fr/paiement"
+        }
+      ],
+      "nature": "malveillant",
+      "indices": [
+        "Unknown phone number",
+        "Small amount to obtain your bank details",
+        "Short deadline to rush you",
+        "Website belonging to no known carrier"
+      ],
+      "explication": "Smishing: the small amount is used to steal your card number. Carriers do not ask for fees by text message."
+    },
+    {
+      "id": "qr-mfa",
+      "canal": "email",
+      "expediteur": {
+        "nom": "Your account security",
+        "adresse": "no-reply@securite-compte-cloud.com"
+      },
+      "objet": "Reactivate your two-factor authentication before Friday",
+      "date": "Monday 09:30",
+      "corps": "A security update requires you to reactivate your two-factor authentication.\n\nScan the QR code below with your phone to complete the procedure.",
+      "qrCode": {
+        "description": "QR code without any explanation",
+        "destination": "https://securite-compte-cloud.com/auth/reactivation"
+      },
+      "nature": "malveillant",
+      "indices": [
+        "Sender domain unrelated to the provider",
+        "QR code in an email: it escapes security filters",
+        "Forces you to use a phone, often less protected",
+        "Deadline to rush you"
+      ],
+      "explication": "Quishing: the QR code hides the fake website's address. Two-factor authentication is managed only through the official tools provided by {{organisation.nom}}."
+    },
+    {
+      "id": "equipe-securite",
+      "canal": "email",
+      "expediteur": {
+        "nom": "Security team",
+        "adresse": "{{contacts.securite}}"
+      },
+      "objet": "Wave of fake delivery text messages: stay alert",
+      "date": "Monday 10:15",
+      "corps": "Hello,\n\nSeveral colleagues received fake delivery text messages this morning asking for €1.99. Don't click and report them.\n\nThank you to those who have already reported them: thanks to you we were able to react.\n\nThe security team",
+      "nature": "legitime",
+      "indices": [
+        "Sender: the official security contact",
+        "No link, no attachment, no risky request",
+        "Informative message consistent with current events"
+      ],
+      "explication": "Legitimate message: it informs without asking for anything sensitive. An alert asking you to click or enter a password would, on the other hand, be suspicious."
+    },
+    {
+      "id": "affiche-parking",
+      "canal": "affiche-qr",
+      "expediteur": {
+        "nom": "Site car park",
+        "adresse": "Poster on the parking meter"
+      },
+      "date": "Monday 12:40",
+      "corps": "“Pay for your parking online: scan me!” The QR code is printed on a sticker placed over the town hall's official poster.",
+      "qrCode": {
+        "description": "QR code on an added sticker",
+        "destination": "https://paiement-stationnement-rapide.net/carte"
+      },
+      "nature": "malveillant",
+      "indices": [
+        "Sticker added over the official display",
+        "Address unrelated to the town or the official operator",
+        "Request for card payment"
+      ],
+      "explication": "Physical quishing, common on parking meters and charging stations. Use the official app or website you know."
+    }
+  ]
+}

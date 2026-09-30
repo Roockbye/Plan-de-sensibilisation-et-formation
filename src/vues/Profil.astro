@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Cle } from '../i18n/index.ts';
+import type { Langue, Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue; id: string }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+const parcours = d.parcours.find((p) => p.profil.id === Astro.props.id)!;
+const profil = parcours.profil;
+const libelle = d.tr(profil.libelle);
+const categories = ['obligatoire', 'prioritaire', 'complementaire'] as const;
+---
+<Base titre={T('profil.titre', { profil: libelle })} langue={d.langue} filAriane={[{ libelle: T('nav.profils'), href: d.lien('/profils/') }, { libelle, lang: lang(profil.libelle) }]}>
+  <h1>{T('profil.titre', { profil: '' })}<span lang={lang(profil.libelle)}>{libelle}</span></h1>
+  <div class="lecture">
+    <p lang={lang(profil.description)}>{d.tr(profil.description)}</p>
+    <p class="groupe-boutons">
+      <button type="button" data-choisir-profil={profil.id} data-libelle-ok={T('profil.enregistre')} data-libelle-ko={T('profil.stockageIndisponible')}>{T('profil.cestMonProfil')}</button>
+      <span data-profil-confirmation role="status"></span>
+    </p>
+
+    <h2>{T('profils.besoins')}</h2>
+    <ul>{profil.besoins.map((b) => <li lang={lang(b)}>{d.tr(b)}</li>)}</ul>
+
+    {profil.contraintes.length > 0 && (
+      <>
+        <h2>{T('profil.contraintes')}</h2>
+        <ul>{profil.contraintes.map((c) => <li lang={lang(c)}>{d.tr(c)}</li>)}</ul>
+      </>
+    )}
+
+    <h2>{T('commun.objectifs')}</h2>
+    <p>{T('profil.objectifsIntro')}</p>
+    <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-objectifs">
+      <table>
+        <caption id="legende-objectifs">{T('profil.objectifsLegende')}</caption>
+        <thead>
+          <tr><th scope="col">{T('profil.objectif')}</th><th scope="col">{T('profil.niveauVise')}</th><th scope="col">{T('commun.modules')}</th></tr>
+        </thead>
+        <tbody>
+          {profil.objectifs.map((o) => (
+            <tr>
+              <th scope="row" lang={lang(o.texte)}>{d.tr(o.texte)}</th>
+              <td>{T(`bloom.${o.niveau}` as Cle)}</td>
+              <td>{o.modules.map((m, i) => <>{i > 0 && ', '}<a href={d.lien(`/modules/${m}/`)} data-lien-module={m}>{d.module(m).meta.code}</a></>)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>{T('profil.exposition')}</h2>
+    <ul>
+      {profil.exposition.map((r) => {
+        const pr = d.prioriteRisque(r);
+        return <li>{d.libelleRisque(r)} – {pr ? T('profil.prioriteOrg', { priorite: d.priorite(pr) }) : T('profil.nonPrioritaire')}</li>;
+      })}
+    </ul>
+  </div>
+
+  <h2>{T('profil.parcoursPropose', { n: parcours.etapes.length, minutes: parcours.dureeTotaleMinutes })}</h2>
+  <p class="lecture">{T('profil.parcoursExplication')}</p>
+
+  {categories.map((cat) => {
+    const etapes = parcours.etapes.filter((e) => e.categorie === cat);
+    return etapes.length > 0 && (
+      <section aria-labelledby={`cat-${cat}`}>
+        <h3 id={`cat-${cat}`}>{T(`profil.categorie.${cat}` as Cle)}</h3>
+        <ol class="parcours">
+          {etapes.map((e) => (
+            <li class="carte parcours__etape">
+              <h4><a href={d.lien(`/modules/${e.module.id}/`)} data-lien-module={e.module.id}>{e.module.code} – <span lang={lang(e.module.titre)}>{d.tr(e.module.titre)}</span></a></h4>
+              <p lang={lang(e.module.resume)}>{d.tr(e.module.resume)}</p>
+              <p>
+                {T('commun.minutes', { n: e.module.dureeMinutes })} – {T(`niveau.${e.module.niveau}` as Cle)} –
+                {T('commun.statut')} : <span class="statut" data-statut-module={e.module.id}>{T('statut.aFaire')}</span>
+              </p>
+              {e.raisons.length > 0 && (
+                <details>
+                  <summary>{T('module.pourquoi')}<span class="visuellement-masque"> ({e.module.code})</span></summary>
+                  <ul>
+                    {e.raisons.map((r) => (
+                      <li>
+                        {d.libelleRisque(r.risque)} : {d.priorite(r.priorite).toLowerCase()}
+                        {r.exposition ? T('profil.expositionDoublee') : ''} → {T('profil.points', { n: r.points })}
+                      </li>
+                    ))}
+                  </ul>
+                  <p>{T('profil.score', { n: e.score })}</p>
+                </details>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+    );
+  })}
+
+  {parcours.risquesNonCouverts.length > 0 && (
+    <p class="encart encart--attention lecture">
+      {T('profil.nonCouverts', { risques: parcours.risquesNonCouverts.map((r) => d.libelleRisque(r)).join(', ') })}
+    </p>
+  )}
+</Base>
+
+<script>
+  import '../scripts/statuts.ts';
+  import { lireProgression, ecrireProgression } from '../scripts/stockage.ts';
+
+  const bouton = document.querySelector<HTMLButtonElement>('[data-choisir-profil]');
+  const confirmation = document.querySelector<HTMLElement>('[data-profil-confirmation]');
+  if (bouton && confirmation) {
+    const id = bouton.dataset.choisirProfil!;
+    const majEtat = () => {
+      const actif = lireProgression().profil === id;
+      bouton.setAttribute('aria-pressed', String(actif));
+      if (actif) confirmation.textContent = bouton.dataset.libelleOk ?? '';
+    };
+    majEtat();
+    bouton.addEventListener('click', () => {
+      const p = lireProgression();
+      p.profil = id;
+      if (!ecrireProgression(p)) confirmation.textContent = bouton.dataset.libelleKo ?? '';
+      majEtat();
+    });
+  }
+</script>

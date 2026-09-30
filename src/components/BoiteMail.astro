@@ -5,7 +5,7 @@
  * « Vérifier le lien » est l'équivalent accessible (clavier, lecteur d'écran, tactile) du survol à la souris.
  */
 import type { ModuleMeta, ScenarioBoiteMail } from '../lib/schemas.ts';
-import { tr } from '../lib/texte.ts';
+import { tr, type Langue } from '../lib/texte.ts';
 import { plateforme } from '../lib/contenus.ts';
 import { traducteur } from '../i18n/index.ts';
 import Markdown from './Markdown.astro';
@@ -14,11 +14,17 @@ interface Props {
   module: ModuleMeta;
   scenario: ScenarioBoiteMail;
   niveauTitre?: 3 | 4;
+  langue: Langue;
+  langueContenu?: Langue;
 }
-const { module, scenario, niveauTitre = 3 } = Astro.props;
+const { module, scenario, niveauTitre = 3, langue, langueContenu } = Astro.props;
 const { config } = plateforme();
-const langue = config.langues.defaut;
 const T = traducteur(langue);
+// Langue du contenu réellement servi (repli sur le français si la traduction manque).
+const lc: Langue = langueContenu ?? langue;
+/** Attribut lang pour un contenu dans une autre langue que la page (RGAA 8.7), et pour l'interface à l'intérieur. */
+const langContenu = lc !== langue ? lc : undefined;
+const langUi = lc !== langue ? langue : undefined;
 const Titre = `h${niveauTitre}` as "h3" | "h4";
 const total = scenario.messages.length;
 const textes = {
@@ -53,9 +59,9 @@ function motifQr(graine: string): { x: number; y: number }[] {
   return cases;
 }
 ---
-<div class="boite" data-boite data-module={module.id} data-total={total} data-libelles={JSON.stringify(textes)}>
-  <Markdown source={tr(scenario.consigne, langue)} />
-  <p class="boite__compteur" data-compteur aria-live="polite">{T('boite.messagesTraites', { n: 0, total })}</p>
+<div class="boite" lang={langContenu} data-boite data-module={module.id} data-total={total} data-libelles={JSON.stringify(textes)}>
+  <Markdown source={tr(scenario.consigne, lc)} />
+  <p class="boite__compteur" lang={langUi} data-compteur aria-live="polite">{T('boite.messagesTraites', { n: 0, total })}</p>
   <ol class="boite__liste">
     {scenario.messages.map((m, i) => {
       const id = `msg-${module.id}-${m.id}`;
@@ -64,28 +70,28 @@ function motifQr(graine: string): { x: number; y: number }[] {
         <li>
           <article class="message carte" data-message data-nature={m.nature} aria-labelledby={`${id}-titre`}>
             <header class="message__entete">
-              <p class="message__canal"><span class="etiquette">{T(`boite.canal.${m.canal}` as any)}</span> <span class="visuellement-masque">{i + 1} / {total}</span></p>
+              <p class="message__canal" lang={langUi}><span class="etiquette">{T(`boite.canal.${m.canal}` as any)}</span> <span class="visuellement-masque">{i + 1} / {total}</span></p>
               <Titre id={`${id}-titre`}>{titre}</Titre>
               <dl class="meta">
-                <dt>{T('boite.expediteur')}</dt>
+                <dt lang={langUi}>{T('boite.expediteur')}</dt>
                 <dd>{m.expediteur.nom} <code>{m.expediteur.adresse}</code></dd>
-                <dt>{T('boite.date')}</dt>
+                <dt lang={langUi}>{T('boite.date')}</dt>
                 <dd>{m.date}</dd>
-                {m.pieceJointe && (<><dt>{T('boite.pieceJointe')}</dt><dd><code>{m.pieceJointe}</code></dd></>)}
+                {m.pieceJointe && (<><dt lang={langUi}>{T('boite.pieceJointe')}</dt><dd><code>{m.pieceJointe}</code></dd></>)}
               </dl>
             </header>
             <div class="message__corps">
-              <Markdown source={tr(m.corps, langue)} />
+              <Markdown source={tr(m.corps, lc)} />
               {m.liens.map((l, j) => (
                 <div class="message__lien">
                   <p>
-                    {T('boite.lien')} : <span class="faux-lien">{l.texteAffiche}</span>
+                    <span lang={langUi}>{T('boite.lien')}</span> : <span class="faux-lien">{l.texteAffiche}</span>
                   </p>
-                  <button type="button" class="bouton--secondaire" aria-expanded="false" aria-controls={`${id}-lien-${j}`} data-reveler>
+                  <button type="button" class="bouton--secondaire" lang={langUi} aria-expanded="false" aria-controls={`${id}-lien-${j}`} data-reveler>
                     {T('boite.verifierLien')}<span class="visuellement-masque"> : {l.texteAffiche}</span>
                   </button>
                   <p id={`${id}-lien-${j}`} class="message__destination" hidden>
-                    {T('boite.destination')} <code>{l.destination}</code>
+                    <span lang={langUi}>{T('boite.destination')}</span> <code>{l.destination}</code>
                   </p>
                 </div>
               ))}
@@ -95,17 +101,17 @@ function motifQr(graine: string): { x: number; y: number }[] {
                     <rect x="-1" y="-1" width="23" height="23" fill="#FFFFFF" />
                     {motifQr(m.qrCode.destination).map((c) => <rect x={c.x} y={c.y} width="1" height="1" fill="#000000" />)}
                   </svg>
-                  <p>{T('boite.qr')} : {tr(m.qrCode.description, langue)}</p>
-                  <button type="button" class="bouton--secondaire" aria-expanded="false" aria-controls={`${id}-qr`} data-reveler>
+                  <p><span lang={langUi}>{T('boite.qr')}</span> : {tr(m.qrCode.description, lc)}</p>
+                  <button type="button" class="bouton--secondaire" lang={langUi} aria-expanded="false" aria-controls={`${id}-qr`} data-reveler>
                     {T('boite.verifierQr')}
                   </button>
                   <p id={`${id}-qr`} class="message__destination" hidden>
-                    {T('boite.destination')} <code>{m.qrCode.destination}</code>
+                    <span lang={langUi}>{T('boite.destination')}</span> <code>{m.qrCode.destination}</code>
                   </p>
                 </div>
               )}
             </div>
-            <div class="message__decision">
+            <div class="message__decision" lang={langUi}>
               <p class="message__decision-titre" id={`${id}-decision`}>{T('boite.decision')}</p>
               <div class="groupe-boutons" role="group" aria-labelledby={`${id}-decision`}>
                 <button type="button" data-decision="malveillant" aria-pressed="false">{T('boite.signaler')}<span class="visuellement-masque"> : {titre}</span></button>
@@ -113,23 +119,23 @@ function motifQr(graine: string): { x: number; y: number }[] {
               </div>
             </div>
             <div class="message-retour" data-retour tabindex="-1" hidden>
-              <p class="message-retour__titre" data-verdict></p>
-              <p>{m.nature === 'malveillant' ? T('boite.etaitMalveillant') : T('boite.etaitLegitime')}</p>
+              <p class="message-retour__titre" lang={langUi} data-verdict></p>
+              <p lang={langUi}>{m.nature === 'malveillant' ? T('boite.etaitMalveillant') : T('boite.etaitLegitime')}</p>
               {m.indices.length > 0 && (
                 <>
-                  <p>{T('boite.indices')} :</p>
-                  <ul>{m.indices.map((ind) => <li>{tr(ind, langue)}</li>)}</ul>
+                  <p lang={langUi}>{T('boite.indices')} :</p>
+                  <ul>{m.indices.map((ind) => <li>{tr(ind, lc)}</li>)}</ul>
                 </>
               )}
-              <Markdown source={tr(m.explication, langue)} />
+              <Markdown source={tr(m.explication, lc)} />
             </div>
           </article>
         </li>
       );
     })}
   </ol>
-  <div class="message-retour message-retour--succes" data-bilan tabindex="-1" hidden></div>
-  <button type="button" class="bouton--secondaire" data-recommencer hidden>{T('boite.recommencer')}</button>
+  <div class="message-retour message-retour--succes" lang={langUi} data-bilan tabindex="-1" hidden></div>
+  <button type="button" class="bouton--secondaire" lang={langUi} data-recommencer hidden>{T('boite.recommencer')}</button>
   <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
 </div>
 

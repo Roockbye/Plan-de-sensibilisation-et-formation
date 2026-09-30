@@ -18,8 +18,10 @@ interface Props {
   max?: number;
   unite?: string;
   enteteCategorie: string;
+  /** Préfixe de la légende du tableau de données (« Données du graphique »). */
+  legendeDonnees: string;
 }
-const { id, titre, categories, series, max = 100, unite = ' %', enteteCategorie } = Astro.props;
+const { id, titre, categories, series, max = 100, unite = ' %', enteteCategorie, legendeDonnees } = Astro.props;
 
 const LARGEUR = 640;
 const MARGE_G = 210;
@@ -87,7 +89,7 @@ function barre(x0: number, y: number, l: number, h: number): string {
 </figure>
 <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby={`${id}-tab`}>
   <table>
-    <caption id={`${id}-tab`}>Données du graphique : {titre}</caption>
+    <caption id={`${id}-tab`}>{legendeDonnees} : {titre}</caption>
     <thead>
       <tr>
         <th scope="col">{enteteCategorie}</th>

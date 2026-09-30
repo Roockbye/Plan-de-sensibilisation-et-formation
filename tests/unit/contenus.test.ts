@@ -11,21 +11,29 @@ describe('contenus pédagogiques', () => {
   it('charge les 8 modules du MVP avec leur version FALC et leurs quiz', () => {
     expect(contenus.modules).toHaveLength(8);
     for (const m of contenus.modules) {
-      expect(m.falc.length, m.meta.id).toBeGreaterThan(100);
-      expect(m.quiz.pretest.length).toBeGreaterThanOrEqual(2);
-      expect(m.quiz.posttest.length).toBeGreaterThanOrEqual(3);
+      expect(m.falc.fr.length, m.meta.id).toBeGreaterThan(100);
+      expect(m.quiz.fr.pretest.length).toBeGreaterThanOrEqual(2);
+      expect(m.quiz.fr.posttest.length).toBeGreaterThanOrEqual(3);
     }
   });
 
   it('personnalise les contenus avec la configuration', () => {
     const m1 = contenus.modules.find((m) => m.meta.id === 'hameconnage')!;
-    expect(m1.standard).toContain(config.contacts.securite);
-    expect(m1.standard).not.toMatch(/\{\{/);
+    expect(m1.standard.fr).toContain(config.contacts.securite);
+    expect(m1.standard.fr).not.toMatch(/\{\{/);
   });
 
   it('couvre au moins une menace émergente (nouvelles technologies)', () => {
     const emergents = contenus.risques.filter((r) => r.emergent).map((r) => r.id);
     expect(contenus.modules.some((m) => m.meta.risques.some((r) => emergents.includes(r)))).toBe(true);
+  });
+
+  it("n'active les modules sectoriels que sur demande de la configuration", () => {
+    expect(contenus.modules.some((m) => m.meta.secteur === 'sante')).toBe(false);
+    const c = configExemple();
+    c.modulesSectoriels = ['sante'];
+    const avecSante = chargerContenus(validerConfig(c).config);
+    expect(avecSante.modules.find((m) => m.meta.id === 'secret-medical')?.meta.code).toBe('S1');
   });
 
   it('refuse un profil actif inexistant', () => {

@@ -1,13 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
-import Markdown from '../components/Markdown.astro';
-import { donnees } from '../lib/donnees.ts';
+import Vue from '../vues/Editoriale.astro';
+import { languesPubliees } from '../lib/donnees.ts';
 
-const d = donnees();
 ---
-<Base titre="Données et confidentialité" filAriane={[{ libelle: 'Données et confidentialité' }]}>
-  <div class="lecture">
-    <h1>Données et confidentialité</h1>
-    <Markdown source={d.pages.confidentialite ?? ''} />
-  </div>
-</Base>
+<Vue langue={languesPubliees().defaut} page={'confidentialite'} />

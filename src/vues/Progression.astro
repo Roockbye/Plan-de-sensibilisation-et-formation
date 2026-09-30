@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Langue, Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+const parcoursParProfil = Object.fromEntries(d.parcours.map((p) => [p.profil.id, { libelle: d.tr(p.profil.libelle), modules: p.etapes.map((e) => e.module.id) }]));
+const libelles = {
+  profil: T('progression.profil'),
+  voirParcours: T('progression.voirParcours'),
+  synthese: T('progression.synthese'),
+  points: T('progression.points'),
+  efface: T('progression.efface'),
+};
+---
+<Base titre={T('nav.progression')} langue={d.langue} filAriane={[{ libelle: T('nav.progression') }]}>
+  <h1>{T('nav.progression')}</h1>
+  <div class="lecture">
+    <p>{T('progression.intro', { seuil: d.config.evaluation.seuilReussite })}</p>
+    <p data-profil-actuel>{T('progression.aucunProfil')} <a href={d.lien('/profils/')}>{T('progression.choisirProfil')}</a>.</p>
+    <p class="message-retour" data-synthese role="status"></p>
+  </div>
+
+  <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-progression">
+    <table class="progression" data-progression data-parcours={JSON.stringify(parcoursParProfil)} data-libelles={JSON.stringify(libelles)} data-prefixe-profil={d.lien('/profils/')}>
+      <caption id="legende-progression">{T('progression.legende')}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{T('commun.module')}</th>
+          <th scope="col" class="nombre">{T('module.etape1')}</th>
+          <th scope="col" class="nombre">{T('progression.meilleurPosttest')}</th>
+          <th scope="col" class="nombre">{T('progression.progression')}</th>
+          <th scope="col" class="nombre">{T('module.etape3')}</th>
+          <th scope="col">{T('commun.statut')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {d.modules.map(({ meta }) => (
+          <tr data-ligne-module={meta.id}>
+            <th scope="row"><a href={d.lien(`/modules/${meta.id}/`)} data-lien-module={meta.id}>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></a></th>
+            <td class="nombre" data-col="pretest">—</td>
+            <td class="nombre" data-col="posttest">—</td>
+            <td class="nombre" data-col="progression">—</td>
+            <td class="nombre" data-col="scenario">—</td>
+            <td><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="lecture">{T('progression.tiret')}</p>
+
+  <section class="lecture" aria-labelledby="titre-effacer">
+    <h2 id="titre-effacer">{T('progression.effacerTitre')}</h2>
+    <p>{T('progression.effacerIntro')}</p>
+    <p class="groupe-boutons">
+      <button type="button" class="bouton--secondaire" data-effacer>{T('progression.effacer')}</button>
+      <button type="button" data-confirmer hidden>{T('progression.confirmer')}</button>
+      <button type="button" class="bouton--secondaire" data-annuler hidden>{T('progression.annuler')}</button>
+    </p>
+    <p role="status" data-statut-effacement></p>
+  </section>
+  <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
+</Base>
+
+<script>
+  import '../scripts/statuts.ts';
+  import { lireProgression, effacerProgression, formater } from '../scripts/stockage.ts';
+
+  const table = document.querySelector<HTMLTableElement>('[data-progression]')!;
+  const parcours: Record<string, { libelle: string; modules: string[] }> = JSON.parse(table.dataset.parcours ?? '{}');
+  const L: Record<string, string> = JSON.parse(table.dataset.libelles ?? '{}');
+  const synthese = document.querySelector<HTMLElement>('[data-synthese]')!;
+  const zoneProfil = document.querySelector<HTMLElement>('[data-profil-actuel]')!;
+  const sansProfil = [...zoneProfil.childNodes].map((n) => n.cloneNode(true));
+
+  const pct = (v?: { pourcent: number }) => (v ? `${v.pourcent} %` : '—');
+
+  function afficher() {
+    const p = lireProgression();
+    const profil = p.profil && parcours[p.profil] ? parcours[p.profil] : undefined;
+    zoneProfil.replaceChildren(...sansProfil.map((n) => n.cloneNode(true)));
+    if (profil) {
+      zoneProfil.replaceChildren();
+      zoneProfil.append(`${formater(L.profil, { profil: profil.libelle })} `);
+      const a = document.createElement('a');
+      a.href = `${table.dataset.prefixeProfil}${p.profil}/`;
+      a.textContent = L.voirParcours ?? '';
+      zoneProfil.append(a);
+    }
+    let valides = 0;
+    let affiches = 0;
+    for (const ligne of table.querySelectorAll<HTMLTableRowElement>('[data-ligne-module]')) {
+      const id = ligne.dataset.ligneModule!;
+      ligne.hidden = Boolean(profil && !profil.modules.includes(id));
+      if (ligne.hidden) continue;
+      affiches++;
+      const s = p.modules[id];
+      if (s?.valide) valides++;
+      const cellule = (col: string) => ligne.querySelector<HTMLElement>(`[data-col="${col}"]`)!;
+      cellule('pretest').textContent = pct(s?.pretest);
+      cellule('posttest').textContent = pct(s?.meilleurPosttest);
+      const delta = s?.pretest && s?.meilleurPosttest ? s.meilleurPosttest.pourcent - s.pretest.pourcent : undefined;
+      cellule('progression').textContent = delta === undefined ? '—' : formater(L.points, { n: `${delta > 0 ? '+' : ''}${delta}` });
+      cellule('scenario').textContent = s?.scenario ? `${s.scenario.score} / ${s.scenario.total}` : '—';
+    }
+    synthese.textContent = formater(L.synthese, { valides, total: affiches });
+  }
+
+  afficher();
+
+  const effacer = document.querySelector<HTMLButtonElement>('[data-effacer]')!;
+  const confirmer = document.querySelector<HTMLButtonElement>('[data-confirmer]')!;
+  const annuler = document.querySelector<HTMLButtonElement>('[data-annuler]')!;
+  const statutEffacement = document.querySelector<HTMLElement>('[data-statut-effacement]')!;
+  const basculer = (confirmation: boolean) => {
+    effacer.hidden = confirmation;
+    confirmer.hidden = !confirmation;
+    annuler.hidden = !confirmation;
+    (confirmation ? confirmer : effacer).focus();
+  };
+  effacer.addEventListener('click', () => basculer(true));
+  annuler.addEventListener('click', () => basculer(false));
+  confirmer.addEventListener('click', () => {
+    effacerProgression();
+    basculer(false);
+    statutEffacement.textContent = L.efface ?? '';
+    afficher();
+    document.dispatchEvent(new CustomEvent('ssi:progression'));
+  });
+</script>

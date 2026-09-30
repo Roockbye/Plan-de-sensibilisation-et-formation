@@ -1,13 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+
+const d = donnees();
+const { T } = d;
 ---
-<Base titre="Page introuvable">
+<Base titre={T('page404.titre')} langue={d.langue}>
   <div class="lecture">
-    <h1>Page introuvable</h1>
-    <p>La page demandée n'existe pas ou a été déplacée.</p>
+    <h1>{T('page404.titre')}</h1>
+    <p>{T('page404.texte')}</p>
     <ul>
-      <li><a href="/">Revenir à l'accueil</a></li>
-      <li><a href="/plan-du-site/">Consulter le plan du site</a></li>
+      <li><a href={d.lien('/')}>{T('page404.accueil')}</a></li>
+      <li><a href={d.lien('/plan-du-site/')}>{T('page404.planDuSite')}</a></li>
     </ul>
   </div>
 </Base>

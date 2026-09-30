@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Action } from '../lib/calendrier.ts';
+import type { Langue, Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+const c = d.config.campagnes;
+
+const parMois = new Map<string, Action[]>();
+for (const a of d.calendrier) {
+  const mois = a.date.slice(0, 7);
+  parMois.set(mois, [...(parMois.get(mois) ?? []), a]);
+}
+const libelleMois = (m: string) => {
+  const s = d.date(`${m}-01`, { month: 'long', year: 'numeric' });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+const frequences = [
+  { action: T('calendrier.freq.accueil'), frequence: T('calendrier.freq.accueilValeur', { jours: c.onboardingDelaiJours }) },
+  { action: T('calendrier.freq.simulation'), frequence: d.frequence(c.simulationPhishing) },
+  { action: T('calendrier.freq.rappel'), frequence: d.frequence(c.rappelModules) },
+  { action: T('calendrier.freq.veille'), frequence: d.frequence(c.veilleNouvellesMenaces) },
+  { action: T('calendrier.freq.crise'), frequence: d.frequence(c.exerciceCrise) },
+  { action: T('calendrier.freq.bilan'), frequence: d.frequence('annuelle') },
+];
+---
+<Base titre={T('nav.calendrier')} langue={d.langue} filAriane={[{ libelle: T('nav.calendrier') }]}>
+  <h1>{T('calendrier.titre')}</h1>
+  <div class="lecture">
+    <p>{T('calendrier.intro', { org: d.config.organisation.nom })}</p>
+    <p><a class="bouton" href={d.lien('/calendrier.ics')} download>{T('calendrier.telecharger')}</a></p>
+  </div>
+
+  <h2>{T('calendrier.frequences')}</h2>
+  <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-frequences">
+    <table>
+      <caption id="legende-frequences">{T('calendrier.frequencesLegende')}</caption>
+      <thead><tr><th scope="col">{T('calendrier.action')}</th><th scope="col">{T('calendrier.frequence')}</th></tr></thead>
+      <tbody>
+        {frequences.map((f) => <tr><th scope="row">{f.action}</th><td>{f.frequence}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-renouvellement">
+    <table>
+      <caption id="legende-renouvellement">{T('calendrier.renouvellementLegende')}</caption>
+      <thead><tr><th scope="col">{T('commun.module')}</th><th scope="col">{T('calendrier.renouvellement')}</th><th scope="col">{T('calendrier.justification')}</th></tr></thead>
+      <tbody>
+        {d.modules.map(({ meta }) => (
+          <tr>
+            <th scope="row"><a href={d.lien(`/modules/${meta.id}/`)}>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></a></th>
+            <td>{d.frequence(meta.renouvellement)}</td>
+            <td>{meta.risques.some((r) => d.risque(r)?.emergent) ? T('calendrier.justifEmergent') : T('calendrier.justifFondamentaux')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>{T('calendrier.programme')}</h2>
+  {[...parMois].map(([mois, actions]) => (
+    <section aria-labelledby={`mois-${mois}`}>
+      <h3 id={`mois-${mois}`}>{libelleMois(mois)}</h3>
+      <ul class="calendrier">
+        {actions.map((a) => {
+          const { titre, description } = d.texteAction(a);
+          return (
+            <li class="carte calendrier__action">
+              <p class="calendrier__entete">
+                <time datetime={a.date}>{d.date(a.date, { weekday: 'long', day: 'numeric', month: 'long' })}</time>
+                <span class="etiquette">{d.typeAction(a)}</span>
+              </p>
+              <h4>{titre}</h4>
+              <p>{description}</p>
+              <p>
+                {T('commun.profils')} : {a.profils.length ? a.profils.map((p) => d.libelleProfil(p)).join(', ') : T('calendrier.tous')}.
+                {a.modules.length > 0 && <> {T('commun.modules')} : {a.modules.map((m, i) => <>{i > 0 && ', '}<a href={d.lien(`/modules/${m}/`)}>{d.module(m).meta.code}</a></>)}.</>}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</Base>

@@ -163,6 +163,21 @@ npm run captures       # captures d'écran à jour
 
 Pour le déploiement, définissez la même variable `ORGANISATION_CONFIG` dans les paramètres de Cloudflare Pages, ou remplacez directement `config/organisation.json`.
 
+## 9. Traduire un contenu
+
+Le français est la langue de référence. Pour publier une autre langue, ajoutez-la à la configuration : `"langues": { "defaut": "fr", "disponibles": ["fr", "en"] }`. Les pages sont alors générées sous `/en/`.
+
+| Contenu | Comment le traduire |
+| --- | --- |
+| Interface | `src/i18n/en.json` (mêmes clés que `fr.json` ; un test vérifie qu'aucune ne manque) |
+| Textes courts des JSON (risques, profils, titres de modules, justifications de la config) | Remplacer `"texte"` par `{ "fr": "texte", "en": "text" }` |
+| Contenu d'un module | Ajouter `standard.en.md` et `falc.en.md` dans le dossier du module |
+| Quiz et mise en situation | Copier `quiz.json` en `quiz.en.json` (et `scenario.json` en `scenario.en.json`), puis traduire **uniquement les textes** |
+| Transcriptions | `transcription-….en.md` à côté de la version française |
+| Pages éditoriales | `contenus/pages/<page>.en.md` |
+
+Le build vérifie qu'une traduction a exactement la même structure que l'original (mêmes identifiants, mêmes bonnes réponses, mêmes enchaînements). Un contenu non traduit reste disponible en français, avec un avis et l'attribut `lang="fr"`.
+
 ## Liste de contrôle
 
 - [ ] Identité, logo et texte alternatif

@@ -1,22 +1,104 @@
 {
   "id": "admin-it",
-  "libelle": "Administrateur informatique",
-  "description": "Personnes disposant de privilèges élevés sur le système d'information (internes ou prestataires) : leur compte est la cible la plus recherchée par un attaquant.",
+  "libelle": {
+    "fr": "Administrateur informatique",
+    "en": "IT administrator"
+  },
+  "description": {
+    "fr": "Personnes disposant de privilèges élevés sur le système d'information (internes ou prestataires) : leur compte est la cible la plus recherchée par un attaquant.",
+    "en": "People with high privileges on the information system (in-house or contractors): their account is the one attackers want most."
+  },
   "besoins": [
-    "Appliquer les règles d'hygiène d'administration (moindre privilège, comptes dédiés)",
-    "Maintenir les systèmes à jour et journaliser les actions",
-    "Détecter les signaux faibles d'une compromission",
-    "Encadrer techniquement l'usage de l'IA générative et des services cloud"
+    {
+      "fr": "Appliquer les règles d'hygiène d'administration (moindre privilège, comptes dédiés)",
+      "en": "Apply administration hygiene rules (least privilege, dedicated accounts)"
+    },
+    {
+      "fr": "Maintenir les systèmes à jour et journaliser les actions",
+      "en": "Keep systems up to date and log actions"
+    },
+    {
+      "fr": "Détecter les signaux faibles d'une compromission",
+      "en": "Detect weak signals of a compromise"
+    },
+    {
+      "fr": "Encadrer techniquement l'usage de l'IA générative et des services cloud",
+      "en": "Provide a technical framework for generative AI and cloud services"
+    }
   ],
   "objectifs": [
-    { "id": "moindre-privilege", "texte": "Appliquer le principe du moindre privilège et utiliser des comptes d'administration dédiés, jamais pour naviguer ou lire ses e-mails", "niveau": "appliquer", "modules": ["hygiene-admin"] },
-    { "id": "correctifs", "texte": "Prioriser l'application des correctifs de sécurité selon l'exposition et la criticité", "niveau": "evaluer", "modules": ["hygiene-admin"] },
-    { "id": "detection", "texte": "Identifier dans les journaux les signes d'une escalade de privilèges ou d'un accès anormal", "niveau": "analyser", "modules": ["hygiene-admin", "incident"] },
-    { "id": "ia-technique", "texte": "Évaluer les risques d'un outil d'IA générative avant son intégration au SI", "niveau": "evaluer", "modules": ["ia-generative"] },
-    { "id": "comptes-proteges", "texte": "Protéger les comptes à privilèges par des secrets robustes et une authentification forte", "niveau": "appliquer", "modules": ["mots-de-passe"] }
+    {
+      "id": "moindre-privilege",
+      "texte": {
+        "fr": "Appliquer le principe du moindre privilège et utiliser des comptes d'administration dédiés, jamais pour naviguer ou lire ses e-mails",
+        "en": "Apply the principle of least privilege and use dedicated admin accounts, never for browsing or email"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "hygiene-admin"
+      ]
+    },
+    {
+      "id": "correctifs",
+      "texte": {
+        "fr": "Prioriser l'application des correctifs de sécurité selon l'exposition et la criticité",
+        "en": "Prioritise security patches according to exposure and criticality"
+      },
+      "niveau": "evaluer",
+      "modules": [
+        "hygiene-admin"
+      ]
+    },
+    {
+      "id": "detection",
+      "texte": {
+        "fr": "Identifier dans les journaux les signes d'une escalade de privilèges ou d'un accès anormal",
+        "en": "Identify in the logs the signs of privilege escalation or abnormal access"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "hygiene-admin",
+        "incident"
+      ]
+    },
+    {
+      "id": "ia-technique",
+      "texte": {
+        "fr": "Évaluer les risques d'un outil d'IA générative avant son intégration au SI",
+        "en": "Assess the risks of a generative AI tool before integrating it into the information system"
+      },
+      "niveau": "evaluer",
+      "modules": [
+        "ia-generative"
+      ]
+    },
+    {
+      "id": "comptes-proteges",
+      "texte": {
+        "fr": "Protéger les comptes à privilèges par des secrets robustes et une authentification forte",
+        "en": "Protect privileged accounts with strong secrets and strong authentication"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "mots-de-passe"
+      ]
+    }
   ],
-  "exposition": ["privileges-admin", "rancongiciel", "shadow-it"],
-  "contraintes": ["Public expert : éviter les rappels trop basiques", "Astreintes et interventions imprévues"],
+  "exposition": [
+    "privileges-admin",
+    "rancongiciel",
+    "shadow-it"
+  ],
+  "contraintes": [
+    {
+      "fr": "Public expert : éviter les rappels trop basiques",
+      "en": "Expert audience: avoid overly basic reminders"
+    },
+    {
+      "fr": "Astreintes et interventions imprévues",
+      "en": "On-call duties and unplanned interventions"
+    }
+  ],
   "dureeAnnuelleCibleMinutes": 180,
   "partEffectif": 0.05,
   "ordre": 30

@@ -1,0 +1,21 @@
+---
+/** Page éditoriale (déclaration d'accessibilité, confidentialité) : contenu Markdown de contenus/pages/. */
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import { donnees } from '../lib/donnees.ts';
+import type { Cle } from '../i18n/index.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { langue: Langue; page: 'accessibilite' | 'confidentialite' }
+const d = donnees(Astro.props.langue);
+const titre = d.T(`page.${Astro.props.page}` as Cle);
+const contenu = d.contenu(d.pages[Astro.props.page]!);
+---
+<Base titre={titre} langue={d.langue} filAriane={[{ libelle: titre }]}>
+  <div class="lecture">
+    <h1>{titre}</h1>
+    <div lang={contenu.langue !== d.langue ? contenu.langue : undefined}>
+      <Markdown source={contenu.valeur} />
+    </div>
+  </div>
+</Base>

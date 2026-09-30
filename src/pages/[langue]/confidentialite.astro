@@ -1,0 +1,10 @@
+---
+import Vue from '../../vues/Editoriale.astro';
+import { languesPubliees } from '../../lib/donnees.ts';
+import type { Langue } from '../../lib/texte.ts';
+
+export function getStaticPaths() {
+  return languesPubliees().autres.map((langue) => ({ params: { langue } }));
+}
+---
+<Vue langue={Astro.params.langue as Langue} page={'confidentialite'} />

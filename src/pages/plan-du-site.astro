@@ -1,38 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
-import { donnees } from '../lib/donnees.ts';
-import { traducteur } from '../i18n/index.ts';
+import Vue from '../vues/PlanDuSite.astro';
+import { languesPubliees } from '../lib/donnees.ts';
 
-const d = donnees();
-const T = traducteur(d.langue);
 ---
-<Base titre="Plan du site" filAriane={[{ libelle: 'Plan du site' }]}>
-  <div class="lecture">
-    <h1>Plan du site</h1>
-    <ul>
-      <li><a href="/">{T('nav.accueil')}</a></li>
-      <li>
-        <a href="/profils/">{T('nav.profils')}</a>
-        <ul>{d.profils.map((p) => <li><a href={`/profils/${p.id}/`}>{d.tr(p.libelle)}</a></li>)}</ul>
-      </li>
-      <li>
-        <a href="/modules/">{T('nav.modules')}</a>
-        <ul>
-          {d.modules.map(({ meta }) => (
-            <li>
-              <a href={`/modules/${meta.id}/`}>{meta.code} – {d.tr(meta.titre)}</a>
-              (<a href={`/modules/${meta.id}/facile/`}>version facile à lire<span class="visuellement-masque"> : {meta.code}</span></a>)
-            </li>
-          ))}
-        </ul>
-      </li>
-      <li><a href="/ma-progression/">{T('nav.progression')}</a></li>
-      <li><a href="/calendrier/">{T('nav.calendrier')}</a></li>
-      <li><a href="/tableau-de-bord/">{T('nav.tableauDeBord')}</a></li>
-      <li><a href="/plan/">{T('nav.plan')}</a></li>
-      <li><a href="/preferences/">{T('nav.preferences')}</a></li>
-      <li><a href="/accessibilite/">Déclaration d'accessibilité</a></li>
-      <li><a href="/confidentialite/">Données et confidentialité</a></li>
-    </ul>
-  </div>
-</Base>
+<Vue langue={languesPubliees().defaut} />

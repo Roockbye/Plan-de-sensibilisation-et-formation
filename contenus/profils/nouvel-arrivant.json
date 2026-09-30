@@ -1,20 +1,88 @@
 {
   "id": "nouvel-arrivant",
-  "libelle": "Nouvel arrivant",
-  "description": "Salarié, stagiaire, alternant ou prestataire qui rejoint l'organisation : il ne connaît ni les règles internes ni les interlocuteurs, et reçoit beaucoup de messages qu'il ne sait pas encore trier.",
+  "libelle": {
+    "fr": "Nouvel arrivant",
+    "en": "Newcomer"
+  },
+  "description": {
+    "fr": "Salarié, stagiaire, alternant ou prestataire qui rejoint l'organisation : il ne connaît ni les règles internes ni les interlocuteurs, et reçoit beaucoup de messages qu'il ne sait pas encore trier.",
+    "en": "Employee, intern, apprentice or contractor joining the organisation: they know neither the internal rules nor the contacts, and receive many messages they cannot yet sort."
+  },
   "besoins": [
-    "Connaître les règles essentielles de la charte informatique",
-    "Identifier ses interlocuteurs sécurité et le canal de signalement",
-    "Acquérir le socle de bons réflexes dès la première semaine"
+    {
+      "fr": "Connaître les règles essentielles de la charte informatique",
+      "en": "Know the key rules of the IT charter"
+    },
+    {
+      "fr": "Identifier ses interlocuteurs sécurité et le canal de signalement",
+      "en": "Identify their security contacts and the reporting channel"
+    },
+    {
+      "fr": "Acquérir le socle de bons réflexes dès la première semaine",
+      "en": "Acquire the core good habits in their first week"
+    }
   ],
   "objectifs": [
-    { "id": "socle-hameconnage", "texte": "Reconnaître un message d'hameçonnage, y compris un faux message « de bienvenue » ou « du service informatique »", "niveau": "analyser", "modules": ["hameconnage"] },
-    { "id": "socle-comptes", "texte": "Sécuriser ses nouveaux comptes dès leur création (phrase de passe, double authentification)", "niveau": "appliquer", "modules": ["mots-de-passe"] },
-    { "id": "socle-signalement", "texte": "Citer le canal de signalement et le contact sécurité de l'organisation", "niveau": "connaitre", "modules": ["incident"] },
-    { "id": "socle-donnees", "texte": "Appliquer les règles de partage des documents de l'organisation", "niveau": "appliquer", "modules": ["donnees"] }
+    {
+      "id": "socle-hameconnage",
+      "texte": {
+        "fr": "Reconnaître un message d'hameçonnage, y compris un faux message « de bienvenue » ou « du service informatique »",
+        "en": "Recognise a phishing message, including a fake “welcome” or “IT department” message"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "hameconnage"
+      ]
+    },
+    {
+      "id": "socle-comptes",
+      "texte": {
+        "fr": "Sécuriser ses nouveaux comptes dès leur création (phrase de passe, double authentification)",
+        "en": "Secure their new accounts as soon as they are created (passphrase, two-factor authentication)"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "mots-de-passe"
+      ]
+    },
+    {
+      "id": "socle-signalement",
+      "texte": {
+        "fr": "Citer le canal de signalement et le contact sécurité de l'organisation",
+        "en": "Name the organisation's reporting channel and security contact"
+      },
+      "niveau": "connaitre",
+      "modules": [
+        "incident"
+      ]
+    },
+    {
+      "id": "socle-donnees",
+      "texte": {
+        "fr": "Appliquer les règles de partage des documents de l'organisation",
+        "en": "Apply the organisation's document-sharing rules"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "donnees"
+      ]
+    }
   ],
-  "exposition": ["hameconnage", "ingenierie-sociale", "shadow-it"],
-  "contraintes": ["Parcours à terminer dans le délai d'accueil défini par la configuration", "Beaucoup d'informations reçues en même temps : aller à l'essentiel"],
+  "exposition": [
+    "hameconnage",
+    "ingenierie-sociale",
+    "shadow-it"
+  ],
+  "contraintes": [
+    {
+      "fr": "Parcours à terminer dans le délai d'accueil défini par la configuration",
+      "en": "Path to complete within the onboarding period set in the configuration"
+    },
+    {
+      "fr": "Beaucoup d'informations reçues en même temps : aller à l'essentiel",
+      "en": "A lot of information received at once: stick to the essentials"
+    }
+  ],
   "dureeAnnuelleCibleMinutes": 60,
   "partEffectif": 0.1,
   "ordre": 40

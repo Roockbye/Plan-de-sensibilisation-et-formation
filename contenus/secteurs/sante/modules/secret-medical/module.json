@@ -1,0 +1,28 @@
+{
+  "id": "secret-medical",
+  "code": "S1",
+  "titre": "Secret médical et accès au dossier patient",
+  "resume": "Accéder uniquement aux dossiers des patients que l'on prend en charge, protéger les données de santé et utiliser les messageries de santé sécurisées.",
+  "risques": ["fuite-donnees", "mots-de-passe"],
+  "profils": ["utilisateur", "manager", "nouvel-arrivant"],
+  "obligatoirePour": ["utilisateur", "nouvel-arrivant"],
+  "dureeMinutes": 10,
+  "niveau": "decouverte",
+  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
+  "objectifs": [
+    "Expliquer pourquoi l'accès au dossier d'un patient est réservé à l'équipe qui le prend en charge",
+    "Ne jamais partager sa carte professionnelle ni sa session",
+    "Utiliser une messagerie de santé sécurisée pour échanger des données de santé",
+    "Signaler un accès ou un envoi inapproprié"
+  ],
+  "reglementations": ["rgpd", "hds", "pgssi-s"],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-09-28",
+  "sources": [
+    { "titre": "Agence du numérique en santé – Politique générale de sécurité des systèmes d'information de santé (PGSSI-S)", "url": "https://esante.gouv.fr/" },
+    { "titre": "CNIL – Données de santé", "url": "https://www.cnil.fr/" }
+  ],
+  "secteur": "sante",
+  "ordre": 15
+}

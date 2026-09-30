@@ -1,27 +1,75 @@
 {
   "id": "incident",
   "code": "M7",
-  "titre": "Réagir à un incident : les bons réflexes face au rançongiciel",
-  "resume": "Reconnaître un incident de sécurité, adopter les premiers gestes qui limitent les dégâts et alerter sans délai. Volet crise pour les managers.",
-  "risques": ["rancongiciel", "fuite-donnees", "hameconnage"],
-  "profils": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
-  "obligatoirePour": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"],
+  "titre": {
+    "fr": "Réagir à un incident : les bons réflexes face au rançongiciel",
+    "en": "Responding to an incident: the right reflexes against ransomware"
+  },
+  "resume": {
+    "fr": "Reconnaître un incident de sécurité, adopter les premiers gestes qui limitent les dégâts et alerter sans délai. Volet crise pour les managers.",
+    "en": "Recognise a security incident, take the first steps that limit the damage and raise the alarm without delay. Crisis section for managers."
+  },
+  "risques": [
+    "rancongiciel",
+    "fuite-donnees",
+    "hameconnage"
+  ],
+  "profils": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
+  "obligatoirePour": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
   "dureeMinutes": 10,
   "niveau": "decouverte",
-  "formats": ["micro-module", "quiz", "mise-en-situation", "fiche-reflexe"],
-  "objectifs": [
-    "Reconnaître les signes d'un incident de sécurité",
-    "Appliquer les premiers gestes : isoler du réseau sans éteindre, ne rien supprimer",
-    "Alerter immédiatement par le canal d'urgence",
-    "Décrire le rôle d'un manager dans les premières heures d'une crise"
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "fiche-reflexe"
   ],
-  "reglementations": ["rgpd", "nis2"],
+  "objectifs": [
+    {
+      "fr": "Reconnaître les signes d'un incident de sécurité",
+      "en": "Recognise the signs of a security incident"
+    },
+    {
+      "fr": "Appliquer les premiers gestes : isoler du réseau sans éteindre, ne rien supprimer",
+      "en": "Take the first steps: disconnect from the network without switching off, delete nothing"
+    },
+    {
+      "fr": "Alerter immédiatement par le canal d'urgence",
+      "en": "Raise the alarm immediately through the emergency channel"
+    },
+    {
+      "fr": "Décrire le rôle d'un manager dans les premières heures d'une crise",
+      "en": "Describe a manager's role in the first hours of a crisis"
+    }
+  ],
+  "reglementations": [
+    "rgpd",
+    "nis2"
+  ],
   "renouvellement": "annuelle",
   "version": "1.0",
   "derniereRevue": "2026-09-28",
   "sources": [
-    { "titre": "17Cyber – Assistance aux victimes de cybermalveillance", "url": "https://17cyber.gouv.fr/" },
-    { "titre": "ANSSI – Attaques par rançongiciels, tous concernés", "url": "https://cyber.gouv.fr/" }
+    {
+      "titre": "17Cyber – Assistance aux victimes de cybermalveillance",
+      "url": "https://17cyber.gouv.fr/"
+    },
+    {
+      "titre": "ANSSI – Attaques par rançongiciels, tous concernés",
+      "url": "https://cyber.gouv.fr/"
+    }
   ],
   "ordre": 70
 }

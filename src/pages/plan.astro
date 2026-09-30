@@ -1,29 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
-import Markdown from '../components/Markdown.astro';
-import { donnees } from '../lib/donnees.ts';
-import { genererPlan } from '../lib/plan.ts';
-import { traducteur } from '../i18n/index.ts';
+import Vue from '../vues/Plan.astro';
+import { languesPubliees } from '../lib/donnees.ts';
 
-const d = donnees();
-const T = traducteur(d.langue);
-// Le titre de niveau 1 du plan devient le titre de la page.
-const plan = genererPlan(d, d.parcours, d.calendrier, new Date().toISOString().slice(0, 10));
 ---
-<Base titre={T('nav.plan')} filAriane={[{ libelle: T('nav.plan') }]}>
-  <p class="groupe-boutons pas-impression">
-    <a class="bouton" href="/plan-sensibilisation.md" download="plan-sensibilisation.md">{T('commun.telecharger')} (Markdown)</a>
-    <button type="button" class="bouton--secondaire" data-imprimer hidden>{T('commun.imprimer')}</button>
-  </p>
-  <div class="plan">
-    <Markdown source={plan} />
-  </div>
-</Base>
-
-<script>
-  const bouton = document.querySelector<HTMLButtonElement>('[data-imprimer]');
-  if (bouton) {
-    bouton.hidden = false;
-    bouton.addEventListener('click', () => window.print());
-  }
-</script>
+<Vue langue={languesPubliees().defaut} />

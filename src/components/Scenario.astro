@@ -5,7 +5,7 @@
  * Aucune limite de temps.
  */
 import type { ModuleMeta, ScenarioEmbranchements } from '../lib/schemas.ts';
-import { tr } from '../lib/texte.ts';
+import { tr, type Langue } from '../lib/texte.ts';
 import { plateforme } from '../lib/contenus.ts';
 import { traducteur } from '../i18n/index.ts';
 import Markdown from './Markdown.astro';
@@ -16,41 +16,47 @@ interface Props {
   scenario: ScenarioEmbranchements;
   transcriptions: Record<string, string>;
   niveauTitre?: 3 | 4;
+  langue: Langue;
+  langueContenu?: Langue;
 }
-const { module, scenario, transcriptions, niveauTitre = 3 } = Astro.props;
+const { module, scenario, transcriptions, niveauTitre = 3, langue, langueContenu } = Astro.props;
 const { config } = plateforme();
-const langue = config.langues.defaut;
 const T = traducteur(langue);
+// Langue du contenu réellement servi (repli sur le français si la traduction manque).
+const lc: Langue = langueContenu ?? langue;
+/** Attribut lang pour un contenu dans une autre langue que la page (RGAA 8.7), et pour l'interface à l'intérieur. */
+const langContenu = lc !== langue ? lc : undefined;
+const langUi = lc !== langue ? langue : undefined;
 const Titre = `h${niveauTitre}` as "h3" | "h4";
 const textes = { fin: T('scenario.fin') };
 ---
-<div class="scenario" data-scenario data-module={module.id} data-depart={scenario.depart} data-libelles={JSON.stringify(textes)}>
-  <Markdown source={tr(scenario.consigne, langue)} />
+<div class="scenario" lang={langContenu} data-scenario data-module={module.id} data-depart={scenario.depart} data-libelles={JSON.stringify(textes)}>
+  <Markdown source={tr(scenario.consigne, lc)} />
   <div class="scenario__fil" data-fil>
     {scenario.etapes.map((e) => {
       const media = e.media ? module.medias.find((m) => m.id === e.media) : undefined;
       return (
         <section class="scenario__etape carte" data-etape={e.id} aria-labelledby={`etape-${module.id}-${e.id}`} hidden={e.id !== scenario.depart}>
-          <Titre id={`etape-${module.id}-${e.id}`} tabindex="-1">{tr(e.titre, langue)}</Titre>
-          <Markdown source={tr(e.texte, langue)} />
-          {media && <Media media={media} transcription={transcriptions[media.id]} />}
+          <Titre id={`etape-${module.id}-${e.id}`} tabindex="-1">{tr(e.titre, lc)}</Titre>
+          <Markdown source={tr(e.texte, lc)} />
+          {media && <Media media={media} transcription={transcriptions[media.id]} langue={langue} langueContenu={lc} />}
           {e.choix.length > 0 ? (
             <div class="scenario__choix">
-              <p class="scenario__question" id={`q-${module.id}-${e.id}`}>{T('scenario.question')}</p>
+              <p lang={langUi} class="scenario__question" id={`q-${module.id}-${e.id}`}>{T('scenario.question')}</p>
               <ul class="scenario__options" aria-labelledby={`q-${module.id}-${e.id}`}>
                 {e.choix.map((c) => (
                   <li>
                     <button type="button" class="bouton--secondaire" data-choix={c.id} data-suivant={c.suivant} data-adapte={String(c.adapte)} aria-pressed="false">
-                      <Markdown source={tr(c.texte, langue)} enLigne />
+                      <Markdown source={tr(c.texte, lc)} enLigne />
                     </button>
                   </li>
                 ))}
               </ul>
               {e.choix.map((c) => (
                 <div class:list={['message-retour', c.adapte ? 'message-retour--succes' : 'message-retour--erreur']} data-retour-pour={c.id} tabindex="-1" hidden>
-                  <p class="message-retour__titre">{c.adapte ? T('scenario.adapte') : T('scenario.inadapte')}</p>
-                  <Markdown source={tr(c.retour, langue)} />
-                  {c.suivant && <button type="button" data-continuer={c.suivant}>{T('scenario.continuer')}</button>}
+                  <p class="message-retour__titre" lang={langUi}>{c.adapte ? T('scenario.adapte') : T('scenario.inadapte')}</p>
+                  <Markdown source={tr(c.retour, lc)} />
+                  {c.suivant && <button type="button" lang={langUi} data-continuer={c.suivant}>{T('scenario.continuer')}</button>}
                 </div>
               ))}
             </div>
@@ -61,8 +67,8 @@ const textes = { fin: T('scenario.fin') };
       );
     })}
   </div>
-  <div class="message-retour message-retour--succes" data-bilan tabindex="-1" hidden></div>
-  <button type="button" class="bouton--secondaire" data-recommencer hidden>{T('scenario.recommencer')}</button>
+  <div class="message-retour message-retour--succes" lang={langUi} data-bilan tabindex="-1" hidden></div>
+  <button type="button" class="bouton--secondaire" lang={langUi} data-recommencer hidden>{T('scenario.recommencer')}</button>
   <noscript><p class="encart encart--attention">{T('commun.jsRequis')}</p></noscript>
 </div>
 

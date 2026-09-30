@@ -17,6 +17,8 @@ contenus/secteurs/<secteur>/modules/<id-module>/
 └── scenario.json    (facultatif)
 ```
 
+**Exemple fourni** : `sante/modules/secret-medical` (S1, « Secret médical et accès au dossier patient »), activé par `config/exemples/clinique.json`.
+
 Secteurs reconnus : `sante`, `industrie`, `finance`, `collectivite`, `education`, `commerce`.
 
 Idées de modules par secteur :
