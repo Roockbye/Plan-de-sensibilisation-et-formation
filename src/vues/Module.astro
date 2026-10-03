@@ -8,7 +8,7 @@ import BoiteMail from '../components/BoiteMail.astro';
 import Media from '../components/Media.astro';
 import { donnees } from '../lib/donnees.ts';
 import type { Cle } from '../i18n/index.ts';
-import type { Langue, Texte } from '../lib/texte.ts';
+import { sansCoupure, type Langue, type Texte } from '../lib/texte.ts';
 
 interface Props { langue: Langue; id: string; falc: boolean }
 const { id, falc } = Astro.props;
@@ -44,7 +44,7 @@ const numeroPosttest = scenario ? 4 : 3;
   filAriane={[{ libelle: T('nav.modules'), href: d.lien('/modules/') }, falc ? { libelle: meta.code, href: base } : { libelle: meta.code }, ...(falc ? [{ libelle: T('module.falcCourt') }] : [])]}
 >
   <article class="module lecture" data-page-module={meta.id}>
-    <h1>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></h1>
+    <h1>{meta.code} – <span lang={lang(meta.titre)}>{sansCoupure(d.tr(meta.titre))}</span></h1>
 
     {langCorps && <p class="encart encart--attention">{T('module.nonTraduit')}</p>}
 

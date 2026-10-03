@@ -1,3 +1,10 @@
+/* Identité « Attaque / Parade » : Barlow (texte) et Barlow Condensed (affichage), hébergées localement. */
+@import '@fontsource/barlow/latin-400.css';
+@import '@fontsource/barlow/latin-400-italic.css';
+@import '@fontsource/barlow/latin-600.css';
+@import '@fontsource/barlow/latin-700.css';
+@import '@fontsource/barlow-condensed/latin-600.css';
+@import '@fontsource/barlow-condensed/latin-700.css';
 /* Polices d'accessibilité : téléchargées uniquement si l'utilisateur les choisit. */
 @import '@fontsource/atkinson-hyperlegible-next/latin-400.css';
 @import '@fontsource/atkinson-hyperlegible-next/latin-700.css';
@@ -8,8 +15,28 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Rôles typographiques. Les préférences d'accessibilité remplacent les DEUX familles :
+   un choix de lisibilité l'emporte toujours sur l'identité visuelle. */
+:root {
+  --police-texte: 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --police-affichage: 'Barlow Condensed', 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --taille-affichage: clamp(2.125rem, 1.7rem + 1.6vw, 2.875rem);
+  --taille-titre-2: 1.875rem;
+  --taille-titre-3: 1.375rem;
+  --taille-titre-4: 1.125rem;
+  --taille-libelle: 0.875rem;
+}
+html[data-police="hyperlegible"] {
+  --police-texte: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --police-affichage: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+}
+html[data-police="dyslexie"] {
+  --police-texte: 'OpenDyslexic', system-ui, sans-serif;
+  --police-affichage: 'OpenDyslexic', system-ui, sans-serif;
+}
+
 html {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--police-texte);
   font-size: 100%;
   line-height: 1.6;
   -webkit-text-size-adjust: 100%;
@@ -18,8 +45,6 @@ html {
 html[data-taille="125"] { font-size: 125%; }
 html[data-taille="150"] { font-size: 150%; }
 html[data-taille="200"] { font-size: 200%; }
-html[data-police="hyperlegible"] { font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; }
-html[data-police="dyslexie"] { font-family: 'OpenDyslexic', system-ui, sans-serif; }
 /* WCAG 1.4.12 : espacement du texte */
 html[data-espacement="augmente"] body { line-height: 1.9; letter-spacing: 0.12em; word-spacing: 0.16em; }
 html[data-espacement="augmente"] p { margin-bottom: 2em; }
@@ -40,10 +65,24 @@ body {
   font-size: 1.0625rem;
 }
 
-h1, h2, h3, h4 { line-height: 1.25; margin: 1.6em 0 0.6em; }
-h1 { font-size: 2rem; margin-top: 0.4em; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.2rem; }
+h1, h2, h3, h4 { margin: 1.6em 0 0.5em; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--police-affichage); font-weight: 700; letter-spacing: 0.005em; }
+h1 { font-size: var(--taille-affichage); line-height: 1.04; margin-top: 0.35em; }
+h2 { font-size: var(--taille-titre-2); line-height: 1.1; }
+h3 { font-size: var(--taille-titre-3); line-height: 1.15; font-weight: 600; }
+h4 { font-size: var(--taille-titre-4); line-height: 1.3; font-weight: 600; }
+/* Libellé de carte et de statut : capitales condensées, légèrement espacées. */
+.libelle {
+  font-family: var(--police-affichage);
+  font-size: var(--taille-libelle);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+/* Chiffres alignés partout où l'on compare des valeurs. */
+td.nombre, th.nombre, .indicateur__valeur, .boite__compteur, time { font-variant-numeric: tabular-nums; }
+p { text-wrap: pretty; }
 p, ul, ol, table, dl { margin: 0 0 1em; }
 li + li { margin-top: 0.3em; }
 img, svg { max-width: 100%; height: auto; }
@@ -96,7 +135,7 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 
 .entete { border-bottom: 4px solid var(--primaire); }
 .entete__haut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1.5rem; padding: 0.8rem 1rem; }
-.marque { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--texte); text-decoration: none; font-weight: 700; }
+.marque { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--texte); text-decoration: none; }
 .marque:hover { text-decoration: underline; }
 .marque img { width: 2.75rem; height: 2.75rem; }
 .marque__texte { display: flex; flex-direction: column; line-height: 1.2; }
@@ -112,7 +151,7 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
   color: var(--texte); text-decoration: none; border-bottom: 3px solid transparent;
 }
 .nav-principale a:hover { text-decoration: underline; }
-.nav-principale a[aria-current="page"] { border-bottom-color: var(--primaire); font-weight: 700; }
+.nav-principale a[aria-current="page"] { border-bottom-color: var(--primaire); }
 
 .fil-ariane ol { display: flex; flex-wrap: wrap; gap: 0.2rem; margin: 1rem 0 0; padding: 0; list-style: none; font-size: 0.95rem; }
 .fil-ariane li { margin: 0; }
@@ -167,7 +206,7 @@ button[aria-pressed="true"] { outline: 3px solid var(--texte); outline-offset: 2
 
 .etiquette {
   display: inline-block;
-  font-size: 0.85rem; font-weight: 600;
+  font-weight: 600;
   padding: 0.1rem 0.5rem;
   border: 1px solid currentColor; border-radius: 999px;
   white-space: nowrap;
@@ -176,6 +215,7 @@ button[aria-pressed="true"] { outline: 3px solid var(--texte); outline-offset: 2
 .etiquette--emergent { color: var(--secondaire); }
 .etiquettes { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; padding: 0; list-style: none; }
 .etiquettes li { margin: 0; }
+.etiquettes li > .etiquette { margin-left: 0.4rem; }
 .meta .etiquettes { flex-direction: column; gap: 0.2rem; margin: 0; }
 
 .meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.3rem 1rem; }
@@ -203,7 +243,7 @@ td.nombre, th.nombre { text-align: right; font-variant-numeric: tabular-nums; }
 .contenu blockquote > :last-child { margin-bottom: 0; }
 
 /* Statuts (jamais portés par la seule couleur : toujours un texte) */
-.statut { font-weight: 700; }
+
 .statut--termine { color: var(--succes); }
 .statut--en-cours { color: var(--avertissement); }
 
@@ -232,7 +272,7 @@ kbd { font: inherit; font-weight: 600; border: 1px solid var(--bordure); border-
 .quiz__questions > li + li { margin-top: 1.25rem; }
 .quiz__question { border: 1px solid var(--bordure); border-radius: 8px; padding: 0.9rem 1.1rem 1rem; margin: 0; }
 .quiz__question legend { padding: 0 0.4rem; font-weight: 600; }
-.quiz__numero { display: block; font-size: 0.9rem; font-weight: 400; color: var(--texte-attenue); }
+.quiz__numero { display: block; color: var(--texte-attenue); }
 .quiz__consigne { display: block; font-weight: 400; font-style: italic; }
 .quiz__choix { list-style: none; padding: 0; margin: 0.6rem 0 0; }
 .quiz__choix li { display: flex; align-items: flex-start; gap: 0.6rem; margin: 0.35rem 0; }
@@ -296,7 +336,7 @@ button[aria-pressed="true"]::before { content: "✓"; font-weight: 700; }
 /* Tableau de bord */
 .indicateurs { list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
 .indicateurs li { margin: 0; }
-.indicateur__valeur { font-size: 1.8rem; font-weight: 700; margin: 0; line-height: 1.2; }
+.indicateur__valeur { font-weight: 700; margin: 0; }
 .indicateur__libelle { margin: 0.3rem 0 0; color: var(--texte-attenue); }
 
 .graphique { margin: 1.5rem 0 0.8rem; max-width: 46rem; }
@@ -331,6 +371,27 @@ button[aria-pressed="true"]::before { content: "✓"; font-weight: 700; }
 /* Plan exporté */
 .plan h1 { font-size: 1.8rem; }
 .plan table { font-size: 0.95rem; }
+
+/* La « voix » du jeu : police d'affichage pour la marque, la navigation, les actions et les libellés. */
+.marque__texte > span:first-child, .nav-principale a, .lien-preferences, .lien-langue,
+.bouton, button, caption, .graphique__titre, .indicateur__valeur, .boite__compteur,
+.message-retour__titre, .scenario__question, .message__decision-titre, .preferences__groupe legend,
+.calendrier__entete, .statut, .meta dt, .quiz__numero, .etiquette {
+  font-family: var(--police-affichage);
+}
+.marque__texte > span:first-child { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1; }
+.nav-principale a { font-size: 1.125rem; font-weight: 600; letter-spacing: 0.01em; }
+.nav-principale a[aria-current="page"] { font-weight: 700; }
+.bouton, button { font-size: 1.0625rem; font-weight: 600; letter-spacing: 0.03em; }
+caption, .graphique__titre { font-size: 1.125rem; font-weight: 600; letter-spacing: 0.01em; }
+.meta dt, .quiz__numero, .statut, .calendrier__entete, .etiquette {
+  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-size: var(--taille-libelle);
+}
+.meta dt { padding-top: 0.15em; }
+.statut { font-size: 0.9375rem; }
+.message-retour__titre, .scenario__question, .message__decision-titre, .boite__compteur { font-size: 1.125rem; font-weight: 600; letter-spacing: 0.01em; }
+.indicateur__valeur { font-size: 2.5rem; line-height: 1; letter-spacing: 0; }
+.preferences__groupe legend { font-size: 1.125rem; font-weight: 600; }
 
 @media print {
   .entete, .pied, .bandeau-demo, .evitement, .pas-impression, .fil-ariane { display: none !important; }
