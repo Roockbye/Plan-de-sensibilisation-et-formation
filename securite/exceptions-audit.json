@@ -1,0 +1,12 @@
+[
+  {
+    "id": "GHSA-ch52-4w7c-c8xp",
+    "paquet": "http-cache-semantics",
+    "gravite": "high",
+    "decision": "Risque accepté temporairement : aucune version corrigée n'existe (≤ 4.2.0, publié le 18/09/2026).",
+    "justification": "La faille permet, dans un cache HTTP partagé côté serveur, de récupérer la réponse mise en cache d'un autre utilisateur (cookies de session). Dans ce projet, le paquet n'est utilisé que par Astro au moment du build (astro/dist/assets/build/remote.js, cache des images distantes). Le site n'utilise aucune image distante et il est publié en fichiers statiques : ni serveur, ni cache partagé, ni cookie. La faille n'est donc pas exploitable.",
+    "revue": "2026-10-03",
+    "expiration": "2026-11-30",
+    "action": "Mettre à jour Astro dès qu'une version corrigée de http-cache-semantics est disponible, puis supprimer cette exception."
+  }
+]

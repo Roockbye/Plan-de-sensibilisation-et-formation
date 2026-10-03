@@ -111,7 +111,7 @@ Les tests automatisés ne détectent qu'une partie des défauts : un **audit man
   - rendu Markdown sûr par construction (micromark échappe le HTML brut et neutralise les URL `javascript:`) ;
   - données relues depuis `localStorage` revalidées, texte injecté uniquement via `textContent`.
 - **Aucun secret** dans le code ni dans la configuration (qui ne contient que des données publiques). La CI lance **gitleaks** sur l'historique.
-- **Dépendances** : peu nombreuses et à jour, `npm audit` en CI, **Dependabot** hebdomadaire, scripts d'installation npm bloqués par défaut.
+- **Dépendances** : peu nombreuses et à jour, Dependabot hebdomadaire, scripts d'installation npm bloqués par défaut. L'audit (`npm run audit`, en CI) bloque toute vulnérabilité haute ou critique, sauf **exception documentée et datée** dans [`securite/exceptions-audit.json`](securite/exceptions-audit.json) (justification, date de revue, date d'expiration). À l'échéance, la CI bloque de nouveau et impose une nouvelle analyse du risque.
 - Simulations d'hameçonnage : les liens affichés ne sont **jamais cliquables** (vérifié par un test).
 
 ## Architecture

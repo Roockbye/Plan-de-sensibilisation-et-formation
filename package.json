@@ -18,7 +18,8 @@
     "plan": "node scripts/exporter-plan.ts",
     "typecheck": "astro check",
     "schema": "node scripts/generer-schema.ts",
-    "captures": "node scripts/captures.ts"
+    "captures": "node scripts/captures.ts",
+    "audit": "node scripts/audit.ts"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible-next": "^5.3.0",
