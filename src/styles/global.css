@@ -195,14 +195,19 @@ button[aria-pressed="true"] { outline: 3px solid var(--texte); outline-offset: 2
 .grille > li > .carte { flex: 1; }
 
 .encart {
-  border-left: 6px solid var(--primaire);
+  border: 1px solid var(--bordure);
   background: var(--surface);
   padding: 0.9rem 1.1rem;
   margin: 1.2rem 0;
-  border-radius: 0 6px 6px 0;
+  border-radius: 10px;
 }
 .encart > :last-child { margin-bottom: 0; }
-.encart--attention { border-left-color: var(--avertissement); }
+/* Avertissement : pictogramme + cadre plus marqué (jamais la couleur seule). */
+.encart--attention { border: 2px solid var(--avertissement); padding-left: 3rem; position: relative; }
+.encart--attention::before {
+  content: ""; position: absolute; left: 0.95rem; top: 0.95rem; width: 1.4rem; height: 1.4rem;
+  background: var(--avertissement); -webkit-mask: url(/pictos/attaque.svg) center / contain no-repeat; mask: url(/pictos/attaque.svg) center / contain no-repeat;
+}
 
 .etiquette {
   display: inline-block;
@@ -212,7 +217,22 @@ button[aria-pressed="true"] { outline: 3px solid var(--texte); outline-offset: 2
   white-space: nowrap;
 }
 .etiquette--obligatoire { color: var(--primaire); }
-.etiquette--emergent { color: var(--secondaire); }
+.etiquette--emergent, .etiquette--attaque {
+  color: var(--attaque); background: var(--attaque-teinte); border: 1px solid var(--attaque);
+  padding-left: 1.55rem; position: relative;
+}
+.etiquette--emergent::before, .etiquette--attaque::before {
+  content: ""; position: absolute; left: 0.4rem; top: 50%; width: 0.95rem; height: 0.95rem; transform: translateY(-50%);
+  background: currentColor; -webkit-mask: url(/pictos/attaque.svg) center / contain no-repeat; mask: url(/pictos/attaque.svg) center / contain no-repeat;
+}
+.etiquette--parade {
+  color: var(--parade); background: var(--parade-teinte); border: 1px solid var(--parade);
+  padding-left: 1.55rem; position: relative;
+}
+.etiquette--parade::before {
+  content: ""; position: absolute; left: 0.4rem; top: 50%; width: 0.95rem; height: 0.95rem; transform: translateY(-50%);
+  background: currentColor; -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
 .etiquettes { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; padding: 0; list-style: none; }
 .etiquettes li { margin: 0; }
 .etiquettes li > .etiquette { margin-left: 0.4rem; }
@@ -235,11 +255,19 @@ td.nombre, th.nombre { text-align: right; font-variant-numeric: tabular-nums; }
 .tableau-defilant:focus-visible { outline-offset: 0; }
 
 /* Contenu Markdown des modules */
+/* « À retenir » : la carte PARADE du module (cadre vert, teinte, bouclier). */
 .contenu blockquote {
-  margin: 1.4rem 0; padding: 0.9rem 1.1rem;
-  border-left: 6px solid var(--secondaire); background: var(--surface);
-  border-radius: 0 6px 6px 0;
+  margin: 1.6rem 0; padding: 1rem 1.2rem 1rem 3.4rem;
+  border: 2px solid var(--parade); border-radius: 16px;
+  background: var(--parade-teinte);
+  position: relative;
+  box-shadow: 0 6px 16px -10px rgba(22, 112, 58, 0.45);
 }
+.contenu blockquote::before {
+  content: ""; position: absolute; left: 1rem; top: 1.05rem; width: 1.6rem; height: 1.6rem;
+  background: var(--parade); -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
+.contenu blockquote strong:first-child { color: var(--parade); font-family: var(--police-affichage); font-size: 1.125rem; letter-spacing: 0.02em; }
 .contenu blockquote > :last-child { margin-bottom: 0; }
 
 /* Statuts (jamais portés par la seule couleur : toujours un texte) */
@@ -247,13 +275,27 @@ td.nombre, th.nombre { text-align: right; font-variant-numeric: tabular-nums; }
 .statut--termine { color: var(--succes); }
 .statut--en-cours { color: var(--avertissement); }
 
-.message-retour { border: 2px solid var(--bordure); border-radius: 6px; padding: 0.8rem 1rem; margin-top: 0.8rem; background: var(--surface); }
-.message-retour--succes { border-color: var(--succes); }
-.message-retour--erreur { border-color: var(--erreur); }
+.message-retour { border: 2px solid var(--bordure); border-radius: 12px; padding: 0.8rem 1rem; margin-top: 0.8rem; background: var(--surface); }
+.message-retour--succes { border-color: var(--parade); background: var(--parade-teinte); }
+.message-retour--erreur { border-color: var(--attaque); background: var(--attaque-teinte); }
 .message-retour > :last-child { margin-bottom: 0; }
-.message-retour__titre { font-weight: 700; margin-bottom: 0.3rem; }
-.message-retour--succes .message-retour__titre { color: var(--succes); }
-.message-retour--erreur .message-retour__titre { color: var(--erreur); }
+.message-retour__titre { margin-bottom: 0.3rem; }
+.message-retour--succes .message-retour__titre, .message-retour--erreur .message-retour__titre { padding-left: 1.7rem; position: relative; }
+.message-retour--succes .message-retour__titre { color: var(--parade); }
+.message-retour--erreur .message-retour__titre { color: var(--attaque); }
+.message-retour--succes .message-retour__titre::before, .message-retour--erreur .message-retour__titre::before {
+  content: ""; position: absolute; left: 0; top: 0.1em; width: 1.3rem; height: 1.3rem; background: currentColor;
+  -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
+.message-retour--erreur .message-retour__titre::before { -webkit-mask-image: url(/pictos/attaque.svg); mask-image: url(/pictos/attaque.svg); }
+
+/* ---------- Surfaces du navigateur ---------------------------------- */
+::selection { background: var(--primaire); color: var(--sur-primaire); }
+html { caret-color: var(--primaire); scrollbar-color: var(--bordure) var(--surface); accent-color: var(--primaire); }
+
+/* « Signaler » est une parade : bouton vert plein, bouclier. */
+button[data-decision="malveillant"] { background: var(--parade); border-color: var(--parade); color: var(--sur-carte); }
+button[data-decision="malveillant"]:disabled { background: var(--surface); color: var(--texte-attenue); border-color: var(--parade); }
 
 /* ---------- Modules --------------------------------------------------- */
 
