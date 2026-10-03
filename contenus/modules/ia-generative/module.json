@@ -64,5 +64,25 @@
       "url": "https://cyber.gouv.fr/"
     }
   ],
-  "ordre": 40
+  "ordre": 40,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Seulement l'IA autorisée par l'organisation",
+        "en": "Only AI tools approved by the organisation"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Aucune donnée sensible dans une IA non autorisée",
+        "en": "No sensitive data in an unapproved AI"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je vérifie chaque réponse avant de l'utiliser",
+        "en": "I check every answer before using it"
+      }
+    }
+  ]
 }

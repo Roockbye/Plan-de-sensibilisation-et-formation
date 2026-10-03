@@ -65,5 +65,25 @@
       "url": "https://www.cnil.fr/"
     }
   ],
-  "ordre": 20
+  "ordre": 20,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Une phrase de passe longue et unique par compte",
+        "en": "A long, unique passphrase for each account"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je refuse une validation que je n'ai pas demandée",
+        "en": "I deny an approval request I didn't make"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je ne donne jamais un code reçu",
+        "en": "I never share a code I received"
+      }
+    }
+  ]
 }

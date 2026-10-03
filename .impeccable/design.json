@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-03T18:30:00Z",
+  "title": "Design System: Sensibilisation à la sécurité numérique",
+  "extensions": {
+    "colorMeta": {
+      "attaque": { "role": "secondary", "displayName": "Attaque", "canonical": "#B42318" },
+      "parade": { "role": "secondary", "displayName": "Parade", "canonical": "#16703A" },
+      "primaire-organisation": { "role": "primary", "displayName": "Couleur de l'organisation (configurable)", "canonical": "#1F4E79" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Affichage", "purpose": "Titres, cartes, navigation, boutons et libellés : la voix du jeu." },
+      "body": { "displayName": "Texte", "purpose": "Texte courant des modules et des pages." }
+    },
+    "shadows": [
+      { "name": "carte", "value": "0 12px 28px -18px rgba(15, 20, 25, 0.55)", "purpose": "Cartes de jeu." },
+      { "name": "jeu", "value": "0 18px 40px -28px rgba(22, 112, 58, 0.6)", "purpose": "Bloc « Votre jeu » de l'accueil." }
+    ],
+    "motion": [
+      { "name": "retourner-carte", "value": "0.7s cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Retournement de la carte parade gagnée ; supprimé si animations réduites." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "48rem" },
+      { "name": "duel", "value": "46rem" }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "Le jeu « Attaque / Parade »",
+    "overview": "Chaque menace est une carte attaque, chaque réflexe une carte parade ; valider un module fait gagner ses parades. Registre adulte et sobre, deux familles de couleur porteuses de sens, accessibilité par construction.",
+    "keyCharacteristics": ["Cartes de jeu à en-tête de famille", "Duel attaque / parade en tête de module", "Une étape à la fois", "Collection personnelle sans classement"],
+    "rules": [
+      { "name": "Jamais la couleur seule", "body": "Libellé, pictogramme et motif distinguent toujours attaque, parade et carte à gagner.", "section": "colors" },
+      { "name": "L'accessibilité prime", "body": "Les préférences de police et d'animation remplacent l'identité visuelle.", "section": "typography" }
+    ],
+    "dos": ["Vérifier 4,5:1 dans les trois thèmes", "Pictogrammes SVG dessinés, appliqués en masque CSS"],
+    "donts": ["Look casino, confettis, mascotte", "Classement entre collègues", "Script ou style inline"]
+  }
+}

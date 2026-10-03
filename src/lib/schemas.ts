@@ -38,6 +38,8 @@ export type Risque = z.infer<typeof risqueSchema>;
 export const profilSchema = z.strictObject({
   id: identifiantSchema,
   libelle: texteSchema,
+  /** Accroche d'une ligne affichée à l'accueil (à défaut : la description). */
+  accroche: texteSchema.optional(),
   description: texteSchema,
   besoins: z.array(texteSchema).min(1),
   objectifs: z
@@ -90,6 +92,8 @@ export const moduleSchema = z.strictObject({
   niveau: z.enum(['decouverte', 'intermediaire', 'avance']),
   formats: z.array(z.enum(FORMATS)).min(1),
   objectifs: z.array(texteSchema).min(1),
+  /** Cartes PARADE gagnées en validant le module : 1 à 3 réflexes courts (jeu « Attaque / Parade »). */
+  parades: z.array(z.strictObject({ titre: texteSchema })).min(1).max(3),
   reglementations: z.array(z.enum(REGLEMENTATIONS)).default([]),
   /** Fréquence de renouvellement recommandée de ce module. */
   renouvellement: z.enum(FREQUENCES),

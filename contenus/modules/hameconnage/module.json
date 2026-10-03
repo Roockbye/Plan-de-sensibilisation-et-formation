@@ -68,5 +68,25 @@
       "url": "https://cyber.gouv.fr/"
     }
   ],
-  "ordre": 10
+  "ordre": 10,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Je vérifie l'adresse réelle avant de cliquer",
+        "en": "I check the real address before clicking"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je ne scanne pas un QR code d'origine inconnue",
+        "en": "I don't scan a QR code of unknown origin"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je signale le message suspect",
+        "en": "I report the suspicious message"
+      }
+    }
+  ]
 }

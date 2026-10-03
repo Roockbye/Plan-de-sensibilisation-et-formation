@@ -15,3 +15,7 @@ playwright-report/
 
 # Fichiers locaux de Wrangler (cache, état de wrangler dev)
 .wrangler/
+
+# Fichiers locaux du plugin impeccable (configuration de poste, cache du hook)
+.impeccable/*.local.json
+.impeccable/hook.cache.json

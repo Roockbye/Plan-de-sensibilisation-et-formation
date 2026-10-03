@@ -4,6 +4,10 @@
     "fr": "Utilisateur standard",
     "en": "Standard user"
   },
+  "accroche": {
+    "fr": "Messagerie, documents partagés, applications métier : le quotidien de chacun.",
+    "en": "Email, shared documents, business apps: everyone's daily work."
+  },
   "description": {
     "fr": "Toute personne qui utilise le système d'information pour son travail quotidien (messagerie, applications métier, documents partagés).",
     "en": "Anyone who uses the information system for their daily work (email, business applications, shared documents)."

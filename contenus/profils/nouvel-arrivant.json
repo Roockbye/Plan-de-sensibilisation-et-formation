@@ -4,6 +4,10 @@
     "fr": "Nouvel arrivant",
     "en": "Newcomer"
   },
+  "accroche": {
+    "fr": "Vous venez d'arriver : les bons réflexes dès la première semaine.",
+    "en": "Just arrived: the right reflexes from your very first week."
+  },
   "description": {
     "fr": "Salarié, stagiaire, alternant ou prestataire qui rejoint l'organisation : il ne connaît ni les règles internes ni les interlocuteurs, et reçoit beaucoup de messages qu'il ne sait pas encore trier.",
     "en": "Employee, intern, apprentice or contractor joining the organisation: they know neither the internal rules nor the contacts, and receive many messages they cannot yet sort."

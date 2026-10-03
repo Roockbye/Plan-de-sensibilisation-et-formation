@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { donnees } from '../lib/donnees.ts';
+import CarteJeu from '../components/CarteJeu.astro';
 import type { Langue, Texte } from '../lib/texte.ts';
 
 interface Props { langue: Langue }
@@ -14,6 +15,7 @@ const libelles = {
   synthese: T('progression.synthese'),
   points: T('progression.points'),
   efface: T('progression.efface'),
+  collection: T('accueil.compteurParades'),
 };
 ---
 <Base titre={T('nav.progression')} langue={d.langue} filAriane={[{ libelle: T('nav.progression') }]}>
@@ -23,6 +25,30 @@ const libelles = {
     <p data-profil-actuel>{T('progression.aucunProfil')} <a href={d.lien('/profils/')}>{T('progression.choisirProfil')}</a>.</p>
     <p class="message-retour" data-synthese role="status"></p>
   </div>
+
+  <section class="collection" aria-labelledby="titre-collection">
+    <div class="collection__tete">
+      <h2 id="titre-collection">{T('collection.titre')}</h2>
+      <p class="collection__compteur libelle" data-collection-compteur></p>
+    </div>
+    <p class="lecture">{T('collection.intro', { seuil: d.config.evaluation.seuilReussite })}</p>
+    <ul class="collection__liste">
+      {d.modules.map(({ meta }) => (
+        <li data-collection-module={meta.id} data-parades={meta.parades.length}>
+          <div class="carte-parade" data-carte-collection>
+            <CarteJeu famille="cachee" libelle={meta.code} titre={T('module.paradesAGagner', { n: meta.parades.length })} class="carte-parade__dos">
+              <p class="carte-jeu__texte"><a href={d.lien(`/modules/${meta.id}/`)} data-lien-module={meta.id} lang={lang(meta.titre)}>{d.tr(meta.titre)}</a></p>
+            </CarteJeu>
+            <CarteJeu famille="parade" libelle={`${T('module.paradeLibelle')} · ${meta.code}`} titre={d.tr(meta.titre)} langTitre={lang(meta.titre)} class="carte-parade__face">
+              <ul class="carte-jeu__liste">
+                {meta.parades.map((pa) => <li lang={lang(pa.titre)}>{d.tr(pa.titre)}</li>)}
+              </ul>
+            </CarteJeu>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
 
   <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-progression">
     <table class="progression" data-progression data-parcours={JSON.stringify(parcoursParProfil)} data-libelles={JSON.stringify(libelles)} data-prefixe-profil={d.lien('/profils/')}>
@@ -108,6 +134,22 @@ const libelles = {
       cellule('scenario').textContent = s?.scenario ? `${s.scenario.score} / ${s.scenario.total}` : '—';
     }
     synthese.textContent = formater(L.synthese, { valides, total: affiches });
+
+    // Collection de parades : mêmes filtres que le tableau, cartes retournées si le module est validé.
+    let gagnees = 0;
+    let totalParades = 0;
+    for (const li of document.querySelectorAll<HTMLElement>('[data-collection-module]')) {
+      const id = li.dataset.collectionModule!;
+      li.hidden = Boolean(profil && !profil.modules.includes(id));
+      const carte = li.querySelector<HTMLElement>('[data-carte-collection]')!;
+      const valide = Boolean(p.modules[id]?.valide);
+      carte.dataset.etat = valide ? 'gagnee' : 'a-gagner';
+      if (li.hidden) continue;
+      const n = Number(li.dataset.parades);
+      totalParades += n;
+      if (valide) gagnees += n;
+    }
+    document.querySelector('[data-collection-compteur]')!.textContent = formater(L.collection, { n: gagnees, total: totalParades });
   }
 
   afficher();

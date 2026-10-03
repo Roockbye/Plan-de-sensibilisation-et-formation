@@ -1,81 +1,184 @@
 ---
+/**
+ * Accueil : un seul objectif, jouer son prochain module.
+ * - Nouveau visiteur : « Qui êtes-vous ? » (profils en une ligne, choix immédiat).
+ * - Visiteur qui revient : « Votre jeu » (parades gagnées, prochain module, cartes du parcours).
+ * Sans JavaScript, la liste des profils reste utilisable par simples liens.
+ */
 import Base from '../layouts/Base.astro';
 import Markdown from '../components/Markdown.astro';
 import { donnees } from '../lib/donnees.ts';
-import type { Langue } from '../lib/texte.ts';
+import { sansCoupure, type Langue, type Texte } from '../lib/texte.ts';
 
 interface Props { langue: Langue }
 const d = donnees(Astro.props.langue);
 const { T } = d;
 const org = d.config.organisation;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
 const accueil = d.pages.accueil ? d.contenu(d.pages.accueil) : undefined;
+
+// Données des jeux par profil, lues par le script pour afficher « Votre jeu » sans rechargement.
+const jeux = Object.fromEntries(
+  d.parcours.map((p) => [
+    p.profil.id,
+    {
+      libelle: d.tr(p.profil.libelle),
+      lien: d.lien(`/profils/${p.profil.id}/`),
+      modules: p.etapes.map((e) => ({
+        id: e.module.id,
+        code: e.module.code,
+        titre: sansCoupure(d.tr(e.module.titre)),
+        parades: e.module.parades.length,
+        lien: d.lien(`/modules/${e.module.id}/`),
+      })),
+    },
+  ]),
+);
+const libelles = {
+  jouer: T('accueil.jouer'),
+  compteur: T('accueil.compteurParades'),
+  gagnee: T('accueil.carteGagnee'),
+  enCours: T('statut.enCours'),
+  aJouer: T('accueil.carteAJouer'),
+  termine: T('accueil.jeuTermine'),
+};
 ---
 <Base titre={T('nav.accueil')} langue={d.langue}>
-  <h1>{T('site.titre')} : {org.nom}</h1>
-  {accueil && (
-    <div class="lecture" lang={accueil.langue !== d.langue ? accueil.langue : undefined}>
-      <Markdown source={accueil.valeur} />
-    </div>
-  )}
+  <div class="accueil">
+    <header class="accueil__entete">
+      <h1>{T('accueil.titre')}</h1>
+      <p class="accueil__org">{T('accueil.programme', { org: org.nom })}</p>
+      {accueil && (
+        <div class="accueil__chapo" lang={accueil.langue !== d.langue ? accueil.langue : undefined}>
+          <Markdown source={accueil.valeur} />
+        </div>
+      )}
+    </header>
 
-  <p class="encart" data-reprise data-libelle={T('accueil.votreProfil')} hidden>
-    <span data-reprise-texte></span> <a href={d.lien('/profils/')} data-reprise-lien>{T('accueil.reprendre')}</a>
-  </p>
+    <section class="mon-jeu" aria-labelledby="titre-mon-jeu" data-mon-jeu data-jeux={JSON.stringify(jeux)} data-libelles={JSON.stringify(libelles)} hidden>
+      <div class="mon-jeu__tete">
+        <h2 id="titre-mon-jeu">{T('accueil.votreJeu')} <span data-jeu-profil></span></h2>
+        <p class="mon-jeu__compteur libelle" data-jeu-compteur></p>
+      </div>
+      <p class="mon-jeu__action">
+        <a class="bouton bouton--grand" href="#" data-jeu-prochain></a>
+      </p>
+      <ol class="mini-cartes" data-jeu-cartes aria-label={T('accueil.cartesParcours')}></ol>
+      <p class="mon-jeu__liens">
+        <a href="#" data-jeu-parcours>{T('accueil.voirParcours')}</a>
+        <button type="button" class="bouton--lien" data-jeu-changer>{T('accueil.changerProfil')}</button>
+      </p>
+    </section>
 
-  <section aria-labelledby="titre-profils">
-    <h2 id="titre-profils">{T('accueil.choisirProfil')}</h2>
-    <p>{T('accueil.choisirProfilIntro', { org: org.nom })}</p>
-    <ul class="grille">
-      {d.parcours.map((p) => (
-        <li>
-          <div class="carte">
-            <h3 lang={d.langueDe(p.profil.libelle) !== d.langue ? 'fr' : undefined}><a href={d.lien(`/profils/${p.profil.id}/`)} data-profil-carte={p.profil.id}>{d.tr(p.profil.libelle)}</a></h3>
-            <p lang={d.langueDe(p.profil.description) !== d.langue ? 'fr' : undefined}>{d.tr(p.profil.description)}</p>
-            <p>{T('accueil.resumeParcours', { n: p.etapes.length, minutes: p.dureeTotaleMinutes, obligatoires: p.etapes.filter((e) => e.categorie === 'obligatoire').length })}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </section>
+    <section class="profils-choix" aria-labelledby="titre-qui" data-choix-profil>
+      <h2 id="titre-qui">{T('accueil.quiEtesVous')}</h2>
+      <p>{T('accueil.quiIntro')}</p>
+      <ul class="profils-choix__liste">
+        {d.parcours.map((p) => {
+          const accroche = p.profil.accroche ?? p.profil.description;
+          return (
+            <li class="profil-choix">
+              <div class="profil-choix__texte">
+                <h3 class="profil-choix__nom"><a href={d.lien(`/profils/${p.profil.id}/`)} lang={lang(p.profil.libelle)}>{d.tr(p.profil.libelle)}</a></h3>
+                <p class="profil-choix__accroche" lang={lang(accroche)}>{d.tr(accroche)}</p>
+                <p class="profil-choix__meta libelle">{T('accueil.resumeJeu', { n: p.etapes.length, minutes: p.dureeTotaleMinutes, parades: p.etapes.reduce((s, e) => s + e.module.parades.length, 0) })}</p>
+              </div>
+              <button type="button" class="bouton--secondaire" data-choisir={p.profil.id} hidden>
+                {T('profil.cestMonProfil')}<span class="visuellement-masque"> : {d.tr(p.profil.libelle)}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
 
-  <section aria-labelledby="titre-deroule" class="lecture">
-    <h2 id="titre-deroule">{T('accueil.deroule')}</h2>
-    <ol>
-      <li><strong>{T('module.etape1')}</strong> : {T('accueil.deroule1')}</li>
-      <li><strong>{T('module.etape2')}</strong> : {T('accueil.deroule2')}</li>
-      <li><strong>{T('module.etape3')}</strong> : {T('accueil.deroule3')}</li>
-      <li><strong>{T('module.etape4')}</strong> : {T('accueil.deroule4', { seuil: d.config.evaluation.seuilReussite })}</li>
-    </ol>
-  </section>
+    <section class="deroule" aria-labelledby="titre-deroule">
+      <h2 id="titre-deroule">{T('accueil.deroule')}</h2>
+      <ol class="deroule__liste">
+        <li><strong>{T('module.attaqueLibelle')}</strong> {T('accueil.deroule1')}</li>
+        <li><strong>{T('module.etape2')}</strong> {T('accueil.deroule2')}</li>
+        <li><strong>{T('module.etape3')}</strong> {T('accueil.deroule3')}</li>
+        <li><strong>{T('module.paradeLibelle')}</strong> {T('accueil.deroule4', { seuil: d.config.evaluation.seuilReussite })}</li>
+      </ol>
+      <p class="deroule__inclusion">{T('accueil.pourTousCourt')} <a href={d.lien('/preferences/')}>{T('nav.preferences')}</a>.</p>
+    </section>
 
-  <section aria-labelledby="titre-accessibilite" class="lecture">
-    <h2 id="titre-accessibilite">{T('accueil.pourTous')}</h2>
-    <ul>
-      <li>{T('accueil.pourTous1')}</li>
-      <li>{T('accueil.pourTous2')} <a href={d.lien('/preferences/')}>{T('nav.preferences')}</a>.</li>
-      <li>{T('accueil.pourTous3')}</li>
-    </ul>
-  </section>
-
-  <section aria-labelledby="titre-pilotage" class="lecture">
-    <h2 id="titre-pilotage">{T('accueil.pilotage')}</h2>
-    <ul>
-      <li><a href={d.lien('/tableau-de-bord/')}>{T('nav.tableauDeBord')}</a> : {T('accueil.pilotage1')}</li>
-      <li><a href={d.lien('/calendrier/')}>{T('nav.calendrier')}</a> : {T('accueil.pilotage2')}</li>
-      <li><a href={d.lien('/plan/')}>{T('nav.plan')}</a> : {T('accueil.pilotage3')}</li>
-    </ul>
-  </section>
+    <aside class="pilotage" aria-labelledby="titre-pilotage">
+      <h2 id="titre-pilotage" class="pilotage__titre">{T('accueil.pilotage')}</h2>
+      <ul>
+        <li><a href={d.lien('/tableau-de-bord/')}>{T('nav.tableauDeBord')}</a></li>
+        <li><a href={d.lien('/calendrier/')}>{T('nav.calendrier')}</a></li>
+        <li><a href={d.lien('/plan/')}>{T('nav.plan')}</a></li>
+      </ul>
+    </aside>
+  </div>
 </Base>
 
 <script>
-  import { lireProgression } from '../scripts/stockage.ts';
+  import { lireProgression, ecrireProgression, formater } from '../scripts/stockage.ts';
 
-  const zone = document.querySelector<HTMLElement>('[data-reprise]');
-  const p = lireProgression();
-  const carte = p.profil ? document.querySelector<HTMLAnchorElement>(`a[data-profil-carte="${CSS.escape(p.profil)}"]`) : null;
-  if (zone && carte) {
-    zone.querySelector('[data-reprise-texte]')!.textContent = `${zone.dataset.libelle} : ${carte.textContent}.`;
-    zone.querySelector<HTMLAnchorElement>('[data-reprise-lien]')!.href = carte.href;
-    zone.hidden = false;
+  interface Jeu { libelle: string; lien: string; modules: { id: string; code: string; titre: string; parades: number; lien: string }[] }
+  const zone = document.querySelector<HTMLElement>('[data-mon-jeu]')!;
+  const choix = document.querySelector<HTMLElement>('[data-choix-profil]')!;
+  const jeux: Record<string, Jeu> = JSON.parse(zone.dataset.jeux ?? '{}');
+  const L: Record<string, string> = JSON.parse(zone.dataset.libelles ?? '{}');
+
+  function afficherJeu(focus: boolean) {
+    const p = lireProgression();
+    const jeu = p.profil ? jeux[p.profil] : undefined;
+    zone.hidden = !jeu;
+    choix.hidden = Boolean(jeu);
+    if (!jeu) return;
+    const etat = (id: string) => (p.modules[id]?.valide ? 'gagnee' : p.modules[id] ? 'en-cours' : 'a-jouer');
+    const gagnees = jeu.modules.filter((m) => etat(m.id) === 'gagnee').reduce((s, m) => s + m.parades, 0);
+    const total = jeu.modules.reduce((s, m) => s + m.parades, 0);
+    zone.querySelector('[data-jeu-profil]')!.textContent = `: ${jeu.libelle}`;
+    zone.querySelector('[data-jeu-compteur]')!.textContent = formater(L.compteur, { n: gagnees, total });
+    const prochain = jeu.modules.find((m) => etat(m.id) !== 'gagnee');
+    const action = zone.querySelector<HTMLAnchorElement>('[data-jeu-prochain]')!;
+    action.textContent = prochain ? formater(L.jouer, { module: `${prochain.code} – ${prochain.titre}` }) : L.termine;
+    action.href = prochain ? prochain.lien : jeu.modules[0]?.lien ?? '#';
+    zone.querySelector<HTMLAnchorElement>('[data-jeu-parcours]')!.href = jeu.lien;
+    const liste = zone.querySelector<HTMLOListElement>('[data-jeu-cartes]')!;
+    liste.replaceChildren(
+      ...jeu.modules.map((m) => {
+        const li = document.createElement('li');
+        const e = etat(m.id);
+        li.className = `mini-carte mini-carte--${e}`;
+        const a = document.createElement('a');
+        a.href = m.lien;
+        const code = document.createElement('span');
+        code.className = 'mini-carte__code';
+        code.textContent = m.code;
+        const titre = document.createElement('span');
+        titre.className = 'mini-carte__titre';
+        titre.textContent = m.titre;
+        const statut = document.createElement('span');
+        statut.className = 'mini-carte__etat libelle';
+        statut.textContent = e === 'gagnee' ? L.gagnee : e === 'en-cours' ? L.enCours : L.aJouer;
+        a.append(code, titre, statut);
+        li.append(a);
+        return li;
+      }),
+    );
+    if (focus) document.getElementById('titre-mon-jeu')?.focus();
   }
+
+  for (const b of document.querySelectorAll<HTMLButtonElement>('[data-choisir]')) {
+    b.hidden = false;
+    b.addEventListener('click', () => {
+      const p = lireProgression();
+      p.profil = b.dataset.choisir;
+      ecrireProgression(p);
+      afficherJeu(true);
+    });
+  }
+  zone.querySelector('[data-jeu-changer]')!.addEventListener('click', () => {
+    zone.hidden = true;
+    choix.hidden = false;
+    document.getElementById('titre-qui')?.focus();
+  });
+  document.getElementById('titre-mon-jeu')?.setAttribute('tabindex', '-1');
+  document.getElementById('titre-qui')?.setAttribute('tabindex', '-1');
+  afficherJeu(false);
 </script>

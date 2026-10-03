@@ -71,5 +71,25 @@
       "url": "https://cyber.gouv.fr/"
     }
   ],
-  "ordre": 70
+  "ordre": 70,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Je débranche du réseau, sans éteindre",
+        "en": "I disconnect from the network, without switching off"
+      }
+    },
+    {
+      "titre": {
+        "fr": "J'alerte tout de suite le numéro d'urgence",
+        "en": "I call the emergency number right away"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je ne paie jamais, je ne supprime rien",
+        "en": "I never pay, I delete nothing"
+      }
+    }
+  ]
 }

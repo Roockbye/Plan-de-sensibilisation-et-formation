@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { auditerAccessibilite } from './outils.ts';
 
 test('audio M3 : fichier lisible, sous-titres synchronisés et transcription disponible', async ({ page }) => {
-  await page.goto('/modules/fraude-president/');
+  await page.goto('/modules/fraude-president/#situation');
   const audio = page.locator('audio[data-audio-sous-titre]');
   await expect(audio).toHaveCount(1);
   await expect(audio.locator('track[kind="captions"]')).toHaveAttribute('src', /\.vtt$/);

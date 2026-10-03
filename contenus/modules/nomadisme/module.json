@@ -63,5 +63,25 @@
       "url": "https://www.cybermalveillance.gouv.fr/"
     }
   ],
-  "ordre": 60
+  "ordre": 60,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Partage de connexion et VPN, jamais de Wi-Fi public seul",
+        "en": "Phone hotspot and VPN, never public Wi-Fi alone"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je verrouille dès que je m'éloigne",
+        "en": "I lock my screen as soon as I step away"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Perte ou vol : j'appelle immédiatement",
+        "en": "Lost or stolen: I call immediately"
+      }
+    }
+  ]
 }

@@ -29,3 +29,11 @@ export function tr(texte: Texte, langue: Langue = LANGUE_PAR_DEFAUT): string {
 export const identifiantSchema = z
   .string()
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'identifiant attendu en minuscules, chiffres et tirets (ex. « fraude-president »)');
+
+/**
+ * Empêche la coupure de ligne au trait d'union des mots courts (« e-mail », « QR-code ») dans les titres :
+ * un liant de mots invisible (U+2060) est inséré après le trait d'union. Sans effet pour les lecteurs d'écran.
+ */
+export function sansCoupure(texte: string): string {
+  return texte.replace(/(^|[\s(«])(\p{L}{1,2})-(?=\p{L})/gu, '$1$2-\u2060');
+}
