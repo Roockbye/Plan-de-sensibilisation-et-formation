@@ -1,0 +1,13 @@
+// Déploiement Cloudflare (Workers, ressources statiques uniquement).
+// Le site est 100 % statique : aucun code serveur, aucun adaptateur Astro.
+// Wrangler publie le dossier dist/ ; le fichier dist/_headers applique les en-têtes de sécurité.
+{
+  "name": "plan-de-sensibilisation-et-formation",
+  "compatibility_date": "2026-09-30",
+  "assets": {
+    "directory": "./dist",
+    // Page 404 personnalisée et URL avec barre oblique finale (/modules/ → /modules/index.html).
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

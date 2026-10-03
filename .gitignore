@@ -9,3 +9,9 @@ playwright-report/
 .env.*
 !.env.example
 .DS_Store
+
+# Outils personnels de développement (serveurs MCP)
+.mcp.json
+
+# Fichiers locaux de Wrangler (cache, état de wrangler dev)
+.wrangler/

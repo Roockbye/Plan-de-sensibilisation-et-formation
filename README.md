@@ -111,7 +111,7 @@ Les tests automatisés ne détectent qu'une partie des défauts : un **audit man
   - rendu Markdown sûr par construction (micromark échappe le HTML brut et neutralise les URL `javascript:`) ;
   - données relues depuis `localStorage` revalidées, texte injecté uniquement via `textContent`.
 - **Aucun secret** dans le code ni dans la configuration (qui ne contient que des données publiques). La CI lance **gitleaks** sur l'historique.
-- **Dépendances** : peu nombreuses et à jour, `npm audit` en CI, **Dependabot** hebdomadaire, scripts d'installation npm bloqués par défaut.
+- **Dépendances** : peu nombreuses et à jour, Dependabot hebdomadaire, scripts d'installation npm bloqués par défaut. L'audit (`npm run audit`, en CI) bloque toute vulnérabilité haute ou critique, sauf **exception documentée et datée** dans [`securite/exceptions-audit.json`](securite/exceptions-audit.json) (justification, date de revue, date d'expiration). À l'échéance, la CI bloque de nouveau et impose une nouvelle analyse du risque.
 - Simulations d'hameçonnage : les liens affichés ne sont **jamais cliquables** (vérifié par un test).
 
 ## Architecture
@@ -141,20 +141,20 @@ tests/unit, tests/e2e        ← Vitest ; Playwright + axe-core
 
 **Langues** : français par défaut, **anglais** publié sous `/en/` (`"langues": {"defaut": "fr", "disponibles": ["fr", "en"]}`). L'interface est entièrement traduite (`src/i18n/fr.json`, `en.json`). Côté contenus, les risques, les profils, les pages éditoriales, les métadonnées des modules et le module M1 sont traduits ; les autres modules s'affichent en français avec un avis, et sont balisés `lang="fr"` pour les lecteurs d'écran (RGAA 8.7). Voir [Traduire un contenu](docs/adapter-a-une-organisation.md#9-traduire-un-contenu).
 
-## Déploiement gratuit (Cloudflare Pages)
+## Déploiement gratuit (Cloudflare)
 
-1. Poussez le dépôt sur GitHub.
-2. Dans Cloudflare, ouvrez **Workers & Pages → Créer → Pages → Connecter à Git**, puis choisissez le dépôt.
-3. Paramètres de build :
-   - **Commande** : `npm run build`
-   - **Répertoire de sortie** : `dist`
-   - **Variable d'environnement** : `NODE_VERSION = 24`
-   - pour une autre organisation : `ORGANISATION_CONFIG = config/mon-organisation.json`
-4. Déployez. Chaque `git push` redéploie automatiquement ; le fichier `_headers` applique les en-têtes de sécurité.
+Le fichier [`wrangler.jsonc`](wrangler.jsonc) décrit le déploiement : Cloudflare publie le dossier `dist/` comme **ressources statiques** (aucun code serveur), et applique les en-têtes de sécurité de `dist/_headers`.
 
-Pour vérifier les en-têtes une fois en ligne : `curl -I https://<votre-projet>.pages.dev` ou [securityheaders.com](https://securityheaders.com).
+1. Dans Cloudflare, ouvrez **Workers & Pages → Créer → importer un dépôt Git**, puis choisissez le dépôt.
+2. Paramètres :
+   - **Commande de build** : `npm run build`
+   - **Commande de déploiement** : `npx wrangler deploy` (valeur proposée par défaut)
+   - **Variables** : `NODE_VERSION = 24` ; pour une autre organisation, `ORGANISATION_CONFIG = config/mon-organisation.json`
+3. Déployez. Chaque `git push` sur `main` redéploie automatiquement le site.
 
-GitHub Pages fonctionne aussi (site statique), mais sans en-têtes HTTP personnalisés : seule la CSP en balise `meta` s'applique.
+> N'ajoutez pas l'adaptateur `@astrojs/cloudflare` : il sert au rendu côté serveur, inutile ici, et il ferait échouer le build (la configuration est lue sur le disque pendant la génération). La présence de `wrangler.jsonc` empêche Wrangler de l'installer automatiquement.
+
+Vérifier en local, sans rien publier : `npm run build && npx wrangler deploy --dry-run`. Vérifier les en-têtes une fois en ligne : `curl -I https://<projet>.<compte>.workers.dev` ou [securityheaders.com](https://securityheaders.com).
 
 ## Licence et crédits
 
