@@ -341,5 +341,8 @@
   "accueil.quiIntro": "Choose your profile: your deck of modules is built for you, based on your organisation's risks.",
   "accueil.resumeJeu": "{n} modules · {minutes} min · {parades} parries",
   "accueil.pourTousCourt": "For everyone: easy-read version, keyboard and screen reader, no timer. Adjust the display:",
-  "nav.menu": "Menu"
+  "nav.menu": "Menu",
+  "catalogue.parades": "{n} parries to win",
+  "collection.titre": "My deck of parries",
+  "collection.intro": "Each module you pass (at least {seuil} % in the post-test) turns over its parry cards: the right reflexes you have mastered."
 }

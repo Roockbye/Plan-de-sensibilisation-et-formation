@@ -95,6 +95,35 @@ const textes = {
     const reponses = (q: HTMLFieldSetElement) =>
       [...q.querySelectorAll<HTMLInputElement>('input')].filter((i) => i.checked).map((i) => i.value);
 
+    // Brouillon : les réponses en cours survivent à un rechargement ou à un changement d'étape (session uniquement).
+    const cleBrouillon = `ssi:brouillon:${module}:${phase}:${form.querySelector('fieldset')?.id ?? ''}`;
+    const lireBrouillon = (): string[] => {
+      try {
+        const v = JSON.parse(sessionStorage.getItem(cleBrouillon) ?? '[]');
+        return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string').slice(0, 100) : [];
+      } catch {
+        return [];
+      }
+    };
+    for (const id of lireBrouillon()) {
+      const champ = document.getElementById(id);
+      if (champ instanceof HTMLInputElement && form.contains(champ)) champ.checked = true;
+    }
+    form.addEventListener('change', () => {
+      try {
+        sessionStorage.setItem(cleBrouillon, JSON.stringify([...form.querySelectorAll<HTMLInputElement>('input:checked')].map((i) => i.id)));
+      } catch {
+        /* stockage indisponible : pas de brouillon */
+      }
+    });
+    const effacerBrouillon = () => {
+      try {
+        sessionStorage.removeItem(cleBrouillon);
+      } catch {
+        /* rien à effacer */
+      }
+    };
+
     form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       const sansReponse = questions.filter((q) => reponses(q).length === 0);
@@ -137,6 +166,7 @@ const textes = {
         q.disabled = true;
       }
 
+      effacerBrouillon();
       const r = resultat(score, questions.length);
       const valide = phase === 'posttest' && r.pourcent >= seuil;
       majModule(module, (s) => {

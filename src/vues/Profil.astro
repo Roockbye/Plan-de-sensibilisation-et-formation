@@ -75,7 +75,7 @@ const categories = ['obligatoire', 'prioritaire', 'complementaire'] as const;
               <h4><a href={d.lien(`/modules/${e.module.id}/`)} data-lien-module={e.module.id}>{e.module.code} – <span lang={lang(e.module.titre)}>{d.tr(e.module.titre)}</span></a></h4>
               <p lang={lang(e.module.resume)}>{d.tr(e.module.resume)}</p>
               <p>
-                {T('commun.minutes', { n: e.module.dureeMinutes })} – {T(`niveau.${e.module.niveau}` as Cle)} –
+                {T('commun.minutes', { n: e.module.dureeMinutes })} – {T(`niveau.${e.module.niveau}` as Cle)} –{' '}
                 {T('commun.statut')} : <span class="statut" data-statut-module={e.module.id}>{T('statut.aFaire')}</span>
               </p>
               {e.raisons.length > 0 && (

@@ -163,7 +163,7 @@ const libellesEtapes = {
 
     {scenario && (
       <section id="situation" class="etape" data-etape="situation" aria-labelledby="titre-situation">
-        <h2 id="titre-situation" tabindex="-1">{T('module.etapeN', { n: 3, total: etapes.length })} · {T('module.etape3')} : <span lang={scenario.langue !== d.langue ? scenario.langue : undefined}>{d.tr(scenario.valeur.titre)}</span></h2>
+        <h2 id="titre-situation" tabindex="-1">{T('module.etapeN', { n: 3, total: etapes.length })} · <span lang={scenario.langue !== d.langue ? scenario.langue : undefined}>{d.tr(scenario.valeur.titre)}</span></h2>
         {scenario.valeur.type === 'boite-mail' ? (
           <BoiteMail module={meta} scenario={scenario.valeur} langue={d.langue} langueContenu={scenario.langue} />
         ) : (

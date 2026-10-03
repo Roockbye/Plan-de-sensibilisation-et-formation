@@ -607,6 +607,27 @@ html:not(.js) .carte-parade__dos { display: none; }
   .nav-principale a[aria-current="page"] { border-left-color: var(--primaire); background: var(--surface); }
 }
 
+/* Catalogue : grille de cartes ATTAQUE. */
+.catalogue { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); }
+.catalogue > li { margin: 0; display: flex; }
+.catalogue > li > .carte-jeu { flex: 1; }
+.catalogue .carte-jeu__titre { font-size: 1.5rem; }
+.catalogue .carte-jeu__titre a { color: var(--texte); text-decoration-color: var(--attaque); text-decoration-thickness: 2px; }
+.catalogue .carte-jeu__titre a:hover { text-decoration-thickness: 3px; }
+.catalogue__infos { margin: 0.2rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 1rem; font-family: var(--police-affichage); font-weight: 600; letter-spacing: 0.02em; }
+.catalogue__note { margin: 0; font-size: 0.9375rem; color: var(--texte-attenue); }
+.catalogue__pied { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1rem; border-top: 1px solid var(--bordure); margin-top: auto; padding-top: 0.75rem; color: var(--texte); }
+
+/* Ma progression : collection de parades. */
+.collection { margin: 2rem 0 2.5rem; }
+.collection__tete { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; }
+.collection__tete h2 { margin: 0; }
+.collection__compteur { margin: 0; color: var(--parade); }
+.collection__liste { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+.collection__liste > li { margin: 0; display: grid; }
+.collection .carte-jeu__titre { font-size: 1.2rem; }
+.collection .carte-jeu--cachee .carte-jeu__corps { margin: 0.7rem; }
+
 /* La « voix » du jeu : police d'affichage pour la marque, la navigation, les actions et les libellés. */
 .marque__texte > span:first-child, .nav-principale a, .lien-preferences, .lien-langue,
 .bouton, button, caption, .graphique__titre, .indicateur__valeur, .boite__compteur,

@@ -51,3 +51,25 @@ test.describe('sans JavaScript', () => {
     await expect(page.locator('.carte-parade__dos')).toBeHidden();
   });
 });
+
+test('les réponses d\'un quiz en cours sont conservées en cas de rechargement', async ({ page }) => {
+  await page.goto('/modules/hameconnage/#posttest');
+  const choix = page.locator('#posttest input').first();
+  await choix.check();
+  await page.reload();
+  await expect(page.locator('#posttest input').first()).toBeChecked();
+});
+
+test('la collection de « Ma progression » retourne les parades d\'un module validé', async ({ page }) => {
+  await page.goto('/modules/incident/#posttest');
+  const qs = page.locator('#posttest fieldset');
+  for (let i = 0; i < (await qs.count()); i++) {
+    const q = qs.nth(i);
+    for (const v of (await q.getAttribute('data-bonnes'))!.split(' ')) await q.locator(`input[value="${v}"]`).check();
+  }
+  await page.locator('#posttest [data-valider]').click();
+  await page.goto('/ma-progression/');
+  await expect(page.locator('[data-collection-module="incident"] [data-carte-collection]')).toHaveAttribute('data-etat', 'gagnee');
+  await expect(page.locator('[data-collection-compteur]')).toHaveText('3 parades gagnées sur 24');
+  await auditerAccessibilite(page, 'collection de parades');
+});

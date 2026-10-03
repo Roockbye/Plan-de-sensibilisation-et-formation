@@ -341,5 +341,8 @@
   "accueil.quiIntro": "Choisissez votre profil : votre jeu de modules est calculé pour vous, selon les risques de votre organisation.",
   "accueil.resumeJeu": "{n} modules · {minutes} min · {parades} parades",
   "accueil.pourTousCourt": "Pour toutes et tous : version facile à lire, clavier et lecteur d'écran, aucun chronomètre. Adaptez l'affichage :",
-  "nav.menu": "Menu"
+  "nav.menu": "Menu",
+  "catalogue.parades": "{n} parades à gagner",
+  "collection.titre": "Mon jeu de parades",
+  "collection.intro": "Chaque module validé (au moins {seuil} % au post-test) retourne ses cartes parade : les bons réflexes que vous maîtrisez."
 }

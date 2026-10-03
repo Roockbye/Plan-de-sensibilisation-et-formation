@@ -11,15 +11,18 @@ interface Props {
   titre: string;
   langTitre?: string;
   class?: string;
-  niveauTitre?: 'p' | 'h3';
+  niveauTitre?: 'p' | 'h2' | 'h3';
+  /** Si fourni, le titre de la carte est un lien (une seule cible cliquable par carte). */
+  lien?: string;
+  attributsLien?: Record<string, string>;
 }
-const { famille, libelle, titre, langTitre, class: classe, niveauTitre = 'p' } = Astro.props;
+const { famille, libelle, titre, langTitre, class: classe, niveauTitre = 'p', lien, attributsLien = {} } = Astro.props;
 const Titre = niveauTitre;
 ---
 <div class:list={['carte-jeu', `carte-jeu--${famille}`, classe]}>
   <p class="carte-jeu__famille libelle"><span class="carte-jeu__picto" aria-hidden="true"></span>{libelle}</p>
   <div class="carte-jeu__corps">
-    <Titre class="carte-jeu__titre" lang={langTitre}>{titre}</Titre>
+    <Titre class="carte-jeu__titre" lang={langTitre}>{lien ? <a href={lien} {...attributsLien}>{titre}</a> : titre}</Titre>
     <slot />
   </div>
 </div>
