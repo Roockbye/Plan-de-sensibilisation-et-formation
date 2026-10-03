@@ -414,6 +414,107 @@ button[aria-pressed="true"]::before { content: "✓"; font-weight: 700; }
 .plan h1 { font-size: 1.8rem; }
 .plan table { font-size: 0.95rem; }
 
+/* ---------- Jeu « Attaque / Parade » : cartes --------------------------- */
+
+.carte-jeu {
+  --famille: var(--bordure);
+  display: flex; flex-direction: column;
+  border: 2px solid var(--famille); border-radius: 18px;
+  background: var(--fond);
+  overflow: hidden;
+  box-shadow: 0 12px 28px -18px rgba(15, 20, 25, 0.55);
+}
+.carte-jeu--attaque { --famille: var(--attaque); }
+.carte-jeu--parade { --famille: var(--parade); }
+.carte-jeu__famille {
+  margin: 0; padding: 0.55rem 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: var(--famille); color: var(--sur-carte);
+  position: relative;
+}
+/* Attaque : bande hachurée sous l'en-tête (le motif distingue la famille sans la couleur). */
+.carte-jeu--attaque .carte-jeu__famille { padding-bottom: calc(0.55rem + 7px); }
+.carte-jeu--attaque .carte-jeu__famille::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+  background: repeating-linear-gradient(135deg, var(--attaque) 0 6px, var(--attaque-teinte) 6px 12px);
+}
+.carte-jeu__picto {
+  width: 1.25rem; height: 1.25rem; flex: none; background: currentColor;
+  -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
+.carte-jeu--attaque .carte-jeu__picto { -webkit-mask-image: url(/pictos/attaque.svg); mask-image: url(/pictos/attaque.svg); }
+.carte-jeu--cachee .carte-jeu__picto { -webkit-mask-image: url(/pictos/cachee.svg); mask-image: url(/pictos/cachee.svg); }
+.carte-jeu__corps { padding: 1rem 1.15rem 1.15rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
+.carte-jeu__titre { margin: 0; font-family: var(--police-affichage); font-size: 1.45rem; font-weight: 700; line-height: 1.1; text-wrap: balance; }
+.carte-jeu__texte { margin: 0; }
+.carte-jeu__pied { margin: auto 0 0; padding-top: 0.4rem; font-size: 0.9375rem; color: var(--texte-attenue); }
+.carte-jeu__liste { list-style: none; margin: 0.2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.carte-jeu__liste li { margin: 0; padding-left: 1.8rem; position: relative; font-weight: 600; line-height: 1.35; }
+.carte-jeu__liste li::before {
+  content: ""; position: absolute; left: 0; top: 0.05em; width: 1.25rem; height: 1.25rem; background: var(--parade);
+  -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
+/* Carte à gagner : face cachée, pointillés, motif de dos de carte. */
+.carte-jeu--cachee {
+  border-style: dashed; box-shadow: none;
+  background: repeating-linear-gradient(45deg, var(--surface) 0 10px, var(--fond) 10px 20px);
+}
+.carte-jeu--cachee .carte-jeu__famille { background: var(--surface); color: var(--texte); border-bottom: 2px dashed var(--bordure); }
+.carte-jeu--cachee .carte-jeu__corps { background: var(--fond); margin: 0.9rem; border-radius: 12px; }
+
+/* Duel : la carte ATTAQUE du module face à la carte PARADE à gagner. */
+.duel { display: grid; gap: 0.75rem; margin: 1.5rem 0 0.5rem; align-items: stretch; }
+.duel__contre {
+  margin: 0; align-self: center; justify-self: center;
+  font-family: var(--police-affichage); font-weight: 700; font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--texte-attenue);
+}
+@media (min-width: 46rem) {
+  .duel { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem; }
+}
+.carte-parade { display: grid; }
+.carte-parade > .carte-jeu { grid-area: 1 / 1; }
+html:not(.js) .carte-parade__dos { display: none; }
+.js .carte-parade:not([data-etat="gagnee"]) .carte-parade__face { display: none; }
+.js .carte-parade[data-etat="gagnee"] .carte-parade__dos { display: none; }
+.carte-parade.retournee .carte-parade__face { animation: retourner-carte 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes retourner-carte {
+  from { transform: perspective(900px) rotateY(80deg) scale(0.96); opacity: 0.4; }
+  to { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .carte-parade.retournee .carte-parade__face { animation: none; }
+}
+
+.details-module { margin: 1.25rem 0 0; border: 1px solid var(--bordure); border-radius: 12px; padding: 0.2rem 1rem; }
+.details-module[open] { padding-bottom: 0.9rem; }
+.details-module summary { cursor: pointer; padding: 0.6rem 0; font-family: var(--police-affichage); font-weight: 600; font-size: 1.0625rem; letter-spacing: 0.02em; }
+
+/* Fil d'étapes : numéro, nom, état écrit ; l'étape active est déclarée aria-current="step". */
+.etapes { margin: 2.25rem 0 0.5rem; }
+.etapes ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); }
+.etapes li { margin: 0; }
+.etapes a {
+  display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 0.6rem; align-items: center;
+  height: 100%; padding: 0.6rem 0.75rem; border: 2px solid var(--bordure); border-radius: 12px;
+  color: var(--texte); text-decoration: none; background: var(--fond);
+}
+.etapes a:hover .etapes__nom { text-decoration: underline; }
+.etapes__num {
+  grid-row: 1 / span 2; width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center;
+  border: 2px solid currentColor; font-family: var(--police-affichage); font-weight: 700; font-size: 1.05rem;
+}
+.etapes__nom { font-family: var(--police-affichage); font-weight: 600; font-size: 1.0625rem; line-height: 1.15; }
+.etapes__etat { font-family: var(--police-affichage); font-size: var(--taille-libelle); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texte-attenue); }
+.etapes a[aria-current="step"] { border-color: var(--primaire); background: var(--surface); box-shadow: inset 0 -4px 0 var(--primaire); }
+.etapes a.est-faite { border-color: var(--parade); }
+.etapes a.est-faite .etapes__num { color: var(--parade); }
+.etapes a.est-faite .etapes__etat { color: var(--parade); }
+
+.etape > h2:first-child { margin-top: 1.5rem; }
+.etape__suite { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; margin-top: 2.25rem; padding-top: 1.25rem; border-top: 1px solid var(--bordure); }
+.etape__suite a[rel="next"] { margin-left: auto; }
+
 /* La « voix » du jeu : police d'affichage pour la marque, la navigation, les actions et les libellés. */
 .marque__texte > span:first-child, .nav-principale a, .lien-preferences, .lien-langue,
 .bouton, button, caption, .graphique__titre, .indicateur__valeur, .boite__compteur,

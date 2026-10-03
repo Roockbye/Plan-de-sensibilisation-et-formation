@@ -309,5 +309,21 @@
   "page404.titre": "Page not found",
   "page404.texte": "The page you requested does not exist or has been moved.",
   "page404.accueil": "Back to the home page",
-  "page404.planDuSite": "See the site map"
+  "page404.planDuSite": "See the site map",
+  "module.duel": "The module's duel",
+  "module.attaqueLibelle": "Attack",
+  "module.paradeLibelle": "Parry",
+  "module.variantes": "Variants: {liste}.",
+  "module.contre": "versus",
+  "module.paradesAGagner": "{n} parries to win",
+  "module.paradesCondition": "Pass the post-test (at least {seuil} %) to add them to your deck.",
+  "module.vosParades": "Your parries",
+  "module.paradesGagnees": "Parries won: they join your deck.",
+  "module.details": "Module details",
+  "module.etapeN": "Step {n} of {total}",
+  "module.navEtapes": "Step navigation",
+  "module.etapePrecedente": "Previous step: {etape}",
+  "module.etapeSuivante": "Next step: {etape}",
+  "module.etapeFaite": "Done",
+  "module.etapeCourante": "current step"
 }

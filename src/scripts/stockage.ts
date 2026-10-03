@@ -16,6 +16,8 @@ export interface SuiviModule {
   meilleurPosttest?: Resultat;
   scenario?: Resultat;
   valide?: boolean;
+  /** Étapes du module marquées comme terminées (ex. « essentiel » lu), pour reprendre au bon endroit. */
+  etapes?: string[];
 }
 
 export interface Progression {
@@ -50,6 +52,7 @@ export function lireProgression(): Progression {
         meilleurPosttest: lireResultat(suivi.meilleurPosttest),
         scenario: lireResultat(suivi.scenario),
         valide: suivi.valide === true,
+        etapes: Array.isArray(suivi.etapes) ? suivi.etapes.filter(estIdentifiant).slice(0, 10) : [],
       };
     }
     const profil = (brut as { profil?: unknown }).profil;

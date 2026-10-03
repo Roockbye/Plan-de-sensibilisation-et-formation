@@ -81,5 +81,25 @@
         "en": "Voice entirely computer-generated (Piper speech synthesis) for educational purposes. Fictitious characters."
       }
     }
+  ],
+  "parades": [
+    {
+      "titre": {
+        "fr": "Urgent et secret : je raccroche et je rappelle un numéro connu",
+        "en": "Urgent and secret: I hang up and call back a known number"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Jamais de virement sans double validation",
+        "en": "No transfer without dual approval"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je signale même une tentative déjouée",
+        "en": "I report even a failed attempt"
+      }
+    }
   ]
 }

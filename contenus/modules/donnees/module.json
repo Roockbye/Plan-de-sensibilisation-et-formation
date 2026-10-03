@@ -60,5 +60,25 @@
       "url": "https://www.cnil.fr/"
     }
   ],
-  "ordre": 50
+  "ordre": 50,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Je classe l'information avant de la partager",
+        "en": "I classify information before sharing it"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je vérifie le destinataire avant d'envoyer",
+        "en": "I check the recipient before sending"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Erreur d'envoi : je préviens tout de suite",
+        "en": "Sent to the wrong person: I report it right away"
+      }
+    }
+  ]
 }

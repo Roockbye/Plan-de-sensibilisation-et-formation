@@ -309,5 +309,21 @@
   "page404.titre": "Page introuvable",
   "page404.texte": "La page demandée n'existe pas ou a été déplacée.",
   "page404.accueil": "Revenir à l'accueil",
-  "page404.planDuSite": "Consulter le plan du site"
+  "page404.planDuSite": "Consulter le plan du site",
+  "module.duel": "Le duel du module",
+  "module.attaqueLibelle": "Attaque",
+  "module.paradeLibelle": "Parade",
+  "module.variantes": "Variantes : {liste}.",
+  "module.contre": "contre",
+  "module.paradesAGagner": "{n} parades à gagner",
+  "module.paradesCondition": "Réussissez le post-test (au moins {seuil} %) pour les ajouter à votre jeu.",
+  "module.vosParades": "Vos parades",
+  "module.paradesGagnees": "Parades gagnées : elles rejoignent votre jeu.",
+  "module.details": "Détails du module",
+  "module.etapeN": "Étape {n} sur {total}",
+  "module.navEtapes": "Navigation entre les étapes",
+  "module.etapePrecedente": "Étape précédente : {etape}",
+  "module.etapeSuivante": "Étape suivante : {etape}",
+  "module.etapeFaite": "Fait",
+  "module.etapeCourante": "étape en cours"
 }

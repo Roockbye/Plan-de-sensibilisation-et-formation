@@ -39,7 +39,7 @@ test('le focus est toujours visible', async ({ page }) => {
 });
 
 test('quiz : erreurs listées, correction textuelle, module validé, progression enregistrée', async ({ page }) => {
-  await page.goto('/modules/mots-de-passe/');
+  await page.goto('/modules/mots-de-passe/#posttest');
   const posttest = page.locator('#posttest form');
 
   // Valider sans répondre : la liste des questions manquantes reçoit le focus.
@@ -77,7 +77,7 @@ test('quiz : erreurs listées, correction textuelle, module validé, progression
 });
 
 test('simulation d\'hameçonnage : vérifier un lien et décider au clavier', async ({ page }) => {
-  await page.goto('/modules/hameconnage/');
+  await page.goto('/modules/hameconnage/#situation');
   const premier = page.locator('[data-message]').first();
 
   await tabulerJusqua(page, '[data-message] [data-reveler]');
@@ -95,7 +95,7 @@ test('simulation d\'hameçonnage : vérifier un lien et décider au clavier', as
 });
 
 test('mise en situation à embranchements : parcours complet au clavier', async ({ page }) => {
-  await page.goto('/modules/incident/');
+  await page.goto('/modules/incident/#situation');
   const scenario = page.locator('[data-scenario]');
   const etapesVisibles = scenario.locator('[data-etape]:not([hidden])');
   await expect(etapesVisibles).toHaveCount(1);

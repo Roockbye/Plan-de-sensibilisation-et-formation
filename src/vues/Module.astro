@@ -6,6 +6,8 @@ import Quiz from '../components/Quiz.astro';
 import Scenario from '../components/Scenario.astro';
 import BoiteMail from '../components/BoiteMail.astro';
 import Media from '../components/Media.astro';
+import CarteJeu from '../components/CarteJeu.astro';
+import NavEtape from '../components/NavEtape.astro';
 import { donnees } from '../lib/donnees.ts';
 import type { Cle } from '../i18n/index.ts';
 import { sansCoupure, type Langue, type Texte } from '../lib/texte.ts';
@@ -35,7 +37,21 @@ const suivant = d.modules[index + 1]?.meta;
 const mediasScenario = new Set(scenario?.valeur.type === 'embranchements' ? scenario.valeur.etapes.flatMap((e) => (e.media ? [e.media] : [])) : []);
 const mediasLibres = meta.medias.filter((x) => !mediasScenario.has(x.id));
 const lien = (autre: typeof meta) => d.lien(`/modules/${autre.id}/${falc ? 'facile/' : ''}`);
-const numeroPosttest = scenario ? 4 : 3;
+// Duel : la carte ATTAQUE est le risque principal du module ; les autres risques en sont des variantes.
+const risquePrincipal = meta.risques[0];
+const risque0 = d.risque(risquePrincipal);
+const autresRisques = meta.risques.slice(1);
+// Étapes du module (la mise en situation est facultative selon les contenus).
+const etapes = [
+  { id: 'pretest', nom: T('module.etape1') },
+  { id: 'essentiel', nom: T('module.etape2') },
+  ...(scenario ? [{ id: 'situation', nom: T('module.etape3') }] : []),
+  { id: 'posttest', nom: T('module.etape4') },
+];
+const libellesEtapes = {
+  aFaire: T('statut.aFaire'), enCours: T('statut.enCours'), fait: T('module.etapeFaite'),
+  courante: T('module.etapeCourante'), gagnees: T('module.paradesGagnees'),
+};
 ---
 <Base
   titre={falc ? `${titre} (${T('module.versionFalc')})` : titre}
@@ -63,74 +79,105 @@ const numeroPosttest = scenario ? 4 : 3;
 
     <p class="module__resume" lang={lang(meta.resume)}>{d.tr(meta.resume)}</p>
 
-    <dl class="meta">
-      <dt>{T('commun.duree')}</dt>
-      <dd>{T('commun.minutes', { n: meta.dureeMinutes })}</dd>
-      <dt>{T('commun.niveau')}</dt>
-      <dd>{T(`niveau.${meta.niveau}` as Cle)}</dd>
-      <dt>{T('commun.formats')}</dt>
-      <dd>{meta.formats.map((f) => T(`format.${f}` as Cle)).join(', ')}</dd>
-      <dt>{T('commun.risques')}</dt>
-      <dd>
-        <ul class="etiquettes">
-          {meta.risques.map((r) => (
-            <li>
-              {d.libelleRisque(r)}
-              {d.risque(r)?.emergent && <span class="etiquette etiquette--emergent">{T('commun.emergent')}</span>}
-            </li>
-          ))}
-        </ul>
-      </dd>
-      <dt>{T('commun.profils')}</dt>
-      <dd>{meta.profils.filter((p) => d.config.profilsActifs.includes(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
-      <dt>{T('commun.statut')}</dt>
-      <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
-    </dl>
+    <section class="duel" aria-labelledby="titre-duel">
+      <h2 id="titre-duel" class="visuellement-masque">{T('module.duel')}</h2>
+      <CarteJeu famille="attaque" libelle={T('module.attaqueLibelle')} titre={d.libelleRisque(risquePrincipal)} class="duel__attaque">
+        <p class="carte-jeu__texte" lang={risque0 && lang(risque0.description)}>{risque0 && d.tr(risque0.description)}</p>
+        {autresRisques.length > 0 && <p class="carte-jeu__pied">{T('module.variantes', { liste: autresRisques.map((r) => d.libelleRisque(r)).join(', ') })}</p>}
+      </CarteJeu>
+      <p class="duel__contre" aria-hidden="true">{T('module.contre')}</p>
+      <div class="carte-parade" data-carte-parade={meta.id}>
+        <CarteJeu famille="cachee" libelle={T('module.paradeLibelle')} titre={T('module.paradesAGagner', { n: meta.parades.length })} class="carte-parade__dos">
+          <p class="carte-jeu__texte">{T('module.paradesCondition', { seuil: d.config.evaluation.seuilReussite })}</p>
+        </CarteJeu>
+        <CarteJeu famille="parade" libelle={T('module.paradeLibelle')} titre={T('module.vosParades')} class="carte-parade__face">
+          <ul class="carte-jeu__liste">
+            {meta.parades.map((pa) => <li lang={lang(pa.titre)}>{d.tr(pa.titre)}</li>)}
+          </ul>
+        </CarteJeu>
+        <p class="visuellement-masque" data-annonce-parade role="status"></p>
+      </div>
+    </section>
 
     <h2>{T('commun.objectifs')}</h2>
     <ul>
       {meta.objectifs.map((o) => <li lang={lang(o)}>{d.tr(o)}</li>)}
     </ul>
 
-    <nav class="module__etapes" aria-labelledby="titre-etapes">
-      <h2 id="titre-etapes">{T('module.etapes')}</h2>
+    <details class="details-module">
+      <summary>{T('module.details')}</summary>
+      <dl class="meta">
+        <dt>{T('commun.duree')}</dt>
+        <dd>{T('commun.minutes', { n: meta.dureeMinutes })}</dd>
+        <dt>{T('commun.niveau')}</dt>
+        <dd>{T(`niveau.${meta.niveau}` as Cle)}</dd>
+        <dt>{T('commun.formats')}</dt>
+        <dd>{meta.formats.map((f) => T(`format.${f}` as Cle)).join(', ')}</dd>
+        <dt>{T('commun.risques')}</dt>
+        <dd>
+          <ul class="etiquettes">
+            {meta.risques.map((r) => (
+              <li>
+                {d.libelleRisque(r)}
+                {d.risque(r)?.emergent && <span class="etiquette etiquette--emergent">{T('commun.emergent')}</span>}
+              </li>
+            ))}
+          </ul>
+        </dd>
+        <dt>{T('commun.profils')}</dt>
+        <dd>{meta.profils.filter((p) => d.config.profilsActifs.includes(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
+        <dt>{T('commun.statut')}</dt>
+        <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
+      </dl>
+    </details>
+
+    <nav class="etapes" aria-label={T('module.etapes')} data-etapes={meta.id} data-libelles={JSON.stringify(libellesEtapes)}>
       <ol>
-        <li><a href="#pretest">{T('module.etape1')}</a></li>
-        <li><a href="#essentiel">{T('module.etape2')}</a></li>
-        {scenario && <li><a href="#situation">{T('module.etape3')}</a></li>}
-        <li><a href="#posttest">{T('module.etape4')}</a></li>
+        {etapes.map((e, i) => (
+          <li>
+            <a href={`#${e.id}`} data-lien-etape={e.id}>
+              <span class="etapes__num" aria-hidden="true">{i + 1}</span>
+              <span class="etapes__nom">{e.nom}</span>
+              <span class="etapes__etat" data-etat-etape={e.id}>{T('statut.aFaire')}</span>
+            </a>
+          </li>
+        ))}
       </ol>
     </nav>
 
-    <section id="pretest" aria-labelledby="titre-pretest">
-      <h2 id="titre-pretest">1. {T('module.etape1')}</h2>
+    <section id="pretest" class="etape" data-etape="pretest" aria-labelledby="titre-pretest">
+      <h2 id="titre-pretest" tabindex="-1">{T('module.etapeN', { n: 1, total: etapes.length })} · {T('module.etape1')}</h2>
       <p>{T('module.pretestIntro')}</p>
       <Quiz module={meta.id} phase="pretest" questions={quiz.valeur.pretest} falc={falc} langue={d.langue} langueContenu={quiz.langue} />
+      <NavEtape etapes={etapes} id="pretest" T={T} />
     </section>
 
-    <section id="essentiel" aria-labelledby="titre-essentiel">
-      <h2 id="titre-essentiel">2. {T('module.etape2')}</h2>
+    <section id="essentiel" class="etape" data-etape="essentiel" aria-labelledby="titre-essentiel">
+      <h2 id="titre-essentiel" tabindex="-1">{T('module.etapeN', { n: 2, total: etapes.length })} · {T('module.etape2')}</h2>
       <div lang={langCorps}>
         <Markdown source={corps.valeur} decalageTitres={1} />
       </div>
       {mediasLibres.map((x) => <Media media={x} transcription={transcriptions[x.id]} langue={d.langue} langueContenu={corps.langue} />)}
+      <NavEtape etapes={etapes} id="essentiel" T={T} />
     </section>
 
     {scenario && (
-      <section id="situation" aria-labelledby="titre-situation">
-        <h2 id="titre-situation">3. {T('module.etape3')} : <span lang={scenario.langue !== d.langue ? scenario.langue : undefined}>{d.tr(scenario.valeur.titre)}</span></h2>
+      <section id="situation" class="etape" data-etape="situation" aria-labelledby="titre-situation">
+        <h2 id="titre-situation" tabindex="-1">{T('module.etapeN', { n: 3, total: etapes.length })} · {T('module.etape3')} : <span lang={scenario.langue !== d.langue ? scenario.langue : undefined}>{d.tr(scenario.valeur.titre)}</span></h2>
         {scenario.valeur.type === 'boite-mail' ? (
           <BoiteMail module={meta} scenario={scenario.valeur} langue={d.langue} langueContenu={scenario.langue} />
         ) : (
           <Scenario module={meta} scenario={scenario.valeur} transcriptions={transcriptions} langue={d.langue} langueContenu={scenario.langue} />
         )}
+        <NavEtape etapes={etapes} id="situation" T={T} />
       </section>
     )}
 
-    <section id="posttest" aria-labelledby="titre-posttest">
-      <h2 id="titre-posttest">{numeroPosttest}. {T('module.etape4')}</h2>
+    <section id="posttest" class="etape" data-etape="posttest" aria-labelledby="titre-posttest">
+      <h2 id="titre-posttest" tabindex="-1">{T('module.etapeN', { n: etapes.length, total: etapes.length })} · {T('module.etape4')}</h2>
       <p>{T('module.posttestIntro', { seuil: d.config.evaluation.seuilReussite })}</p>
       <Quiz module={meta.id} phase="posttest" questions={quiz.valeur.posttest} falc={falc} langue={d.langue} langueContenu={quiz.langue} />
+      <NavEtape etapes={etapes} id="posttest" T={T} />
     </section>
 
     {meta.sources.length > 0 && (
@@ -157,4 +204,5 @@ const numeroPosttest = scenario ? 4 : 3;
 
 <script>
   import '../scripts/statuts.ts';
+  import '../scripts/etapes.ts';
 </script>

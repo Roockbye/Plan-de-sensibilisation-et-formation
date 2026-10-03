@@ -1,0 +1,20 @@
+---
+/** Liens « Étape précédente / suivante » en bas de chaque étape d'un module (simples ancres : fonctionnent sans JavaScript). */
+import type { Cle } from '../i18n/index.ts';
+
+interface Props {
+  etapes: { id: string; nom: string }[];
+  id: string;
+  T: (cle: Cle, params?: Record<string, string | number>) => string;
+}
+const { etapes, id, T } = Astro.props;
+const i = etapes.findIndex((e) => e.id === id);
+const precedente = etapes[i - 1];
+const suivante = etapes[i + 1];
+---
+{(precedente || suivante) && (
+  <nav class="etape__suite" aria-label={T('module.navEtapes')}>
+    {precedente && <a class="bouton bouton--secondaire" href={`#${precedente.id}`} rel="prev">{T('module.etapePrecedente', { etape: precedente.nom })}</a>}
+    {suivante && <a class="bouton" href={`#${suivante.id}`} rel="next" data-terminer-etape={id}>{T('module.etapeSuivante', { etape: suivante.nom })}</a>}
+  </nav>
+)}

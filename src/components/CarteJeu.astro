@@ -1,0 +1,25 @@
+---
+/**
+ * Carte du jeu « Attaque / Parade ».
+ * La famille est portée par le libellé écrit, le pictogramme et le motif de l'en-tête
+ * (hachures pour l'attaque, aplat pour la parade, pointillés pour une carte à gagner) :
+ * jamais par la seule couleur.
+ */
+interface Props {
+  famille: 'attaque' | 'parade' | 'cachee';
+  libelle: string;
+  titre: string;
+  langTitre?: string;
+  class?: string;
+  niveauTitre?: 'p' | 'h3';
+}
+const { famille, libelle, titre, langTitre, class: classe, niveauTitre = 'p' } = Astro.props;
+const Titre = niveauTitre;
+---
+<div class:list={['carte-jeu', `carte-jeu--${famille}`, classe]}>
+  <p class="carte-jeu__famille libelle"><span class="carte-jeu__picto" aria-hidden="true"></span>{libelle}</p>
+  <div class="carte-jeu__corps">
+    <Titre class="carte-jeu__titre" lang={langTitre}>{titre}</Titre>
+    <slot />
+  </div>
+</div>

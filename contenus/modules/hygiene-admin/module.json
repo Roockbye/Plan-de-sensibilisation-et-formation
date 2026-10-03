@@ -64,5 +64,25 @@
       "url": "https://cyber.gouv.fr/"
     }
   ],
-  "ordre": 80
+  "ordre": 80,
+  "parades": [
+    {
+      "titre": {
+        "fr": "Un compte d'administration séparé, jamais pour le web ni les e-mails",
+        "en": "A separate admin account, never for web or email"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Les correctifs d'abord là où c'est exposé",
+        "en": "Patch exposed systems first"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Je vérifie l'identité avant toute réinitialisation",
+        "en": "I verify identity before any reset"
+      }
+    }
+  ]
 }
