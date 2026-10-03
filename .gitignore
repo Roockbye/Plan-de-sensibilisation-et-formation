@@ -12,3 +12,6 @@ playwright-report/
 
 # Outils personnels de développement (serveurs MCP)
 .mcp.json
+
+# Fichiers locaux de Wrangler (cache, état de wrangler dev)
+.wrangler/
