@@ -38,6 +38,8 @@ export type Risque = z.infer<typeof risqueSchema>;
 export const profilSchema = z.strictObject({
   id: identifiantSchema,
   libelle: texteSchema,
+  /** Accroche d'une ligne affichée à l'accueil (à défaut : la description). */
+  accroche: texteSchema.optional(),
   description: texteSchema,
   besoins: z.array(texteSchema).min(1),
   objectifs: z

@@ -4,6 +4,10 @@
     "fr": "Administrateur informatique",
     "en": "IT administrator"
   },
+  "accroche": {
+    "fr": "Vos accès ouvrent tout le système : c'est eux que les attaquants visent.",
+    "en": "Your access opens the whole system: it's what attackers are after."
+  },
   "description": {
     "fr": "Personnes disposant de privilèges élevés sur le système d'information (internes ou prestataires) : leur compte est la cible la plus recherchée par un attaquant.",
     "en": "People with high privileges on the information system (in-house or contractors): their account is the one attackers want most."

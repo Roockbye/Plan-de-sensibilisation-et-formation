@@ -4,6 +4,10 @@
     "fr": "Manager et direction",
     "en": "Managers and executives"
   },
+  "accroche": {
+    "fr": "Vous validez et vous décidez : vous êtes la cible préférée des fraudeurs.",
+    "en": "You approve and decide: you are fraudsters' favourite target."
+  },
   "description": {
     "fr": "Encadrants et membres de la direction : cibles privilégiées des fraudes (autorité, accès aux paiements), ils portent aussi la responsabilité de la sécurité et donnent l'exemple.",
     "en": "Line managers and members of management: favourite targets of fraud (authority, access to payments), they are also accountable for security and set the example."
