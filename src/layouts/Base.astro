@@ -83,6 +83,10 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
             <span class="marque__org">{org.nom}</span>
           </span>
         </a>
+        <button type="button" class="bouton-menu" aria-expanded="true" aria-controls="menu-liste" data-bouton-menu hidden>
+          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          {T('nav.menu')}
+        </button>
         <div class="entete__outils">
           {versions.map((l) => (
             <a class="lien-langue" href={lienLangue(l, cheminNeutre)} hreflang={l} lang={l}>
@@ -96,7 +100,7 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
         </div>
       </div>
       <nav class="nav-principale conteneur" id="menu" aria-label={T('nav.label')} tabindex="-1">
-        <ul>
+        <ul id="menu-liste">
           {liens.map((l) => (
             <li><a href={lien(l.href)} aria-current={estActif(l.href) ? 'page' : undefined}>{l.libelle}</a></li>
           ))}
@@ -136,3 +140,25 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
     </footer>
   </body>
 </html>
+
+<script>
+  // Menu repliable sur petit écran (amélioration progressive : sans JavaScript, la navigation reste dépliée).
+  const bouton = document.querySelector<HTMLButtonElement>('[data-bouton-menu]');
+  const liste = document.getElementById('menu-liste');
+  if (bouton && liste) {
+    const petitEcran = window.matchMedia('(max-width: 47.99rem)');
+    const ouvrir = (ouvert: boolean) => {
+      bouton.setAttribute('aria-expanded', String(ouvert));
+      liste.hidden = !ouvert;
+    };
+    const appliquer = () => {
+      bouton.hidden = !petitEcran.matches;
+      ouvrir(!petitEcran.matches);
+    };
+    bouton.addEventListener('click', () => ouvrir(bouton.getAttribute('aria-expanded') !== 'true'));
+    // Le lien d'évitement « Aller au menu » déplie le menu replié.
+    document.querySelector('a[href="#menu"]')?.addEventListener('click', () => ouvrir(true));
+    petitEcran.addEventListener('change', appliquer);
+    appliquer();
+  }
+</script>

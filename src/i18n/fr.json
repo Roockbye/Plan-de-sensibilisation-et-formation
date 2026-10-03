@@ -1,7 +1,7 @@
 {
   "site.titre": "Sensibilisation à la sécurité numérique",
   "site.description": "Programme de sensibilisation et de formation des utilisateurs à la sécurité du système d'information.",
-  "site.bandeauDemo": "Plateforme de démonstration : toutes les données de suivi sont fictives et aucune information personnelle n'est collectée.",
+  "site.bandeauDemo": "Démonstration : données de suivi fictives, aucune donnée personnelle collectée.",
   "evitement.contenu": "Aller au contenu",
   "evitement.menu": "Aller au menu",
   "nav.label": "Menu principal",
@@ -340,5 +340,6 @@
   "accueil.quiEtesVous": "Qui êtes-vous ?",
   "accueil.quiIntro": "Choisissez votre profil : votre jeu de modules est calculé pour vous, selon les risques de votre organisation.",
   "accueil.resumeJeu": "{n} modules · {minutes} min · {parades} parades",
-  "accueil.pourTousCourt": "Pour toutes et tous : version facile à lire, clavier et lecteur d'écran, aucun chronomètre. Adaptez l'affichage :"
+  "accueil.pourTousCourt": "Pour toutes et tous : version facile à lire, clavier et lecteur d'écran, aucun chronomètre. Adaptez l'affichage :",
+  "nav.menu": "Menu"
 }

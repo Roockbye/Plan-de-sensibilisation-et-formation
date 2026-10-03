@@ -14,6 +14,8 @@
 /* ---------- Base ------------------------------------------------------- */
 
 *, *::before, *::after { box-sizing: border-box; }
+/* L'attribut hidden l'emporte toujours sur les règles d'affichage des composants. */
+[hidden] { display: none !important; }
 
 /* Rôles typographiques. Les préférences d'accessibilité remplacent les DEUX familles :
    un choix de lisibilité l'emporte toujours sur l'identité visuelle. */
@@ -588,6 +590,22 @@ html:not(.js) .carte-parade__dos { display: none; }
 .pilotage__titre { font-size: 1.125rem; margin: 0 0 0.5rem; }
 .pilotage ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; }
 .pilotage li { margin: 0; }
+
+/* ---------- Petits écrans : en-tête compact et menu repliable --------- */
+
+.bouton-menu { background: var(--fond); color: var(--texte); border-color: var(--texte); }
+@media (max-width: 47.99rem) {
+  .bandeau-demo { font-size: 0.8125rem; padding: 0.3rem 0; }
+  .entete__haut { padding: 0.6rem 1rem; gap: 0.5rem 1rem; }
+  .marque img { width: 2.25rem; height: 2.25rem; }
+  .marque__texte > span:first-child { font-size: 1.0625rem; }
+  .entete__outils { order: 3; flex-basis: 100%; gap: 0.25rem 1.25rem; }
+  .marque { flex: 1 1 0; min-width: 0; }
+  .bouton-menu { margin-left: auto; flex: none; }
+  .nav-principale ul { flex-direction: column; gap: 0; padding-bottom: 0.5rem; }
+  .nav-principale a { display: flex; align-items: center; min-height: 2.75rem; width: 100%; border-bottom-width: 0; border-left: 4px solid transparent; padding-left: 0.75rem; }
+  .nav-principale a[aria-current="page"] { border-left-color: var(--primaire); background: var(--surface); }
+}
 
 /* La « voix » du jeu : police d'affichage pour la marque, la navigation, les actions et les libellés. */
 .marque__texte > span:first-child, .nav-principale a, .lien-preferences, .lien-langue,

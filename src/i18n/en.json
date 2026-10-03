@@ -1,7 +1,7 @@
 {
   "site.titre": "Digital security awareness",
   "site.description": "User awareness and training programme on information system security.",
-  "site.bandeauDemo": "Demonstration platform: all tracking data is fictitious and no personal information is collected.",
+  "site.bandeauDemo": "Demo: fictitious tracking data, no personal data collected.",
   "evitement.contenu": "Skip to content",
   "evitement.menu": "Skip to menu",
   "nav.label": "Main menu",
@@ -340,5 +340,6 @@
   "accueil.quiEtesVous": "Who are you?",
   "accueil.quiIntro": "Choose your profile: your deck of modules is built for you, based on your organisation's risks.",
   "accueil.resumeJeu": "{n} modules · {minutes} min · {parades} parries",
-  "accueil.pourTousCourt": "For everyone: easy-read version, keyboard and screen reader, no timer. Adjust the display:"
+  "accueil.pourTousCourt": "For everyone: easy-read version, keyboard and screen reader, no timer. Adjust the display:",
+  "nav.menu": "Menu"
 }
