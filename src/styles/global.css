@@ -776,8 +776,9 @@ html:not(.js) .carte-parade__dos { display: none; }
   .forme--triangle { animation-delay: 0.7s; }
   .forme--carre { animation-delay: 0.8s; }
 
-  .reveler-actif [data-apparition] { transition: translate 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease; }
-  .reveler-actif [data-apparition]:not(.est-revele) { opacity: 0; translate: 0 1.75rem; }
+  /* Position seule, jamais l'opacité : le texte garde son contraste à tout instant (axe, loupes, captures). */
+  .reveler-actif [data-apparition] { transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveler-actif [data-apparition]:not(.est-revele) { translate: 0 2.5rem; }
   .profil-choix:nth-child(2) { transition-delay: 0.05s; }
   .profil-choix:nth-child(3) { transition-delay: 0.1s; }
   .profil-choix:nth-child(4) { transition-delay: 0.15s; }
