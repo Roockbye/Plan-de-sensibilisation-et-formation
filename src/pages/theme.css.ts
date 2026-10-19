@@ -10,10 +10,17 @@ const COMMUNS = {
     attenue: '#4A4F56', bordure: '#6B7178', succes: '#1B6B32', erreur: '#B42318', avertissement: '#8A5300', focus: '#1A1C1E',
     // Familles de cartes du jeu « Attaque / Parade » (contrastes ≥ 4,5:1 vérifiés sur fond, surface et teinte).
     attaque: '#B42318', attaqueTeinte: '#FDEDEA', parade: '#16703A', paradeTeinte: '#E5F3EA', surAttaque: '#FFFFFF',
+    // Palette « Arcade lumineuse » : grandes bandes et accents de jeu (contrastes vérifiés ≥ 4,5:1).
+    violet: '#6D28D9', violetFonce: '#4338CA', violetClair: '#F1EBFF', violetTexte: '#6D28D9',
+    corail: '#FF7A59', corailClair: '#FFEDE6', menthe: '#2FD198', mentheClair: '#DDF7EC',
+    soleil: '#FFC93C', soleilClair: '#FFF5D6', encre: '#1B1035', surViolet: '#FFFFFF',
   },
   sombre: {
     attenue: '#C3C8CE', bordure: '#8E959C', succes: '#7BD99A', erreur: '#FF9F96', avertissement: '#F5C26B', focus: '#F1F3F5',
     attaque: '#FF9C8F', attaqueTeinte: '#3A1A17', parade: '#7DD8A0', paradeTeinte: '#132E1F', surAttaque: '#15171A',
+    violet: '#2A1569', violetFonce: '#1C1A4E', violetClair: '#241B3D', violetTexte: '#B9A2FF',
+    corail: '#FF8F70', corailClair: '#3B1D2A', menthe: '#4BE0A8', mentheClair: '#12302A',
+    soleil: '#FFD166', soleilClair: '#3A3014', encre: '#1B1035', surViolet: '#FFFFFF',
   },
 };
 
@@ -36,7 +43,19 @@ export const GET: APIRoute = () => {
   --attaque-teinte: ${c.attaqueTeinte};
   --parade: ${c.parade};
   --parade-teinte: ${c.paradeTeinte};
-  --sur-carte: ${c.surAttaque};`;
+  --sur-carte: ${c.surAttaque};
+  --violet: ${c.violet};
+  --violet-fonce: ${c.violetFonce};
+  --violet-clair: ${c.violetClair};
+  --violet-texte: ${c.violetTexte};
+  --corail: ${c.corail};
+  --corail-clair: ${c.corailClair};
+  --menthe: ${c.menthe};
+  --menthe-clair: ${c.mentheClair};
+  --soleil: ${c.soleil};
+  --soleil-clair: ${c.soleilClair};
+  --encre: ${c.encre};
+  --sur-violet: ${c.surViolet};`;
 
   const css = `/* Généré depuis la configuration de l'organisation – ne pas modifier à la main. */
 :root, :root[data-theme="clair"] {${bloc(theme.clair, COMMUNS.clair)}
@@ -68,6 +87,18 @@ export const GET: APIRoute = () => {
   --parade: #7CFF7C;
   --parade-teinte: #000000;
   --sur-carte: #000000;
+  --violet: #000000;
+  --violet-fonce: #000000;
+  --violet-clair: #000000;
+  --violet-texte: #FFFF00;
+  --corail: #FF8080;
+  --corail-clair: #000000;
+  --menthe: #7CFF7C;
+  --menthe-clair: #000000;
+  --soleil: #FFFF00;
+  --soleil-clair: #000000;
+  --encre: #000000;
+  --sur-violet: #FFFFFF;
   color-scheme: dark;
 }
 `;

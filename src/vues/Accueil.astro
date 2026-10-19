@@ -45,14 +45,37 @@ const libelles = {
 ---
 <Base titre={T('nav.accueil')} langue={d.langue}>
   <div class="accueil">
-    <header class="accueil__entete">
-      <h1>{T('accueil.titre')}</h1>
-      <p class="accueil__org">{T('accueil.programme', { org: org.nom })}</p>
-      {accueil && (
-        <div class="accueil__chapo" lang={accueil.langue !== d.langue ? accueil.langue : undefined}>
-          <Markdown source={accueil.valeur} />
+    <header class="heros bande bande--violet">
+      <div class="heros__texte">
+        <h1>{T('accueil.titre')}</h1>
+        <p class="heros__org">{T('accueil.programme', { org: org.nom })}</p>
+        {accueil && (
+          <div class="heros__chapo" lang={accueil.langue !== d.langue ? accueil.langue : undefined}>
+            <Markdown source={accueil.valeur} />
+          </div>
+        )}
+        <p class="heros__actions">
+          <a class="bouton bouton--soleil bouton--grand" href="#titre-qui" data-heros-action data-lien-jeu="#titre-mon-jeu">{T('accueil.commencer')}</a>
+          <a class="heros__lien" href="#titre-deroule">{T('accueil.commentCaMarche')}</a>
+        </p>
+      </div>
+      <div class="heros__table" aria-hidden="true">
+        <span class="forme forme--rond"></span>
+        <span class="forme forme--triangle"></span>
+        <span class="forme forme--carre"></span>
+        <div class="carte-deco carte-deco--attaque">
+          <span class="carte-deco__famille"><span class="carte-deco__picto"></span>{T('module.attaqueLibelle')}</span>
+          <span class="carte-deco__titre">{T('accueil.decoAttaque')}</span>
         </div>
-      )}
+        <div class="carte-deco carte-deco--cachee">
+          <span class="carte-deco__famille"><span class="carte-deco__picto"></span>{T('module.paradeLibelle')}</span>
+          <span class="carte-deco__titre">?</span>
+        </div>
+        <div class="carte-deco carte-deco--parade">
+          <span class="carte-deco__famille"><span class="carte-deco__picto"></span>{T('module.paradeLibelle')}</span>
+          <span class="carte-deco__titre">{T('accueil.decoParade')}</span>
+        </div>
+      </div>
     </header>
 
     <section class="mon-jeu" aria-labelledby="titre-mon-jeu" data-mon-jeu data-jeux={JSON.stringify(jeux)} data-libelles={JSON.stringify(libelles)} hidden>
@@ -70,14 +93,15 @@ const libelles = {
       </p>
     </section>
 
-    <section class="profils-choix" aria-labelledby="titre-qui" data-choix-profil>
+    <section class="profils-choix bande bande--corail" aria-labelledby="titre-qui" data-choix-profil>
       <h2 id="titre-qui">{T('accueil.quiEtesVous')}</h2>
       <p>{T('accueil.quiIntro')}</p>
       <ul class="profils-choix__liste">
         {d.parcours.map((p) => {
           const accroche = p.profil.accroche ?? p.profil.description;
           return (
-            <li class="profil-choix">
+            <li class="profil-choix" data-apparition>
+              <span class="profil-choix__pastille" aria-hidden="true">{d.tr(p.profil.libelle).charAt(0)}</span>
               <div class="profil-choix__texte">
                 <h3 class="profil-choix__nom"><a href={d.lien(`/profils/${p.profil.id}/`)} lang={lang(p.profil.libelle)}>{d.tr(p.profil.libelle)}</a></h3>
                 <p class="profil-choix__accroche" lang={lang(accroche)}>{d.tr(accroche)}</p>
@@ -92,7 +116,7 @@ const libelles = {
       </ul>
     </section>
 
-    <section class="deroule" aria-labelledby="titre-deroule">
+    <section class="deroule" aria-labelledby="titre-deroule" data-apparition>
       <h2 id="titre-deroule">{T('accueil.deroule')}</h2>
       <ol class="deroule__liste">
         <li><strong>{T('module.attaqueLibelle')}</strong> {T('accueil.deroule1')}</li>
@@ -123,6 +147,32 @@ const libelles = {
   const jeux: Record<string, Jeu> = JSON.parse(zone.dataset.jeux ?? '{}');
   const L: Record<string, string> = JSON.parse(zone.dataset.libelles ?? '{}');
 
+  /** Compteur de parades : le nombre défile (visuel), le texte complet reste lisible par les lecteurs d'écran. */
+  function compter(el: HTMLElement, n: number, total: number) {
+    const texte = formater(L.compteur, { n, total });
+    const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.animations === 'reduites';
+    if (reduit || n === 0) {
+      el.textContent = texte;
+      return;
+    }
+    el.replaceChildren();
+    const visuel = document.createElement('span');
+    visuel.setAttribute('aria-hidden', 'true');
+    const lu = document.createElement('span');
+    lu.className = 'visuellement-masque';
+    lu.textContent = texte;
+    el.append(visuel, lu);
+    const debut = performance.now();
+    const duree = 900;
+    const pas = (t: number) => {
+      const p = Math.min(1, (t - debut) / duree);
+      const ease = 1 - Math.pow(1 - p, 3);
+      visuel.textContent = formater(L.compteur, { n: Math.round(n * ease), total });
+      if (p < 1) requestAnimationFrame(pas);
+    };
+    requestAnimationFrame(pas);
+  }
+
   function afficherJeu(focus: boolean) {
     const p = lireProgression();
     const jeu = p.profil ? jeux[p.profil] : undefined;
@@ -133,7 +183,9 @@ const libelles = {
     const gagnees = jeu.modules.filter((m) => etat(m.id) === 'gagnee').reduce((s, m) => s + m.parades, 0);
     const total = jeu.modules.reduce((s, m) => s + m.parades, 0);
     zone.querySelector('[data-jeu-profil]')!.textContent = `: ${jeu.libelle}`;
-    zone.querySelector('[data-jeu-compteur]')!.textContent = formater(L.compteur, { n: gagnees, total });
+    compter(zone.querySelector<HTMLElement>('[data-jeu-compteur]')!, gagnees, total);
+    const heros = document.querySelector<HTMLAnchorElement>('[data-heros-action]');
+    if (heros) heros.href = heros.dataset.lienJeu ?? heros.href;
     const prochain = jeu.modules.find((m) => etat(m.id) !== 'gagnee');
     const action = zone.querySelector<HTMLAnchorElement>('[data-jeu-prochain]')!;
     action.textContent = prochain ? formater(L.jouer, { module: `${prochain.code} – ${prochain.titre}` }) : L.termine;

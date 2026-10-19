@@ -142,6 +142,10 @@ const csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 's
 </html>
 
 <script>
+  import '../scripts/animations.ts';
+</script>
+
+<script>
   // Menu repliable sur petit écran (amélioration progressive : sans JavaScript, la navigation reste dépliée).
   const bouton = document.querySelector<HTMLButtonElement>('[data-bouton-menu]');
   const liste = document.getElementById('menu-liste');

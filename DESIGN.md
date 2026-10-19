@@ -111,6 +111,14 @@ La couleur primaire de l'organisation (`primaire-organisation`, configurable dan
 - **Attaque** (`attaque` / `attaque-teinte`) : menaces, réponses incorrectes, « nouvelle menace ».
 - **Parade** (`parade` / `parade-teinte`) : réflexes, réponses correctes, parades gagnées, bouton « Signaler ».
 
+### Arcade lumineuse (énergie)
+
+- **Violet** (`violet` → `violet-fonce`) : grandes bandes pleine largeur (héros d'accueil, en-tête de module), texte blanc (≥ 7:1). `violet-texte` pour le violet posé sur fond clair ou sombre.
+- **Soleil** (`soleil`, texte `encre`) : l'appel principal sur bande violette (« Commencer à jouer »), la pastille « contre » du duel.
+- **Corail** (`corail` / `corail-clair`) : bande « Qui êtes-vous ? », tuile Attaque du déroulé.
+- **Menthe** (`menthe` / `menthe-clair`) : étapes terminées, tuile Parade du déroulé.
+- Liseré aux quatre couleurs sous l'en-tête du site. En contraste renforcé, les bandes deviennent noires bordées de blanc.
+
 ### Neutral
 
 Fond blanc, surface gris très clair, texte presque noir, texte atténué gris foncé (≥ 7:1), bordures gris moyen (≥ 3:1). Thème sombre : fond `#15171A`, surface `#212429`, familles éclaircies (`attaque-sombre`, `parade-sombre`). Contraste renforcé : noir, blanc, jaune, rouge clair et vert clair.
@@ -166,7 +174,15 @@ Liens condensés, page active soulignée (bureau) ou marquée à gauche (mobile)
 
 ### Duel (signature)
 
-En tête de module : carte attaque du risque principal « contre » la carte parade à gagner (face cachée). Quand le post-test est validé, la parade se retourne (0,7 s, ease-out exponentielle ; supprimée si animations réduites) et le gain est annoncé aux lecteurs d'écran.
+En tête de module : carte attaque du risque principal « contre » la carte parade à gagner (face cachée). Quand le post-test est validé, la parade se retourne (0,7 s, ease-out exponentielle ; supprimée si animations réduites) et le gain est annoncé aux lecteurs d'écran. Une gerbe de douze petits boucliers jaillit une seule fois (1,1 s). Le duel déborde sur le bas de la bande violette du titre.
+
+### Mouvement (« vivant et maîtrisé »)
+
+- Accueil : le texte du héros monte, les trois cartes sont distribuées en éventail, puis les formes surgissent (une fois, jamais en boucle).
+- Sections sous la ligne de flottaison : apparition au défilement (`data-apparition`, classe posée par le script : sans JavaScript, tout est visible ; un élément déjà à l'écran n'est jamais masqué).
+- Changement d'étape : glissement de 0,4 s ; transitions de page entre documents (`@view-transition`).
+- Survol / focus : les cartes se soulèvent de 4 px ; les boutons s'enfoncent légèrement à la pression.
+- Tout est coupé si le système demande moins d'animations ou si la préférence du site est « réduites » ; les animations ne touchent que la position et l'échelle (jamais l'opacité du texte au repos, pour ne pas fausser les contrastes).
 
 ## Do's and Don'ts
 
@@ -179,7 +195,7 @@ En tête de module : carte attaque du risque principal « contre » la carte par
 
 ### Don't:
 
-- Pas de look casino ou poker, pas de confettis ni de mascotte, pas de classement entre collègues, pas de chronomètre.
+- Pas de look casino ou poker, pas de confettis génériques (seule la gerbe de boucliers, une fois par parade gagnée) ni de mascotte, pas de classement entre collègues, pas de chronomètre.
 - Pas d'imitation d'un jeu de marque (nom ou visuel).
 - Pas de script ni de style inline (CSP stricte), pas de police ou d'image externe.
 - Pas de bordure gauche épaisse sur les encarts, pas de texte en dégradé, pas de caractères Unicode en guise d'icônes.
