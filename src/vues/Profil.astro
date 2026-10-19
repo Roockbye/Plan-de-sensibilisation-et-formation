@@ -14,13 +14,15 @@ const libelle = d.tr(profil.libelle);
 const categories = ['obligatoire', 'prioritaire', 'complementaire'] as const;
 ---
 <Base titre={T('profil.titre', { profil: libelle })} langue={d.langue} filAriane={[{ libelle: T('nav.profils'), href: d.lien('/profils/') }, { libelle, lang: lang(profil.libelle) }]}>
-  <h1>{T('profil.titre', { profil: '' })}<span lang={lang(profil.libelle)}>{libelle}</span></h1>
-  <div class="lecture">
+  <header class="entete-page bande bande--corail">
+    <h1>{T('profil.titre', { profil: '' })}<span lang={lang(profil.libelle)}>{libelle}</span></h1>
     <p lang={lang(profil.description)}>{d.tr(profil.description)}</p>
     <p class="groupe-boutons">
       <button type="button" data-choisir-profil={profil.id} data-libelle-ok={T('profil.enregistre')} data-libelle-ko={T('profil.stockageIndisponible')}>{T('profil.cestMonProfil')}</button>
       <span data-profil-confirmation role="status"></span>
     </p>
+  </header>
+  <div class="lecture">
 
     <h2>{T('profils.besoins')}</h2>
     <ul>{profil.besoins.map((b) => <li lang={lang(b)}>{d.tr(b)}</li>)}</ul>

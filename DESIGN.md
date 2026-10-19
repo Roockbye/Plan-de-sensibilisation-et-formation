@@ -117,6 +117,8 @@ La couleur primaire de l'organisation (`primaire-organisation`, configurable dan
 - **Soleil** (`soleil`, texte `encre`) : l'appel principal sur bande violette (« Commencer à jouer »), la pastille « contre » du duel.
 - **Corail** (`corail` / `corail-clair`) : bande « Qui êtes-vous ? », tuile Attaque du déroulé.
 - **Menthe** (`menthe` / `menthe-clair`) : étapes terminées, tuile Parade du déroulé.
+- **Une couleur par rubrique** (bande d'en-tête de page, `entete-page`) : Modules et Tableau de bord en violet, Profils en corail, Ma progression et Préférences en menthe, Calendrier et Plan en soleil, pages éditoriales en violet clair. Deux formes décoratives (rond, carré) à droite à partir de 56 rem, absentes en contraste renforcé.
+- Cartes de profil, étapes de parcours, indicateurs et groupes de préférences : bandeau supérieur de 6 px qui alterne les quatre couleurs (catégorie du parcours : obligatoire corail, prioritaire soleil, complémentaire menthe). En-têtes de tableaux en violet clair. Cartes à gagner : dos rayé soleil, en-tête encre.
 - Liseré aux quatre couleurs sous l'en-tête du site. En contraste renforcé, les bandes deviennent noires bordées de blanc.
 
 ### Neutral
@@ -179,7 +181,8 @@ En tête de module : carte attaque du risque principal « contre » la carte par
 ### Mouvement (« vivant et maîtrisé »)
 
 - Accueil : le texte du héros monte, les trois cartes sont distribuées en éventail, puis les formes surgissent (une fois, jamais en boucle).
-- Sections sous la ligne de flottaison : apparition au défilement (`data-apparition`, classe posée par le script : sans JavaScript, tout est visible ; un élément déjà à l'écran n'est jamais masqué).
+- Sur toutes les pages, cartes, tuiles, graphiques et tableaux sous la ligne de flottaison glissent en place, en léger décalé (les barres des graphiques poussent depuis l'axe). Jamais les champs de formulaire.
+- Sections de l'accueil : apparition au défilement (`data-apparition`, classe posée par le script : sans JavaScript, tout est visible ; un élément déjà à l'écran n'est jamais masqué).
 - Changement d'étape : glissement de 0,4 s ; transitions de page entre documents (`@view-transition`).
 - Survol / focus : les cartes se soulèvent de 4 px ; les boutons s'enfoncent légèrement à la pression.
 - Tout est coupé si le système demande moins d'animations ou si la préférence du site est « réduites » ; les animations ne touchent que la position et l'échelle (jamais l'opacité du texte au repos, pour ne pas fausser les contrastes).

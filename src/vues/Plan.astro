@@ -13,7 +13,7 @@ const plan = genererPlan(d, d.parcours, d.calendrier, new Date().toISOString().s
 ---
 <Base titre={T('nav.plan')} langue={d.langue} filAriane={[{ libelle: T('nav.plan') }]}>
   {d.langue !== 'fr' && <p class="encart encart--attention lecture pas-impression">{T('plan.enFrancais')}</p>}
-  <p class="groupe-boutons pas-impression">
+  <p class="groupe-boutons entete-page entete-page--outils bande bande--soleil pas-impression">
     <a class="bouton" href="/plan-sensibilisation.md" download="plan-sensibilisation.md">{T('commun.telecharger')} (Markdown)</a>
     <button type="button" class="bouton--secondaire" data-imprimer hidden>{T('commun.imprimer')}</button>
   </p>

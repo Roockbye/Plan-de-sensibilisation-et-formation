@@ -30,11 +30,11 @@ const frequences = [
 ];
 ---
 <Base titre={T('nav.calendrier')} langue={d.langue} filAriane={[{ libelle: T('nav.calendrier') }]}>
-  <h1>{T('calendrier.titre')}</h1>
-  <div class="lecture">
+  <header class="entete-page bande bande--soleil">
+    <h1>{T('calendrier.titre')}</h1>
     <p>{T('calendrier.intro', { org: d.config.organisation.nom })}</p>
     <p><a class="bouton" href={d.lien('/calendrier.ics')} download>{T('calendrier.telecharger')}</a></p>
-  </div>
+  </header>
 
   <h2>{T('calendrier.frequences')}</h2>
   <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-frequences">

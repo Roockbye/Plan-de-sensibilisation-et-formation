@@ -19,9 +19,11 @@ const libelles = {
 };
 ---
 <Base titre={T('nav.progression')} langue={d.langue} filAriane={[{ libelle: T('nav.progression') }]}>
-  <h1>{T('nav.progression')}</h1>
-  <div class="lecture">
+  <header class="entete-page bande bande--menthe">
+    <h1>{T('nav.progression')}</h1>
     <p>{T('progression.intro', { seuil: d.config.evaluation.seuilReussite })}</p>
+  </header>
+  <div class="lecture">
     <p data-profil-actuel>{T('progression.aucunProfil')} <a href={d.lien('/profils/')}>{T('progression.choisirProfil')}</a>.</p>
     <p class="message-retour" data-synthese role="status"></p>
   </div>

@@ -36,9 +36,11 @@ const groupes: { cle: string; titre: Cle; options: { valeur: string; libelle: st
 ];
 ---
 <Base titre={T('prefs.titre')} langue={d.langue} filAriane={[{ libelle: T('prefs.titre') }]}>
-  <div class="lecture">
+  <header class="entete-page bande bande--menthe">
     <h1>{T('prefs.titre')}</h1>
     <p>{T('prefs.intro')}</p>
+  </header>
+  <div class="lecture">
 
     <form class="preferences" data-preferences data-libelle-ok={T('prefs.enregistre')} data-libelle-ko={T('prefs.stockageIndisponible')}>
       {groupes.map((g) => (
