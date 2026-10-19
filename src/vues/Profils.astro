@@ -9,14 +9,16 @@ const { T } = d;
 const lang = (v: Parameters<typeof d.langueDe>[0]) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
 ---
 <Base titre={T('nav.profils')} langue={d.langue} filAriane={[{ libelle: T('nav.profils') }]}>
-  <h1>{T('nav.profils')}</h1>
-  <p class="lecture">{T('profils.intro', { n: d.profils.length, org: d.config.organisation.nom })}</p>
+  <header class="entete-page bande bande--corail">
+    <h1>{T('nav.profils')}</h1>
+    <p>{T('profils.intro', { n: d.profils.length, org: d.config.organisation.nom })}</p>
+  </header>
 
   <ul class="grille">
     {d.parcours.map((p) => (
       <li>
-        <section class="carte" aria-labelledby={`profil-${p.profil.id}`}>
-          <h2 id={`profil-${p.profil.id}`} lang={lang(p.profil.libelle)}>{d.tr(p.profil.libelle)}</h2>
+        <section class="carte carte-profil" aria-labelledby={`profil-${p.profil.id}`}>
+          <h2 id={`profil-${p.profil.id}`} class="carte-profil__titre"><span class="profil-choix__pastille" aria-hidden="true">{d.tr(p.profil.libelle).charAt(0)}</span> <span lang={lang(p.profil.libelle)}>{d.tr(p.profil.libelle)}</span></h2>
           <p lang={lang(p.profil.description)}>{d.tr(p.profil.description)}</p>
           <h3>{T('profils.besoins')}</h3>
           <ul>{p.profil.besoins.map((b) => <li lang={lang(b)}>{d.tr(b)}</li>)}</ul>

@@ -9,8 +9,10 @@ const { T } = d;
 const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
 ---
 <Base titre={T('pied.planDuSite')} langue={d.langue} filAriane={[{ libelle: T('pied.planDuSite') }]}>
-  <div class="lecture">
+  <header class="entete-page bande bande--violet-clair">
     <h1>{T('pied.planDuSite')}</h1>
+  </header>
+  <div class="lecture">
     <ul>
       <li><a href={d.lien('/')}>{T('nav.accueil')}</a></li>
       <li>

@@ -14,10 +14,12 @@ const retard = d.config.evaluation.delaiRetardJours;
 const numero = (id: string) => T('tdb.simulationN', { n: id.replace('simulation-', '') });
 ---
 <Base titre={T('nav.tableauDeBord')} langue={d.langue} filAriane={[{ libelle: T('nav.tableauDeBord') }]}>
-  <h1>{T('tdb.titre')}</h1>
-  <p class="encart encart--attention lecture">
-    <strong>{T('tdb.fictif')}</strong> {T('tdb.fictifDetail', { n: tdb.effectifTotal, date: d.date(tdb.dateReference) })}
-  </p>
+  <header class="entete-page bande bande--violet">
+    <h1>{T('tdb.titre')}</h1>
+    <p class="encart encart--attention">
+      <strong>{T('tdb.fictif')}</strong> {T('tdb.fictifDetail', { n: tdb.effectifTotal, date: d.date(tdb.dateReference) })}
+    </p>
+  </header>
 
   <h2>{T('tdb.indicateurs')}</h2>
   <ul class="indicateurs">

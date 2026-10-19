@@ -12,8 +12,10 @@ const { T } = d;
 const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
 ---
 <Base titre={T('nav.modules')} langue={d.langue} filAriane={[{ libelle: T('nav.modules') }]}>
-  <h1>{T('nav.modules')}</h1>
-  <p class="lecture">{T('modules.intro', { n: d.modules.length })}</p>
+  <header class="entete-page bande bande--violet">
+    <h1>{T('nav.modules')}</h1>
+    <p>{T('modules.intro', { n: d.modules.length })}</p>
+  </header>
 
   <ul class="catalogue">
     {d.modules.map(({ meta }) => {

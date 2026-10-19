@@ -12,8 +12,10 @@ const titre = d.T(`page.${Astro.props.page}` as Cle);
 const contenu = d.contenu(d.pages[Astro.props.page]!);
 ---
 <Base titre={titre} langue={d.langue} filAriane={[{ libelle: titre }]}>
-  <div class="lecture">
+  <header class="entete-page bande bande--violet-clair">
     <h1>{titre}</h1>
+  </header>
+  <div class="lecture">
     <div lang={contenu.langue !== d.langue ? contenu.langue : undefined}>
       <Markdown source={contenu.valeur} />
     </div>
