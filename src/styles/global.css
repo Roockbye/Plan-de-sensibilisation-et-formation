@@ -519,12 +519,6 @@ html:not(.js) .carte-parade__dos { display: none; }
 
 /* ---------- Accueil : « Votre jeu » ------------------------------------- */
 
-.accueil__entete { max-width: 46rem; margin-bottom: 2.25rem; }
-.accueil__entete h1 { margin-bottom: 0.3rem; }
-.accueil__org { margin: 0 0 1rem; font-family: var(--police-affichage); font-size: 1.125rem; font-weight: 600; letter-spacing: 0.02em; color: var(--texte-attenue); }
-.accueil__chapo { font-size: 1.1875rem; }
-.accueil__chapo p { margin: 0; }
-
 .bouton--grand { font-size: 1.25rem; padding: 0.8rem 1.5rem; min-height: 3.25rem; border-radius: 10px; }
 .bouton--lien {
   background: none; border: 0; padding: 0; min-height: 0; min-width: 0; color: var(--primaire);
@@ -627,6 +621,193 @@ html:not(.js) .carte-parade__dos { display: none; }
 .collection__liste > li { margin: 0; display: grid; }
 .collection .carte-jeu__titre { font-size: 1.2rem; }
 .collection .carte-jeu--cachee .carte-jeu__corps { margin: 0.7rem; }
+
+/* ---------- « Arcade lumineuse » : bandes de couleur, héros, mouvement -------- */
+
+/* Bandes pleine largeur : le fond déborde jusqu'aux bords de l'écran (border-image « outset »,
+   qui ne crée pas de défilement horizontal) tandis que le contenu reste dans la colonne. */
+.bande {
+  border-image-source: linear-gradient(var(--bande-fond), var(--bande-fond));
+  border-image-slice: 0 fill;
+  border-image-outset: 0 100vmax;
+  padding-block: 2.25rem;
+}
+.bande--violet {
+  --bande-fond: var(--violet);
+  border-image-source: linear-gradient(115deg, var(--violet) 0%, var(--violet) 40%, var(--violet-fonce) 100%);
+  color: var(--sur-violet);
+  --focus: var(--sur-violet);
+}
+.bande--violet a:not(.bouton) { color: inherit; }
+.bande--violet .encart { background: var(--fond); color: var(--texte); border-color: transparent; }
+.bande--corail { --bande-fond: var(--corail-clair); }
+:root[data-theme="contraste"] .bande { border-image: none; border-block: 2px solid var(--bordure); }
+
+/* Accueil : héros violet, texte à gauche, « table de jeu » à droite. */
+.heros { display: grid; gap: 1.5rem 2.5rem; align-items: center; margin-top: 1rem; margin-bottom: 2.5rem; padding-block: 2.5rem 3rem; }
+.heros__texte { max-width: 38rem; }
+.heros h1 { margin-top: 0; margin-bottom: 0.4rem; font-size: clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem); line-height: 0.98; }
+.heros__org { margin: 0 0 1.1rem; font-family: var(--police-affichage); font-size: 1.1875rem; font-weight: 600; letter-spacing: 0.02em; }
+.heros__chapo { font-size: 1.1875rem; }
+.heros__chapo p { margin: 0; }
+.heros__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin: 1.75rem 0 0; }
+.heros__lien { font-family: var(--police-affichage); font-weight: 600; font-size: 1.1875rem; letter-spacing: 0.02em; }
+@media (min-width: 56rem) {
+  .heros { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); padding-block: 3.5rem 4rem; }
+}
+
+/* Table de jeu décorative (aria-hidden) : trois cartes posées en éventail et des formes. */
+.heros__table { position: relative; min-height: 17rem; }
+@media (max-width: 35.99rem) { .heros__table { min-height: 13.5rem; } }
+.forme { position: absolute; display: block; }
+.forme--rond { width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--corail); top: 0; right: 6%; }
+.forme--triangle { width: 4rem; height: 3.5rem; background: var(--menthe); clip-path: polygon(50% 0, 100% 100%, 0 100%); bottom: 0.25rem; left: 2%; rotate: -12deg; }
+.forme--carre { width: 2.5rem; height: 2.5rem; background: var(--soleil); border-radius: 6px; top: 12%; left: 30%; rotate: 18deg; }
+.carte-deco {
+  position: absolute; top: 50%; left: 50%;
+  width: min(11rem, 34%); aspect-ratio: 5 / 7;
+  display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 16px; background: var(--fond); color: var(--texte);
+  border: 2px solid var(--deco); box-shadow: 0 22px 40px -22px rgba(10, 4, 30, 0.75);
+  translate: -50% -50%;
+}
+.carte-deco--attaque { --deco: var(--attaque); translate: -142% -44%; rotate: -9deg; }
+.carte-deco--cachee { --deco: var(--sur-violet); translate: -50% -54%; rotate: 0deg; z-index: 1;
+  background: repeating-linear-gradient(45deg, var(--soleil) 0 10px, var(--soleil-clair) 10px 20px); }
+.carte-deco--parade { --deco: var(--parade); translate: 42% -44%; rotate: 9deg; }
+.carte-deco__famille {
+  display: flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.7rem;
+  background: var(--deco); color: var(--sur-carte);
+  font-family: var(--police-affichage); font-weight: 700; font-size: 0.875rem; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.carte-deco--cachee .carte-deco__famille { background: var(--encre); color: var(--soleil); }
+.carte-deco__picto {
+  width: 1rem; height: 1rem; flex: none; background: currentColor;
+  -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+}
+.carte-deco--attaque .carte-deco__picto { -webkit-mask-image: url(/pictos/attaque.svg); mask-image: url(/pictos/attaque.svg); }
+.carte-deco--cachee .carte-deco__picto { -webkit-mask-image: url(/pictos/cachee.svg); mask-image: url(/pictos/cachee.svg); }
+.carte-deco__titre {
+  flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0.6rem;
+  font-family: var(--police-affichage); font-weight: 700; font-size: 1.25rem; line-height: 1.1;
+}
+.carte-deco--cachee .carte-deco__titre { margin: 0.6rem; border-radius: 10px; background: var(--encre); color: var(--soleil); font-size: 3rem; }
+
+/* Bouton « soleil » : l'appel principal sur les bandes violettes. */
+.bouton--soleil { background: var(--soleil); border-color: var(--soleil); color: var(--encre); box-shadow: 0 10px 24px -12px rgba(10, 4, 30, 0.8); }
+.bouton--soleil:hover { box-shadow: 0 0 0 4px var(--violet), 0 0 0 7px var(--soleil); }
+
+/* Choix du profil sur bande corail : pastilles de couleur. */
+.profils-choix { max-width: none; }
+.profils-choix > * { max-width: 54rem; }
+.profils-choix__liste { border-top-color: var(--texte); }
+.profil-choix { justify-content: flex-start; border-bottom-color: var(--texte); }
+.profil-choix__pastille {
+  flex: none; width: 3.25rem; height: 3.25rem; border-radius: 50%;
+  display: inline-grid; place-items: center;
+  font-family: var(--police-affichage); font-weight: 700; font-size: 1.6rem; line-height: 1;
+  background: var(--violet-texte); color: var(--fond);
+}
+.profil-choix:nth-child(4n + 2) .profil-choix__pastille { background: var(--encre); color: var(--soleil); }
+.profil-choix:nth-child(4n + 3) .profil-choix__pastille { background: var(--menthe); color: var(--encre); }
+.profil-choix:nth-child(4n + 4) .profil-choix__pastille { background: var(--corail); color: var(--encre); }
+.profil-choix [data-choisir] { margin-left: auto; }
+
+/* « Comment ça marche » : quatre tuiles, une couleur par temps du jeu. */
+.deroule__liste li { border-radius: 14px; border-top-width: 6px; background: var(--violet-clair); border-top-color: var(--violet-texte); }
+.deroule__liste li:nth-child(1) { background: var(--corail-clair); border-top-color: var(--corail); }
+.deroule__liste li:nth-child(3) { background: var(--soleil-clair); border-top-color: var(--soleil); }
+.deroule__liste li:nth-child(4) { background: var(--menthe-clair); border-top-color: var(--menthe); }
+
+/* En-tête du site : liseré aux quatre couleurs du jeu. */
+.entete { border-bottom: 0; border-image: linear-gradient(90deg, var(--violet-texte) 0 25%, var(--corail) 25% 50%, var(--soleil) 50% 75%, var(--menthe) 75%) 1; border-bottom-style: solid; border-bottom-width: 5px; }
+:root[data-theme="contraste"] .entete { border-image: none; border-bottom-color: var(--bordure); }
+
+/* Module : titre sur bande violette, le duel déborde sur son bord. */
+.module__entete { margin-top: 0.75rem; padding-block: 1.75rem 4.25rem; }
+.module__entete h1 { margin-top: 0; }
+.module__entete .module__resume { max-width: 46rem; margin-bottom: 0; }
+.module__entete + .duel { position: relative; margin-top: -3rem; }
+.duel__contre {
+  padding: 0.35rem 0.9rem; border-radius: 999px;
+  background: var(--soleil); color: var(--encre); letter-spacing: 0.04em;
+  box-shadow: 0 8px 18px -10px rgba(10, 4, 30, 0.7);
+}
+
+/* Fil d'étapes : étape active en violet, étapes faites en menthe. */
+.etapes a { transition: background-color 0.2s ease, translate 0.2s ease; }
+.etapes a[aria-current="step"] { background: var(--violet); border-color: var(--violet); box-shadow: none; }
+.etapes a[aria-current="step"], .etapes a[aria-current="step"] .etapes__num, .etapes a[aria-current="step"] .etapes__etat { color: var(--sur-violet); }
+.etapes a.est-faite:not([aria-current]) { background: var(--menthe-clair); }
+:root[data-theme="contraste"] .etapes a[aria-current="step"] { border-color: var(--primaire); }
+
+/* Relief au survol et à la pression (le mouvement suit les préférences plus bas). */
+.carte-jeu, .mini-carte a, .bouton, button { transition: translate 0.18s ease, scale 0.12s ease, box-shadow 0.18s ease; }
+.catalogue .carte-jeu:hover, .catalogue .carte-jeu:focus-within, .mini-carte a:hover, .mini-carte a:focus-visible { translate: 0 -4px; box-shadow: 0 20px 34px -20px rgba(27, 16, 53, 0.65); }
+.bouton:active, button:active { scale: 0.97; }
+
+/* Célébration : gerbe de boucliers quand une parade est gagnée (décorative). */
+.carte-parade { position: relative; }
+.gerbe { position: absolute; left: 50%; top: 40%; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.gerbe__eclat {
+  position: absolute; left: -0.7rem; top: -0.7rem; width: 1.4rem; height: 1.4rem; background: var(--menthe);
+  -webkit-mask: url(/pictos/parade.svg) center / contain no-repeat; mask: url(/pictos/parade.svg) center / contain no-repeat;
+  opacity: 0;
+}
+.gerbe__eclat--1 { background: var(--soleil); }
+.gerbe__eclat--2 { background: var(--corail); }
+.gerbe__eclat--3 { background: var(--violet-texte); }
+
+/* Mouvement : uniquement si la personne n'a demandé aucune réduction (système ou préférences du site). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: 0.18s ease both vt-sortie; }
+  ::view-transition-new(root) { animation: 0.32s cubic-bezier(0.16, 1, 0.3, 1) both vt-entree; }
+
+  .heros__texte > * { animation: monter 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .heros__texte > :nth-child(2) { animation-delay: 0.06s; }
+  .heros__texte > :nth-child(3) { animation-delay: 0.12s; }
+  .heros__texte > :nth-child(4) { animation-delay: 0.18s; }
+  .carte-deco { animation: distribuer 0.75s cubic-bezier(0.2, 1.3, 0.4, 1) backwards; }
+  .carte-deco--attaque { animation-delay: 0.15s; }
+  .carte-deco--cachee { animation-delay: 0.3s; }
+  .carte-deco--parade { animation-delay: 0.45s; }
+  .forme { animation: surgir 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) 0.6s backwards; }
+  .forme--triangle { animation-delay: 0.7s; }
+  .forme--carre { animation-delay: 0.8s; }
+
+  .reveler-actif [data-apparition] { transition: translate 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease; }
+  .reveler-actif [data-apparition]:not(.est-revele) { opacity: 0; translate: 0 1.75rem; }
+  .profil-choix:nth-child(2) { transition-delay: 0.05s; }
+  .profil-choix:nth-child(3) { transition-delay: 0.1s; }
+  .profil-choix:nth-child(4) { transition-delay: 0.15s; }
+
+  .etape--entree { animation: glisser 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .gerbe__eclat { animation: jaillir 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .mon-jeu:not([hidden]) { animation: monter 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+html[data-animations="reduites"]::view-transition-group(*),
+html[data-animations="reduites"]::view-transition-old(*),
+html[data-animations="reduites"]::view-transition-new(*) { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .carte-deco, .forme, .etapes a, .carte-jeu, .mini-carte a, .bouton, button { transition: none; }
+  .bouton:active, button:active, .catalogue .carte-jeu:hover, .catalogue .carte-jeu:focus-within, .mini-carte a:hover, .mini-carte a:focus-visible { translate: none; scale: none; }
+}
+html[data-animations="reduites"] .bouton:active, html[data-animations="reduites"] button:active,
+html[data-animations="reduites"] .catalogue .carte-jeu:hover, html[data-animations="reduites"] .catalogue .carte-jeu:focus-within,
+html[data-animations="reduites"] .mini-carte a:hover, html[data-animations="reduites"] .mini-carte a:focus-visible { translate: none; scale: none; }
+
+@keyframes monter { from { translate: 0 1.25rem; } }
+@keyframes glisser { from { translate: 0 0.75rem; } }
+@keyframes distribuer { from { translate: -50% 60%; rotate: 0deg; scale: 0.85; } }
+@keyframes surgir { from { scale: 0; } }
+@keyframes jaillir {
+  0% { opacity: 1; transform: rotate(var(--angle)) translateY(0) scale(0.6); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateY(-8.5rem) scale(1.1); }
+}
+@keyframes vt-sortie { to { opacity: 0; } }
+@keyframes vt-entree { from { opacity: 0; translate: 0 0.75rem; } }
 
 /* La « voix » du jeu : police d'affichage pour la marque, la navigation, les actions et les libellés. */
 .marque__texte > span:first-child, .nav-principale a, .lien-preferences, .lien-langue,

@@ -344,5 +344,9 @@
   "nav.menu": "Menu",
   "catalogue.parades": "{n} parries to win",
   "collection.titre": "My deck of parries",
-  "collection.intro": "Each module you pass (at least {seuil} % in the post-test) turns over its parry cards: the right reflexes you have mastered."
+  "collection.intro": "Each module you pass (at least {seuil} % in the post-test) turns over its parry cards: the right reflexes you have mastered.",
+  "accueil.commencer": "Start playing",
+  "accueil.commentCaMarche": "How does it work?",
+  "accueil.decoAttaque": "Fake urgent email",
+  "accueil.decoParade": "I check the link"
 }

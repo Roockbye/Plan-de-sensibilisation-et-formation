@@ -51,6 +51,7 @@ test('aucun défilement horizontal de la page à 320 px de large (WCAG 1.4.10)',
 });
 
 test('chaque page a un titre unique, une langue et un seul h1', async ({ page }) => {
+  test.setTimeout(120_000); // parcourt toutes les pages du site d'affilée
   const titres = new Set<string>();
   for (const chemin of PAGES) {
     await page.goto(chemin);

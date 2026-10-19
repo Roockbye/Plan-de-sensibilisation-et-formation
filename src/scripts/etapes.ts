@@ -56,15 +56,41 @@ if (nav) {
       carte.dataset.etat = gagnee ? 'gagnee' : 'a-gagner';
       if (gagnee && !gagneeAuChargement && !carte.classList.contains('retournee')) {
         carte.classList.add('retournee'); // déclenche le retournement (désactivé si animations réduites)
+        celebrer(carte);
         if (annonce) annonce.textContent = L.gagnees ?? '';
       }
     }
   }
 
+  /** Gerbe de boucliers autour de la carte gagnée (décorative, une seule fois, coupée si animations réduites). */
+  function celebrer(cible: HTMLElement) {
+    const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.animations === 'reduites';
+    if (reduit) return;
+    const gerbe = document.createElement('span');
+    gerbe.className = 'gerbe';
+    gerbe.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 12; i++) {
+      const eclat = document.createElement('span');
+      eclat.className = `gerbe__eclat gerbe__eclat--${i % 4}`;
+      eclat.style.setProperty('--angle', `${i * 30}deg`);
+      gerbe.append(eclat);
+    }
+    cible.append(gerbe);
+    setTimeout(() => gerbe.remove(), 1400);
+  }
+
   function afficher(id: string, focus: boolean) {
     if (!ids.includes(id)) return;
+    const changement = active !== '' && active !== id;
     active = id;
-    for (const section of sections) section.hidden = section.dataset.etape !== id;
+    for (const section of sections) {
+      section.hidden = section.dataset.etape !== id;
+      if (!section.hidden && changement) {
+        section.classList.remove('etape--entree');
+        void section.offsetWidth; // relance l'animation d'entrée
+        section.classList.add('etape--entree');
+      }
+    }
     majEtats();
     if (focus) document.getElementById(`titre-${id}`)?.focus();
   }

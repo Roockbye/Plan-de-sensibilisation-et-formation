@@ -344,5 +344,9 @@
   "nav.menu": "Menu",
   "catalogue.parades": "{n} parades à gagner",
   "collection.titre": "Mon jeu de parades",
-  "collection.intro": "Chaque module validé (au moins {seuil} % au post-test) retourne ses cartes parade : les bons réflexes que vous maîtrisez."
+  "collection.intro": "Chaque module validé (au moins {seuil} % au post-test) retourne ses cartes parade : les bons réflexes que vous maîtrisez.",
+  "accueil.commencer": "Commencer à jouer",
+  "accueil.commentCaMarche": "Comment ça marche ?",
+  "accueil.decoAttaque": "Faux e-mail urgent",
+  "accueil.decoParade": "Je vérifie le lien"
 }

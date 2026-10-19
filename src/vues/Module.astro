@@ -60,24 +60,26 @@ const libellesEtapes = {
   filAriane={[{ libelle: T('nav.modules'), href: d.lien('/modules/') }, falc ? { libelle: meta.code, href: base } : { libelle: meta.code }, ...(falc ? [{ libelle: T('module.falcCourt') }] : [])]}
 >
   <article class="module lecture" data-page-module={meta.id}>
-    <h1>{meta.code} – <span lang={lang(meta.titre)}>{sansCoupure(d.tr(meta.titre))}</span></h1>
+    <header class="module__entete bande bande--violet">
+      <h1>{meta.code} – <span lang={lang(meta.titre)}>{sansCoupure(d.tr(meta.titre))}</span></h1>
 
-    {langCorps && <p class="encart encart--attention">{T('module.nonTraduit')}</p>}
+      {langCorps && <p class="encart encart--attention">{T('module.nonTraduit')}</p>}
 
-    {falc ? (
-      <p class="encart">
-        <strong>{T('module.versionFalc')}.</strong> <a href={base}>{T('module.lienStandard')}</a>
-      </p>
-    ) : (
-      <>
-        <p class="encart suggestion-falc">
-          {T('module.suggestionFalc')} <a href={lienFalc}>{T('module.lienFalc')}</a>
+      {falc ? (
+        <p class="encart">
+          <strong>{T('module.versionFalc')}.</strong> <a href={base}>{T('module.lienStandard')}</a>
         </p>
-        <p><a class="lien-falc" href={lienFalc}>{T('module.lienFalc')}</a></p>
-      </>
-    )}
+      ) : (
+        <>
+          <p class="encart suggestion-falc">
+            {T('module.suggestionFalc')} <a href={lienFalc}>{T('module.lienFalc')}</a>
+          </p>
+          <p><a class="lien-falc" href={lienFalc}>{T('module.lienFalc')}</a></p>
+        </>
+      )}
 
-    <p class="module__resume" lang={lang(meta.resume)}>{d.tr(meta.resume)}</p>
+      <p class="module__resume" lang={lang(meta.resume)}>{d.tr(meta.resume)}</p>
+    </header>
 
     <section class="duel" aria-labelledby="titre-duel">
       <h2 id="titre-duel" class="visuellement-masque">{T('module.duel')}</h2>
