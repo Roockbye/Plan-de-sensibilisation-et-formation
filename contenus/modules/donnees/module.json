@@ -17,7 +17,9 @@
     "utilisateur",
     "manager",
     "nouvel-arrivant",
-    "nomade"
+    "nomade",
+    "bureau-etudes",
+    "prestataire"
   ],
   "obligatoirePour": [
     "nouvel-arrivant"

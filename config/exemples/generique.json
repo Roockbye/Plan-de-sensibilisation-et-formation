@@ -1,0 +1,162 @@
+{
+  "$schema": "../organisation.schema.json",
+  "organisation": {
+    "nom": "Organisation exemple",
+    "nomCourt": "Exemple",
+    "logo": "organisation/logo-exemple.svg",
+    "logoAlt": "Organisation exemple",
+    "secteur": "generique",
+    "taille": "pme",
+    "effectif": 120,
+    "typeSI": "hybride"
+  },
+  "contacts": {
+    "securite": "securite@exemple.org",
+    "signalement": {
+      "fr": "le bouton « Signaler » de la messagerie ou un e-mail à securite@exemple.org",
+      "en": "the “Report” button in your email client or an email to securite@exemple.org"
+    },
+    "telephoneUrgence": "01 23 45 67 89",
+    "accessibilite": "accessibilite@exemple.org"
+  },
+  "charte": {
+    "couleurPrimaire": "#1F4E79",
+    "couleurSecondaire": "#A4461A",
+    "correctionContrasteAuto": true
+  },
+  "langues": {
+    "defaut": "fr",
+    "disponibles": [
+      "fr",
+      "en"
+    ]
+  },
+  "profilsActifs": [
+    "utilisateur",
+    "manager",
+    "admin-it",
+    "nouvel-arrivant",
+    "nomade"
+  ],
+  "risquesPrioritaires": [
+    {
+      "id": "hameconnage",
+      "priorite": 3,
+      "justification": {
+        "fr": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI).",
+        "en": "Leading intrusion vector observed in SMEs (ANSSI cyber threat overview)."
+      }
+    },
+    {
+      "id": "fraude-president",
+      "priorite": 3,
+      "justification": {
+        "fr": "Impact financier direct ; renforcé par les deepfakes vocaux.",
+        "en": "Direct financial impact; amplified by voice deepfakes."
+      }
+    },
+    {
+      "id": "rancongiciel",
+      "priorite": 3,
+      "justification": {
+        "fr": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques.",
+        "en": "Risk of business shutdown; major scenario of the risk assessment."
+      }
+    },
+    {
+      "id": "deepfake",
+      "priorite": 2,
+      "justification": {
+        "fr": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement.",
+        "en": "New threat: executives' voices cloned to back up transfer fraud."
+      }
+    },
+    {
+      "id": "quishing",
+      "priorite": 2,
+      "justification": {
+        "fr": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie.",
+        "en": "New threat: rigged QR codes that bypass email filters."
+      }
+    },
+    {
+      "id": "ia-generative",
+      "priorite": 2,
+      "justification": {
+        "fr": "Usage croissant d'outils d'IA non encadrés (fuite de données).",
+        "en": "Growing use of unmanaged AI tools (data leaks)."
+      }
+    },
+    {
+      "id": "fuite-donnees",
+      "priorite": 2,
+      "justification": {
+        "fr": "Données personnelles clients et salariés (RGPD).",
+        "en": "Personal data of clients and employees (GDPR)."
+      }
+    },
+    {
+      "id": "mots-de-passe",
+      "priorite": 2
+    },
+    {
+      "id": "nomadisme",
+      "priorite": 2
+    },
+    {
+      "id": "privileges-admin",
+      "priorite": 2
+    }
+  ],
+  "reglementations": [
+    "rgpd",
+    "nis2"
+  ],
+  "modulesSectoriels": [],
+  "campagnes": {
+    "debut": "2027-01-04",
+    "onboardingDelaiJours": 7,
+    "simulationPhishing": "trimestrielle",
+    "rappelModules": "trimestrielle",
+    "veilleNouvellesMenaces": "semestrielle",
+    "exerciceCrise": "annuelle",
+    "justifications": {
+      "accueil": {
+        "fr": "Une dizaine d'arrivées par an (alternants, CDD) : le parcours d'accueil couvre la période la plus exposée, avant le premier accès à la messagerie et aux applications.",
+        "en": "Around ten arrivals a year (apprentices, fixed-term contracts): the induction path covers the most exposed period, before first access to email and applications."
+      },
+      "simulation": {
+        "fr": "L'hameçonnage est un risque de priorité haute et la PME n'a pas de filtrage avancé : un exercice par trimestre entretient le réflexe sans lasser 120 personnes.",
+        "en": "Phishing is a high-priority risk and the SME has no advanced filtering: one exercise per quarter keeps the reflex alive without wearing out 120 people."
+      },
+      "rappel": {
+        "fr": "Les connaissances s'érodent en quelques mois : un rappel court par trimestre, calé après chaque simulation, consolide les modules les plus prioritaires.",
+        "en": "Knowledge fades within a few months: a short quarterly refresher, scheduled after each simulation, consolidates the highest-priority modules."
+      },
+      "veille": {
+        "fr": "SI hybride avec services cloud et usage croissant de l'IA générative : les techniques (deepfakes, quishing) évoluent plus vite que le cycle annuel.",
+        "en": "Hybrid IT with cloud services and growing use of generative AI: techniques (deepfakes, quishing) change faster than the yearly cycle."
+      },
+      "crise": {
+        "fr": "NIS2 impose la formation des organes de direction : un exercice annuel suffit à une PME de cette taille pour tester la chaîne d'alerte et les décisions.",
+        "en": "NIS2 requires training for management bodies: a yearly exercise is enough for an SME of this size to test the alert chain and decisions."
+      },
+      "bilan": {
+        "fr": "Le plan est révisé chaque année avec l'analyse de risques, comme le prévoit la démarche d'amélioration continue (RGPD, NIS2).",
+        "en": "The plan is reviewed every year together with the risk analysis, as continuous improvement requires (GDPR, NIS2)."
+      }
+    }
+  },
+  "evaluation": {
+    "seuilReussite": 70,
+    "delaiRetardJours": 30
+  },
+  "accessibilite": {
+    "dateAudit": "2026-09-28",
+    "etatConformite": "partiellement conforme"
+  },
+  "demo": {
+    "graine": 2027,
+    "dateReference": "2027-06-15"
+  }
+}

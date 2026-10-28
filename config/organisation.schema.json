@@ -71,6 +71,19 @@
       ],
       "additionalProperties": false
     },
+    "effectifsProfils": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 500000
+      }
+    },
     "contacts": {
       "type": "object",
       "properties": {
@@ -259,7 +272,9 @@
           "pgssi-s",
           "lpm",
           "rgs",
-          "pci-dss"
+          "pci-dss",
+          "aircyber",
+          "en9100"
         ]
       }
     },

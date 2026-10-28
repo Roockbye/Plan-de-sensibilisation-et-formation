@@ -18,12 +18,16 @@
     "manager",
     "admin-it",
     "nouvel-arrivant",
-    "nomade"
+    "nomade",
+    "bureau-etudes",
+    "prestataire"
   ],
   "obligatoirePour": [
     "utilisateur",
     "admin-it",
-    "nouvel-arrivant"
+    "nouvel-arrivant",
+    "bureau-etudes",
+    "prestataire"
   ],
   "dureeMinutes": 8,
   "niveau": "decouverte",

@@ -205,6 +205,11 @@ export function chargerContenus(config: Config, racine = dossierContenus()): Con
       throw new ErreurConfig(`Configuration : profil actif « ${id} » introuvable dans contenus/profils/. Profils disponibles : ${[...idsProfils].join(', ')}`);
     }
   }
+  for (const id of Object.keys(config.effectifsProfils)) {
+    if (!config.profilsActifs.includes(id)) {
+      throw new ErreurConfig(`Configuration : effectifsProfils cite « ${id} », qui n'est pas un profil actif (profilsActifs).`);
+    }
+  }
   const profils = tousProfils
     .filter((p) => config.profilsActifs.includes(p.id))
     .sort((a, b) => a.ordre - b.ordre);

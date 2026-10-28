@@ -1,0 +1,126 @@
+{
+  "id": "bureau-etudes",
+  "libelle": {
+    "fr": "Ingénieur et technicien de bureau d'études",
+    "en": "Design office engineer and technician"
+  },
+  "accroche": {
+    "fr": "Les plans de vos clients passent entre vos mains : c'est eux que les attaquants veulent.",
+    "en": "Your clients' drawings go through your hands: that is what attackers are after."
+  },
+  "description": {
+    "fr": "Personnes qui conçoivent, calculent et documentent des pièces à partir des données techniques confiées par les clients (plans, maquettes numériques, spécifications). Elles échangent des fichiers lourds tous les jours et travaillent en partie à distance.",
+    "en": "People who design, calculate and document parts from technical data entrusted by clients (drawings, digital mock-ups, specifications). They exchange large files every day and partly work remotely."
+  },
+  "besoins": [
+    {
+      "fr": "Protéger les plans et maquettes des clients, dont l'organisation n'est que dépositaire",
+      "en": "Protect clients' drawings and mock-ups, which the organisation only holds in trust"
+    },
+    {
+      "fr": "Échanger les fichiers uniquement par la plateforme sécurisée imposée par les clients, jamais en pièce jointe",
+      "en": "Exchange files only through the secure platform required by clients, never as email attachments"
+    },
+    {
+      "fr": "Reconnaître les faux liens de partage de fichiers, vecteur de l'incident de compromission de compte",
+      "en": "Recognise fake file-sharing links, the vector of the account compromise incident"
+    },
+    {
+      "fr": "Travailler à distance sans exposer les données techniques",
+      "en": "Work remotely without exposing technical data"
+    },
+    {
+      "fr": "Utiliser les outils d'IA générative sans y copier de données clients",
+      "en": "Use generative AI tools without pasting client data into them"
+    }
+  ],
+  "objectifs": [
+    {
+      "id": "echange-securise",
+      "texte": {
+        "fr": "Transmettre et recevoir des données techniques uniquement par le canal autorisé pour chaque client, et refuser un envoi par un autre canal",
+        "en": "Send and receive technical data only through the channel authorised for each client, and refuse any other channel"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "donnees-techniques"
+      ]
+    },
+    {
+      "id": "classification",
+      "texte": {
+        "fr": "Reconnaître une donnée « Confidentiel client » et appliquer les règles de stockage et de partage associées",
+        "en": "Recognise “Client confidential” data and apply the related storage and sharing rules"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "donnees-techniques",
+        "donnees"
+      ]
+    },
+    {
+      "id": "faux-partage",
+      "texte": {
+        "fr": "Repérer un faux lien de partage de fichiers et le signaler sans cliquer",
+        "en": "Spot a fake file-sharing link and report it without clicking"
+      },
+      "niveau": "analyser",
+      "modules": [
+        "hameconnage"
+      ]
+    },
+    {
+      "id": "mfa",
+      "texte": {
+        "fr": "Activer et utiliser la double authentification sur son compte Microsoft 365",
+        "en": "Enable and use multi-factor authentication on their Microsoft 365 account"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "mots-de-passe"
+      ]
+    },
+    {
+      "id": "ia-donnees",
+      "texte": {
+        "fr": "Évaluer si une demande à un outil d'IA générative expose des données clients",
+        "en": "Assess whether a request to a generative AI tool exposes client data"
+      },
+      "niveau": "evaluer",
+      "modules": [
+        "ia-generative"
+      ]
+    },
+    {
+      "id": "teletravail",
+      "texte": {
+        "fr": "Travailler à distance par le VPN, sans copie locale non chiffrée des plans",
+        "en": "Work remotely through the VPN, without unencrypted local copies of drawings"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "nomadisme"
+      ]
+    }
+  ],
+  "exposition": [
+    "hameconnage",
+    "fuite-donnees",
+    "ia-generative",
+    "nomadisme",
+    "shadow-it"
+  ],
+  "contraintes": [
+    {
+      "fr": "Jalons clients serrés : modules de 10 minutes, à placer hors des pics de charge",
+      "en": "Tight client milestones: 10-minute modules, scheduled outside peak workload"
+    },
+    {
+      "fr": "Deux jours de télétravail par semaine : contenus consultables à distance",
+      "en": "Two remote-working days a week: content available remotely"
+    }
+  ],
+  "dureeAnnuelleCibleMinutes": 90,
+  "partEffectif": 0.6,
+  "ordre": 5
+}

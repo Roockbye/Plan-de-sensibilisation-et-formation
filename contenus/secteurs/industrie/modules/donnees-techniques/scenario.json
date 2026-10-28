@@ -1,0 +1,81 @@
+{
+  "type": "embranchements",
+  "titre": "Mise en situation : le jalon de vendredi",
+  "consigne": "Jeudi, 17 h 40. La livraison d'un dossier de plans au client est prévue demain matin. Choisissez vos réactions. Il n'y a pas de limite de temps.",
+  "depart": "demande",
+  "etapes": [
+    {
+      "id": "demande",
+      "titre": "17 h 40 : un ingénieur indépendant vous écrit",
+      "texte": "Un ingénieur indépendant en renfort sur le projet vous demande d'envoyer les maquettes à jour sur son adresse personnelle : il veut avancer ce soir depuis chez lui.",
+      "choix": [
+        {
+          "id": "envoyer",
+          "texte": "J'envoie les fichiers sur son adresse personnelle, il fait partie du projet",
+          "adapte": false,
+          "retour": "Une adresse personnelle échappe à tout contrôle : les fichiers sortent du périmètre protégé et l'accord de confidentialité n'est plus respecté.",
+          "suivant": "fuite"
+        },
+        {
+          "id": "acces",
+          "texte": "Je lui réponds de se connecter avec son compte nominatif par le VPN, comme prévu pour les intervenants",
+          "adapte": true,
+          "retour": "Bien : il travaille sur les données là où elles sont protégées, avec un accès tracé et temporaire.",
+          "suivant": "lien"
+        }
+      ]
+    },
+    {
+      "id": "fuite",
+      "titre": "Le lendemain : un doute",
+      "texte": "Le client demande par quel canal ses maquettes ont circulé cette semaine. Vous réalisez qu'une copie est sur une messagerie personnelle.",
+      "choix": [
+        {
+          "id": "signaler",
+          "texte": "Je préviens tout de suite le référent sécurité pour qu'il évalue la situation et informe le client si nécessaire",
+          "adapte": true,
+          "retour": "C'est la bonne réaction : le contrat impose souvent de notifier le client dans un délai court. Signaler tôt limite les conséquences.",
+          "suivant": "lien"
+        },
+        {
+          "id": "taire",
+          "texte": "Je demande à l'ingénieur de supprimer le message et je n'en parle pas",
+          "adapte": false,
+          "retour": "Sans signalement, impossible de vérifier que la copie a bien disparu ni de respecter l'obligation d'information du client.",
+          "suivant": "lien"
+        }
+      ]
+    },
+    {
+      "id": "lien",
+      "titre": "18 h 15 : un « partage de fichiers »",
+      "texte": "Un e-mail « Nouveau dossier partagé avec vous : Révision C – plans nacelle » vous invite à vous connecter pour télécharger les fichiers. L'expéditeur ressemble au client, mais le lien mène à un domaine inconnu.",
+      "choix": [
+        {
+          "id": "cliquer",
+          "texte": "Je clique et je saisis mon mot de passe Microsoft 365, j'attends cette révision",
+          "adapte": false,
+          "retour": "C'est exactement le piège d'un faux lien de partage : le compte volé sert ensuite à envoyer du hameçonnage aux clients.",
+          "suivant": "fin-compromis"
+        },
+        {
+          "id": "signaler-lien",
+          "texte": "Je ne clique pas, je signale le message et je vérifie sur la plateforme d'échange habituelle",
+          "adapte": true,
+          "retour": "Parfait : la plateforme officielle est la seule source fiable pour les fichiers du client.",
+          "suivant": "fin-bonne"
+        }
+      ]
+    },
+    {
+      "id": "fin-compromis",
+      "titre": "Conséquence : compte compromis",
+      "texte": "Votre compte envoie pendant la nuit des e-mails piégés à vos contacts clients. Le référent sécurité doit bloquer le compte et prévenir les clients. La double authentification aurait bloqué l'attaquant."
+    },
+    {
+      "id": "fin-bonne",
+      "titre": "Conséquence : livraison sereine",
+      "texte": "Le dossier part vendredi par la plateforme d'échange. Votre signalement permet de bloquer le faux lien pour toute l'équipe avant que quelqu'un d'autre ne clique."
+    }
+  ]
+}

@@ -10,7 +10,7 @@ import { ajusterContraste, ratioContraste, RATIO_AA_TEXTE } from './contraste.ts
 
 export const FREQUENCES = ['mensuelle', 'trimestrielle', 'semestrielle', 'annuelle'] as const;
 export const SECTEURS = ['generique', 'sante', 'industrie', 'finance', 'collectivite', 'education', 'commerce'] as const;
-export const REGLEMENTATIONS = ['rgpd', 'nis2', 'iso27001', 'dora', 'hds', 'pgssi-s', 'lpm', 'rgs', 'pci-dss'] as const;
+export const REGLEMENTATIONS = ['rgpd', 'nis2', 'iso27001', 'dora', 'hds', 'pgssi-s', 'lpm', 'rgs', 'pci-dss', 'aircyber', 'en9100'] as const;
 
 const couleurSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'couleur au format #RRGGBB attendue');
 const courrielSchema = z.email('adresse e-mail invalide');
@@ -31,6 +31,11 @@ export const configSchema = z.strictObject({
     effectif: z.number().int().min(1).max(500000),
     typeSI: z.enum(['cloud', 'sur-site', 'hybride']),
   }),
+  /**
+   * Effectif réel de chaque profil (facultatif). À défaut, l'effectif total est réparti
+   * selon la part par défaut de chaque profil (partEffectif).
+   */
+  effectifsProfils: z.record(identifiantSchema, z.number().int().min(0).max(500000)).default({}),
   contacts: z.strictObject({
     securite: courrielSchema,
     /** Comment signaler un incident ou un message suspect (texte affiché dans les modules). */

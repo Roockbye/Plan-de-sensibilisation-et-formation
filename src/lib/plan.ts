@@ -8,6 +8,7 @@ import type { Parcours } from './parcours.ts';
 import { cleJustificationModule, libelleType, texteAction, type Action } from './calendrier.ts';
 import { tr, type Texte } from './texte.ts';
 import { FORMATS } from './schemas.ts';
+import { repartirEffectif } from './indicateurs.ts';
 import { t as texteInterface, type Cle } from '../i18n/index.ts';
 
 const FREQ: Record<string, string> = { mensuelle: 'mensuelle', trimestrielle: 'trimestrielle', semestrielle: 'semestrielle', annuelle: 'annuelle' };
@@ -29,6 +30,7 @@ const BLOOM: Record<string, string> = { connaitre: 'Connaître', comprendre: 'Co
 const REGLEMENTATION: Record<string, string> = {
   rgpd: 'RGPD', nis2: 'Directive NIS2', iso27001: 'ISO/IEC 27001', dora: 'DORA', hds: 'Hébergement de données de santé (HDS)',
   'pgssi-s': 'PGSSI-S', lpm: 'Loi de programmation militaire (OIV)', rgs: 'RGS', 'pci-dss': 'PCI DSS',
+  aircyber: 'AirCyber (BoostAeroSpace)', en9100: 'EN 9100 (qualité aéronautique)',
 };
 
 /** Échappe une valeur placée dans une cellule de tableau Markdown. */
@@ -56,8 +58,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     return pr ? t(pr.libelle) : id;
   };
   const codeModule = (id: string) => p.modules.find((m) => m.meta.id === id)?.meta.code ?? id;
-  const effectifs = new Map(parcours.map((pc) => [pc.profil.id, pc.profil.partEffectif]));
-  const totalParts = [...effectifs.values()].reduce((s, v) => s + v, 0) || 1;
+  const effectifs = repartirEffectif(org.effectif, parcours, config.effectifsProfils);
   const emergents = p.risques.filter((r) => r.emergent);
   const s: string[] = [];
 
@@ -73,7 +74,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   ]));
 
   s.push('## 1. Finalité du plan');
-  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs de ${org.nom} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par l'équipe sécurité (contact : ${config.contacts.securite}) et révisé chaque année.`);
+  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs de ${org.nom} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par la fonction sécurité – RSSI ou, à défaut, référent sécurité (contact : ${config.contacts.securite}) – et révisé chaque année.`);
   s.push(`Les principes retenus : des parcours différenciés par profil, des formats courts et variés, une accessibilité à toutes et tous (y compris les personnes en situation de handicap), une évaluation systématique avant et après chaque module, et une fréquence de renouvellement adaptée à l'évolution des menaces.`);
 
   s.push('## 2. Prise en compte de l\'analyse de risques');
@@ -100,7 +101,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   s.push('Les contraintes de chaque profil (temps disponible, niveau technique, horaires, situation de handicap) déterminent le format et la durée des actions.');
   for (const pc of parcours) {
     const pr = pc.profil;
-    const n = Math.max(1, Math.round((org.effectif * pr.partEffectif) / totalParts));
+    const n = effectifs.get(pr.id)!;
     s.push(`### ${t(pr.libelle)} (environ ${n} personnes)`);
     s.push(t(pr.description));
     s.push('**Besoins identifiés :**\n\n' + pr.besoins.map((b) => `- ${t(b)}`).join('\n'));
@@ -165,7 +166,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     ['3 – Comportement', 'Simulations d\'hameçonnage successives, signalements réels', 'Taux de clic (↓) et taux de signalement (↑)'],
     ['4 – Résultats', 'Suivi des incidents d\'origine humaine', 'Nombre et gravité des incidents, délai de signalement'],
   ]));
-  s.push(`Un module non terminé ${config.evaluation.delaiRetardJours} jours après son ouverture est considéré « en retard » et fait l'objet d'une relance. Les indicateurs sont suivis par profil dans le tableau de bord RSSI et présentés à la direction lors du bilan annuel. Les résultats individuels restent confidentiels : le pilotage s'appuie sur des indicateurs agrégés.`);
+  s.push(`Un module non terminé ${config.evaluation.delaiRetardJours} jours après son ouverture est considéré « en retard » et fait l'objet d'une relance. Les indicateurs sont suivis par profil dans le tableau de bord sécurité et présentés à la direction lors du bilan annuel. Les résultats individuels restent confidentiels : le pilotage s'appuie sur des indicateurs agrégés.`);
   s.push('### Une évaluation accessible à toutes et tous');
   s.push([
     '- **Mêmes exigences, forme adaptée** : le seuil de réussite est identique pour tous ; l\'aménagement porte sur la forme de l\'évaluation, jamais sur son niveau.',
@@ -204,7 +205,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
 
   s.push('## 10. Pilotage et amélioration continue');
   s.push([
-    `- **Pilotage** : équipe sécurité (${config.contacts.securite}), avec l'appui des managers pour les relances et de la direction pour le portage.`,
+    `- **Pilotage** : fonction sécurité, RSSI ou référent sécurité (${config.contacts.securite}), avec l'appui des managers pour les relances et de la direction pour le portage.`,
     '- **Revue annuelle** : mise à jour de l\'analyse de risques, des profils, des contenus et des fréquences, à partir des indicateurs et des incidents de l\'année.',
     '- **Veille** : intégration des nouvelles menaces (publications de l\'ANSSI, de Cybermalveillance.gouv.fr, retours d\'incidents).',
     `- **Signalement** : ${t(config.contacts.signalement)} ; urgence : ${config.contacts.telephoneUrgence}.`,

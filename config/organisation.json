@@ -1,27 +1,35 @@
 {
   "$schema": "./organisation.schema.json",
   "organisation": {
-    "nom": "Organisation exemple",
-    "nomCourt": "Exemple",
-    "logo": "organisation/logo-exemple.svg",
-    "logoAlt": "Organisation exemple",
-    "secteur": "generique",
+    "nom": "AéroStar",
+    "nomCourt": "AéroStar",
+    "logo": "organisation/logo-aerostar.svg",
+    "logoAlt": "AéroStar",
+    "secteur": "industrie",
     "taille": "pme",
     "effectif": 120,
     "typeSI": "hybride"
   },
+  "effectifsProfils": {
+    "bureau-etudes": 72,
+    "utilisateur": 26,
+    "manager": 8,
+    "admin-it": 4,
+    "nouvel-arrivant": 10,
+    "prestataire": 4
+  },
   "contacts": {
-    "securite": "securite@exemple.org",
+    "securite": "securite@aerostar.example",
     "signalement": {
-      "fr": "le bouton « Signaler » de la messagerie ou un e-mail à securite@exemple.org",
-      "en": "the “Report” button in your email client or an email to securite@exemple.org"
+      "fr": "le bouton « Signaler » d'Outlook ou un e-mail au référent sécurité (securite@aerostar.example)",
+      "en": "the “Report” button in Outlook or an email to the security officer (securite@aerostar.example)"
     },
-    "telephoneUrgence": "01 23 45 67 89",
-    "accessibilite": "accessibilite@exemple.org"
+    "telephoneUrgence": "05 36 49 12 34",
+    "accessibilite": "accessibilite@aerostar.example"
   },
   "charte": {
-    "couleurPrimaire": "#1F4E79",
-    "couleurSecondaire": "#A4461A",
+    "couleurPrimaire": "#0B3C6E",
+    "couleurSecondaire": "#B4470C",
     "correctionContrasteAuto": true
   },
   "langues": {
@@ -32,118 +40,142 @@
     ]
   },
   "profilsActifs": [
+    "bureau-etudes",
     "utilisateur",
     "manager",
     "admin-it",
     "nouvel-arrivant",
-    "nomade"
+    "prestataire"
   ],
   "risquesPrioritaires": [
     {
       "id": "hameconnage",
       "priorite": 3,
       "justification": {
-        "fr": "Premier vecteur d'intrusion observé dans les PME (panorama de la cybermenace ANSSI).",
-        "en": "Leading intrusion vector observed in SMEs (ANSSI cyber threat overview)."
+        "fr": "Incident de mars 2026 : un faux lien de partage de fichiers a permis de voler un compte Microsoft 365, utilisé deux jours pour hameçonner des clients.",
+        "en": "March 2026 incident: a fake file-sharing link led to a stolen Microsoft 365 account, used for two days to phish clients."
       }
     },
     {
-      "id": "fraude-president",
+      "id": "fuite-donnees",
       "priorite": 3,
       "justification": {
-        "fr": "Impact financier direct ; renforcé par les deepfakes vocaux.",
-        "en": "Direct financial impact; amplified by voice deepfakes."
+        "fr": "Plans et maquettes clients : une fuite peut coûter un client, alors que deux clients représentent 75 % du chiffre d'affaires.",
+        "en": "Clients' drawings and mock-ups: a leak can cost a client, while two clients account for 75% of revenue."
       }
     },
     {
       "id": "rancongiciel",
       "priorite": 3,
       "justification": {
-        "fr": "Risque d'arrêt d'activité ; scénario majeur de l'analyse de risques.",
-        "en": "Risk of business shutdown; major scenario of the risk assessment."
+        "fr": "Scénario redouté de l'analyse de risques : compte volé, prise de contrôle de l'Active Directory, chiffrement du serveur du bureau d'études (environ 55 k€ par jour d'arrêt).",
+        "en": "Feared scenario of the risk analysis: stolen account, takeover of Active Directory, encryption of the design office server (about €55k per day of downtime)."
       }
     },
     {
-      "id": "deepfake",
-      "priorite": 2,
+      "id": "mots-de-passe",
+      "priorite": 3,
       "justification": {
-        "fr": "Nouvelle menace : voix de dirigeants clonées pour appuyer les fraudes au virement.",
-        "en": "New threat: executives' voices cloned to back up transfer fraud."
+        "fr": "Pas de double authentification sur site, mots de passe par défaut dans l'Active Directory ; l'assureur exige la double authentification généralisée au renouvellement de 2027.",
+        "en": "No multi-factor authentication on site, default passwords in Active Directory; the insurer requires MFA everywhere at the 2027 renewal."
       }
     },
     {
-      "id": "quishing",
-      "priorite": 2,
+      "id": "privileges-admin",
+      "priorite": 3,
       "justification": {
-        "fr": "Nouvelle menace : QR codes piégés qui contournent les filtres de messagerie.",
-        "en": "New threat: rigged QR codes that bypass email filters."
+        "fr": "Comptes administrateurs partagés, dont celui de l'infogérant ; point bloquant pour le niveau AirCyber Bronze.",
+        "en": "Shared administrator accounts, including the managed IT provider's; a blocking point for AirCyber Bronze."
       }
     },
     {
       "id": "ia-generative",
       "priorite": 2,
       "justification": {
-        "fr": "Usage croissant d'outils d'IA non encadrés (fuite de données).",
-        "en": "Growing use of unmanaged AI tools (data leaks)."
+        "fr": "Risque de copier des spécifications clients dans des outils d'IA publics : fuite de données confidentielles.",
+        "en": "Risk of pasting client specifications into public AI tools: leak of confidential data."
       }
     },
     {
-      "id": "fuite-donnees",
+      "id": "shadow-it",
       "priorite": 2,
       "justification": {
-        "fr": "Données personnelles clients et salariés (RGPD).",
-        "en": "Personal data of clients and employees (GDPR)."
+        "fr": "Fichiers CAO lourds : tentation des services de transfert gratuits ; un client envoie encore des archives par e-mail.",
+        "en": "Large CAD files: temptation to use free transfer services; one client still sends archives by email."
       }
-    },
-    {
-      "id": "mots-de-passe",
-      "priorite": 2
     },
     {
       "id": "nomadisme",
-      "priorite": 2
+      "priorite": 2,
+      "justification": {
+        "fr": "Deux jours de télétravail par semaine pour les ingénieurs ; accès distants des indépendants par VPN.",
+        "en": "Two remote-working days a week for engineers; freelancers' remote access through VPN."
+      }
     },
     {
-      "id": "privileges-admin",
-      "priorite": 2
+      "id": "fraude-president",
+      "priorite": 2,
+      "justification": {
+        "fr": "Paiements fournisseurs et paie : fraude au virement possible, d'autant plus crédible avec les deepfakes.",
+        "en": "Supplier payments and payroll: transfer fraud is possible, all the more convincing with deepfakes."
+      }
+    },
+    {
+      "id": "deepfake",
+      "priorite": 2,
+      "justification": {
+        "fr": "Nouvelle menace : voix clonée d'un dirigeant ou d'un client pour obtenir un virement ou des fichiers.",
+        "en": "New threat: cloned voice of an executive or a client to obtain a transfer or files."
+      }
+    },
+    {
+      "id": "quishing",
+      "priorite": 1,
+      "justification": {
+        "fr": "Nouvelle menace, exposition plus faible : QR codes piégés dans des courriers ou sur les salons professionnels.",
+        "en": "New threat, lower exposure: rigged QR codes in letters or at trade shows."
+      }
     }
   ],
   "reglementations": [
     "rgpd",
-    "nis2"
+    "aircyber",
+    "en9100"
   ],
-  "modulesSectoriels": [],
+  "modulesSectoriels": [
+    "industrie"
+  ],
   "campagnes": {
     "debut": "2027-01-04",
-    "onboardingDelaiJours": 7,
+    "onboardingDelaiJours": 5,
     "simulationPhishing": "trimestrielle",
     "rappelModules": "trimestrielle",
     "veilleNouvellesMenaces": "semestrielle",
     "exerciceCrise": "annuelle",
     "justifications": {
       "accueil": {
-        "fr": "Une dizaine d'arrivées par an (alternants, CDD) : le parcours d'accueil couvre la période la plus exposée, avant le premier accès à la messagerie et aux applications.",
-        "en": "Around ten arrivals a year (apprentices, fixed-term contracts): the induction path covers the most exposed period, before first access to email and applications."
+        "fr": "Alternants, CDD et ingénieurs indépendants arrivent au fil des pics de charge : le parcours d'accueil est suivi avant l'ouverture des accès aux partages clients.",
+        "en": "Apprentices, fixed-term staff and freelance engineers arrive with workload peaks: the induction path is completed before access to client shares is opened."
       },
       "simulation": {
-        "fr": "L'hameçonnage est un risque de priorité haute et la PME n'a pas de filtrage avancé : un exercice par trimestre entretient le réflexe sans lasser 120 personnes.",
-        "en": "Phishing is a high-priority risk and the SME has no advanced filtering: one exercise per quarter keeps the reflex alive without wearing out 120 people."
+        "fr": "L'incident de mars 2026 est venu d'un faux lien de partage : un exercice par trimestre, avec des leurres de partage de fichiers, entretient le réflexe sans peser sur les jalons clients.",
+        "en": "The March 2026 incident came from a fake sharing link: one exercise per quarter, using file-sharing lures, keeps the reflex alive without weighing on client milestones."
       },
       "rappel": {
-        "fr": "Les connaissances s'érodent en quelques mois : un rappel court par trimestre, calé après chaque simulation, consolide les modules les plus prioritaires.",
-        "en": "Knowledge fades within a few months: a short quarterly refresher, scheduled after each simulation, consolidates the highest-priority modules."
+        "fr": "Aucune formation depuis trois ans : rappels courts chaque trimestre la première année, après chaque simulation, puis ajustement au bilan.",
+        "en": "No training for three years: short refreshers every quarter in the first year, after each simulation, then adjusted at the review."
       },
       "veille": {
-        "fr": "SI hybride avec services cloud et usage croissant de l'IA générative : les techniques (deepfakes, quishing) évoluent plus vite que le cycle annuel.",
-        "en": "Hybrid IT with cloud services and growing use of generative AI: techniques (deepfakes, quishing) change faster than the yearly cycle."
+        "fr": "Faux partages, deepfakes et IA générative évoluent vite, et la transposition française de NIS2 est encore en discussion : revue des contenus tous les six mois.",
+        "en": "Fake shares, deepfakes and generative AI change quickly, and the French transposition of NIS2 is still being debated: content review every six months."
       },
       "crise": {
-        "fr": "NIS2 impose la formation des organes de direction : un exercice annuel suffit à une PME de cette taille pour tester la chaîne d'alerte et les décisions.",
-        "en": "NIS2 requires training for management bodies: a yearly exercise is enough for an SME of this size to test the alert chain and decisions."
+        "fr": "Aucune cellule de crise aujourd'hui : exercice annuel sur le scénario du rançongiciel (compromission de l'Active Directory, chiffrement du serveur du bureau d'études) avec la direction et l'équipe informatique.",
+        "en": "No crisis unit today: a yearly exercise on the ransomware scenario (Active Directory compromise, encryption of the design office server) with management and the IT team."
       },
       "bilan": {
-        "fr": "Le plan est révisé chaque année avec l'analyse de risques, comme le prévoit la démarche d'amélioration continue (RGPD, NIS2).",
-        "en": "The plan is reviewed every year together with the risk analysis, as continuous improvement requires (GDPR, NIS2)."
+        "fr": "Bilan annuel aligné sur la revue de direction EN 9100 et sur l'évaluation AirCyber (Bronze fin 2027, puis Silver).",
+        "en": "Yearly review aligned with the EN 9100 management review and the AirCyber assessment (Bronze by end of 2027, then Silver)."
       }
     }
   },

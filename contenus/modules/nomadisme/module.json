@@ -18,7 +18,8 @@
     "nomade",
     "manager",
     "utilisateur",
-    "admin-it"
+    "admin-it",
+    "bureau-etudes"
   ],
   "obligatoirePour": [
     "nomade"

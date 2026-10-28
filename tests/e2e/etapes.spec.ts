@@ -70,6 +70,6 @@ test('la collection de « Ma progression » retourne les parades d\'un module va
   await page.locator('#posttest [data-valider]').click();
   await page.goto('/ma-progression/');
   await expect(page.locator('[data-collection-module="incident"] [data-carte-collection]')).toHaveAttribute('data-etat', 'gagnee');
-  await expect(page.locator('[data-collection-compteur]')).toHaveText('3 parades gagnées sur 24');
+  await expect(page.locator('[data-collection-compteur]')).toHaveText('3 parades gagnées sur 27');
   await auditerAccessibilite(page, 'collection de parades');
 });

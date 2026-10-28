@@ -97,10 +97,13 @@ function joursEntre(a: string, b: string): number {
   return Math.round((Date.parse(b) - Date.parse(a)) / 86400000);
 }
 
-/** Répartit l'effectif entre les profils actifs selon leur part (normalisée). */
-export function repartirEffectif(effectif: number, parcours: Parcours[]): Map<string, number> {
+/**
+ * Effectif de chaque profil actif : valeur réelle de la configuration si elle existe,
+ * sinon répartition de l'effectif total selon la part par défaut des profils (normalisée).
+ */
+export function repartirEffectif(effectif: number, parcours: Parcours[], reels: Record<string, number> = {}): Map<string, number> {
   const total = parcours.reduce((s, p) => s + p.profil.partEffectif, 0) || 1;
-  return new Map(parcours.map((p) => [p.profil.id, Math.max(1, Math.round((effectif * p.profil.partEffectif) / total))]));
+  return new Map(parcours.map((p) => [p.profil.id, reels[p.profil.id] ?? Math.max(1, Math.round((effectif * p.profil.partEffectif) / total))]));
 }
 
 export function genererTableauDeBord(config: Config, parcours: Parcours[], calendrier: Action[], aujourdhui = new Date().toISOString().slice(0, 10)): TableauDeBord {
@@ -108,7 +111,7 @@ export function genererTableauDeBord(config: Config, parcours: Parcours[], calen
   const dateReference = config.demo.dateReference ?? aujourdhui;
   const { debut } = config.campagnes;
   const joursDepuisDebut = Math.max(0, joursEntre(debut, dateReference));
-  const effectifs = repartirEffectif(config.organisation.effectif, parcours);
+  const effectifs = repartirEffectif(config.organisation.effectif, parcours, config.effectifsProfils);
   const seuil = config.evaluation.seuilReussite;
 
   const personnes: Personne[] = [];

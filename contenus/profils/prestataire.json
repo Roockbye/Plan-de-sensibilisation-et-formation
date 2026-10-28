@@ -1,0 +1,78 @@
+{
+  "id": "prestataire",
+  "libelle": {
+    "fr": "Prestataire et intervenant externe",
+    "en": "Contractor and external worker"
+  },
+  "accroche": {
+    "fr": "Vous accédez au système d'information de l'extérieur : vos accès sont une porte d'entrée.",
+    "en": "You access the information system from outside: your access is a way in."
+  },
+  "description": {
+    "fr": "Ingénieurs indépendants en renfort, infogérant et autres intervenants qui reçoivent un accès temporaire au réseau, aux serveurs ou aux données techniques.",
+    "en": "Freelance engineers brought in for peak workloads, the managed IT provider and other contractors who receive temporary access to the network, servers or technical data."
+  },
+  "besoins": [
+    {
+      "fr": "Connaître les règles de confidentialité qui s'appliquent aux données des clients (accords de confidentialité)",
+      "en": "Know the confidentiality rules that apply to client data (non-disclosure agreements)"
+    },
+    {
+      "fr": "Utiliser un compte nominatif, jamais un compte partagé, avec double authentification",
+      "en": "Use a named account, never a shared one, with multi-factor authentication"
+    },
+    {
+      "fr": "Savoir à qui signaler un incident et dans quel délai",
+      "en": "Know whom to report an incident to, and how quickly"
+    }
+  ],
+  "objectifs": [
+    {
+      "id": "compte-nominatif",
+      "texte": {
+        "fr": "Utiliser uniquement son compte nominatif, protégé par la double authentification, et ne jamais le partager",
+        "en": "Use only their named account, protected by multi-factor authentication, and never share it"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "mots-de-passe"
+      ]
+    },
+    {
+      "id": "donnees-clients",
+      "texte": {
+        "fr": "Appliquer les règles d'échange et de stockage des données techniques des clients",
+        "en": "Apply the exchange and storage rules for clients' technical data"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "donnees-techniques"
+      ]
+    },
+    {
+      "id": "signaler",
+      "texte": {
+        "fr": "Signaler immédiatement un incident au référent sécurité, par le canal prévu",
+        "en": "Report an incident immediately to the security officer, through the agreed channel"
+      },
+      "niveau": "appliquer",
+      "modules": [
+        "incident"
+      ]
+    }
+  ],
+  "exposition": [
+    "privileges-admin",
+    "fuite-donnees",
+    "mots-de-passe"
+  ],
+  "contraintes": [
+    {
+      "fr": "Présence courte et variable : parcours resserré, obligatoire avant l'ouverture des accès",
+      "en": "Short, variable presence: compact path, compulsory before access is granted"
+    }
+  ],
+  "dureeAnnuelleCibleMinutes": 30,
+  "partEffectif": 0.04,
+  "ordre": 70
+}
