@@ -166,6 +166,14 @@ Principal : aplat couleur de l'organisation, texte condensé. Secondaire : conto
 
 **Carte de jeu** (`CarteJeu.astro`) : en-tête de famille (libellé + pictogramme), corps (titre condensé, texte, pied). Variantes : attaque (bande hachurée), parade, cachée (pointillés, dos de carte). Mini-cartes du parcours à l'accueil. Encarts : cadre fin, sans bordure gauche épaisse.
 
+### Support de présentation
+
+Diapositives (`Presentation.astro`) : grande carte arrondie, bandeau supérieur de 10 px qui alterne les quatre couleurs, numéro « n / N » en haut à droite, titre condensé jusqu'à 3 rem. Fonds teintés pour la diapositive de titre (violet clair), les parades (menthe clair) et la conclusion « signalez » (soleil clair). Questions pour la salle : choix en liste, réponse dans un `details` cerclé de vert parade. Barre de commandes au-dessus (précédente, compteur, suivante, plein écran, tout afficher) ; en plein écran, le texte grossit encore. À l'impression : une diapositive par page.
+
+### Avis de fin de module
+
+Bloc teinté violet clair avec bandeau violet, sous le post-test : trois `fieldset` aux choix Oui / En partie / Non en ligne, bouton secondaire, confirmation écrite, rappel du contact pour un aménagement.
+
 ### Inputs / Fields
 
 Boutons radio et cases à cocher natifs, agrandis (1,3–1,4 rem), `accent-color` de l'organisation ; chaque question est un `fieldset` / `legend`.

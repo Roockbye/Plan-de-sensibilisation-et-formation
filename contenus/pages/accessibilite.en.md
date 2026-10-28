@@ -19,6 +19,8 @@ The platform is **{{accessibilite.etatConformite}}** with the French accessibili
 - Display preferences: text size up to 200 %, fonts for low vision or dyslexia, increased text spacing, dark theme, high contrast, reduced motion.
 - Text transcript and captions for any audio or video content.
 - Dashboard charts always accompanied by a data table.
+- **Presentation slides** for every module, for group sessions: keyboard-operable, counter announced to screen readers, readable and printable without JavaScript.
+- Adapted assessments: easy-read quizzes, no time limit, retakes without penalty; end-of-module feedback on whether it suited your needs; alternative sitting (oral or assisted) on request.
 - Automated tests (axe-core) of every page on each code change.
 
 ## Non-accessible content

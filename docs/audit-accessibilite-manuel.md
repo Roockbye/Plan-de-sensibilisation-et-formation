@@ -24,6 +24,7 @@ Après l'audit, reportez les résultats dans le tableau de synthèse (§ 7), pui
 | P8 | Calendrier | `/calendrier/` |
 | P9 | Préférences d'affichage | `/preferences/` |
 | P10 | Déclaration d'accessibilité | `/accessibilite/` |
+| P11 | Support de présentation d'un module | `/modules/hameconnage/presentation/` |
 
 ### Environnements de test
 
@@ -68,6 +69,8 @@ Débranchez la souris ou n'y touchez pas.
 | C10 | Lecteur audio : lecture, pause et avance au clavier ; la transcription se déplie avec Entrée | 4.1, 4.3 | P4 | Contrôles utilisables |
 | C11 | Préférences : changement avec les flèches, effet immédiat | 7.1 | P9 | Message « Préférences enregistrées » |
 | C12 | Tableaux défilants : atteignables au Tab et défilables avec les flèches | 12.13 | P7, P8 | Défilement horizontal possible |
+| C13 | Support de présentation : « Diapositive suivante », flèches gauche/droite, Début, Fin ; « Voir la réponse » se déplie avec Entrée ; plein écran quitté avec Échap | 7.1, 12.11 | P11 | Toutes les diapositives atteintes, focus jamais perdu |
+| C14 | Avis de fin de module : répondre et enregistrer au clavier | 7.1, 11.5 | P3 | Message « Merci… » affiché |
 
 ## 3. Lecteur d'écran (NVDA puis VoiceOver)
 
@@ -88,6 +91,8 @@ Débranchez la souris ou n'y touchez pas.
 | L13 | Statuts (« Validé », « En cours ») lus en texte | 3.1 | P2, P6 | Aucun statut transmis par la couleur seule |
 | L14 | Les liens externes (« Pour aller plus loin ») sont signalés | 6.1 | P3 | « (site externe) » |
 | L15 | Les messages de confirmation (préférences, effacement) sont annoncés | 7.5 | P6, P9 | Lecture automatique |
+| L16 | Support de présentation : le compteur « Diapositive n sur N » est annoncé et le titre de la nouvelle diapositive est lu | 7.5, 9.1 | P11 | Annonce à chaque changement |
+| L17 | Avis de fin de module : chaque question est lue avec son intitulé (`legend`) ; la confirmation est annoncée | 11.5, 7.5 | P3 | Question lue avant les choix |
 
 ## 4. Affichage et adaptation
 
@@ -131,11 +136,11 @@ Pour chaque défaut, notez :
 
 | Section | Vérifications | Conformes | Non conformes | Non applicables |
 | --- | --- | --- | --- | --- |
-| Clavier (C1–C12) | 12 | | | |
-| Lecteur d'écran (L1–L15) | 15 | | | |
+| Clavier (C1–C14) | 14 | | | |
+| Lecteur d'écran (L1–L17) | 17 | | | |
 | Affichage (A1–A7) | 7 | | | |
 | Contenus (E1–E6) | 6 | | | |
-| **Total** | **40** | | | |
+| **Total** | **44** | | | |
 
 **Conclusion** (à reporter dans la déclaration) :
 - **totalement conforme** : aucun défaut ;
