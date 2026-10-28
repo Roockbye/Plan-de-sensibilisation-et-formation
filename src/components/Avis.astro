@@ -1,0 +1,80 @@
+---
+/**
+ * Avis de fin de module (niveau 1 du modèle de Kirkpatrick) : utilité, clarté, adaptation aux besoins.
+ * Facultatif, sans limite de temps, enregistré uniquement dans le navigateur (aucune collecte).
+ * Ce n'est pas un <form> : il ne s'envoie nulle part. Sans JavaScript, il reste masqué.
+ */
+import { traducteur } from '../i18n/index.ts';
+import type { Cle } from '../i18n/index.ts';
+import type { Langue } from '../lib/texte.ts';
+
+interface Props { module: string; langue: Langue; contact: string }
+const { module, langue, contact } = Astro.props;
+const T = traducteur(langue);
+const questions = ['utile', 'clair', 'adapte'] as const;
+const reponses = [['oui', 'avis.oui'], ['en-partie', 'avis.enPartie'], ['non', 'avis.non']] as const;
+const libelles = { merci: T('avis.merci'), manquant: T('avis.manquant'), indisponible: T('avis.indisponible') };
+---
+<section class="avis" aria-labelledby={`titre-avis-${module}`} data-avis={module} data-libelles={JSON.stringify(libelles)} hidden>
+  <h3 id={`titre-avis-${module}`}>{T('avis.titre')}</h3>
+  <p>{T('avis.intro')}</p>
+  {questions.map((q) => (
+    <fieldset class="avis__question" data-question={q}>
+      <legend>{T(`avis.${q}` as Cle)}</legend>
+      <div class="avis__choix">
+        {reponses.map(([valeur, cle]) => (
+          <span class="avis__option">
+            <input type="radio" name={`avis-${module}-${q}`} id={`avis-${module}-${q}-${valeur}`} value={valeur} />
+            <label for={`avis-${module}-${q}-${valeur}`}>{T(cle)}</label>
+          </span>
+        ))}
+      </div>
+    </fieldset>
+  ))}
+  <p class="groupe-boutons">
+    <button type="button" class="bouton--secondaire" data-avis-enregistrer>{T('avis.envoyer')}</button>
+  </p>
+  <p class="avis__statut" data-avis-statut role="status"></p>
+  <p class="avis__amenagement">{T('avis.amenagement', { contact })}</p>
+</section>
+
+<script>
+  const CLE = 'ssi:avis';
+  type Avis = Record<string, { utile?: string; clair?: string; adapte?: string; date: string }>;
+  const lire = (): Avis => {
+    try { return JSON.parse(localStorage.getItem(CLE) ?? '{}') as Avis; } catch { return {}; }
+  };
+
+  for (const bloc of document.querySelectorAll<HTMLElement>('[data-avis]')) {
+    const module = bloc.dataset.avis!;
+    const L = JSON.parse(bloc.dataset.libelles ?? '{}') as Record<string, string>;
+    const statut = bloc.querySelector<HTMLElement>('[data-avis-statut]')!;
+    const questions = [...bloc.querySelectorAll<HTMLFieldSetElement>('[data-question]')];
+    const existant = lire()[module];
+    if (existant) {
+      for (const q of questions) {
+        const v = existant[q.dataset.question as 'utile'];
+        const input = v ? q.querySelector<HTMLInputElement>(`input[value="${CSS.escape(v)}"]`) : null;
+        if (input) input.checked = true;
+      }
+    }
+    bloc.hidden = false;
+    bloc.querySelector('[data-avis-enregistrer]')!.addEventListener('click', () => {
+      const reponses = Object.fromEntries(
+        questions.map((q) => [q.dataset.question!, q.querySelector<HTMLInputElement>('input:checked')?.value]).filter(([, v]) => v),
+      );
+      if (Object.keys(reponses).length === 0) {
+        statut.textContent = L.manquant ?? '';
+        return;
+      }
+      try {
+        const tous = lire();
+        tous[module] = { ...reponses, date: new Date().toISOString().slice(0, 10) };
+        localStorage.setItem(CLE, JSON.stringify(tous));
+        statut.textContent = L.merci ?? '';
+      } catch {
+        statut.textContent = L.indisponible ?? '';
+      }
+    });
+  }
+</script>

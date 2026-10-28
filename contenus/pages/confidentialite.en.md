@@ -2,7 +2,7 @@
 
 This platform is a **demonstration**: it collects no personal data and uses no cookies, no analytics tool and no external resources.
 
-- Your **quiz answers**, **results** and **display preferences** are stored only in your browser's local storage (`localStorage`). They never leave your device and you can delete them at any time from the “My progress” page.
+- Your **quiz answers**, **results**, **end-of-module feedback** and **display preferences** are stored only in your browser's local storage (`localStorage`). They never leave your device and you can delete them at any time from the “My progress” page.
 - **Phishing simulations** are scenarios shown within the platform: **no real email, text message or other message is sent**, and the links shown are never clickable.
 - The **dashboard** shows an **entirely fictitious** population, generated automatically from the headcount set in the configuration.
 

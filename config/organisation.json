@@ -119,7 +119,33 @@
     "simulationPhishing": "trimestrielle",
     "rappelModules": "trimestrielle",
     "veilleNouvellesMenaces": "semestrielle",
-    "exerciceCrise": "annuelle"
+    "exerciceCrise": "annuelle",
+    "justifications": {
+      "accueil": {
+        "fr": "Une dizaine d'arrivées par an (alternants, CDD) : le parcours d'accueil couvre la période la plus exposée, avant le premier accès à la messagerie et aux applications.",
+        "en": "Around ten arrivals a year (apprentices, fixed-term contracts): the induction path covers the most exposed period, before first access to email and applications."
+      },
+      "simulation": {
+        "fr": "L'hameçonnage est un risque de priorité haute et la PME n'a pas de filtrage avancé : un exercice par trimestre entretient le réflexe sans lasser 120 personnes.",
+        "en": "Phishing is a high-priority risk and the SME has no advanced filtering: one exercise per quarter keeps the reflex alive without wearing out 120 people."
+      },
+      "rappel": {
+        "fr": "Les connaissances s'érodent en quelques mois : un rappel court par trimestre, calé après chaque simulation, consolide les modules les plus prioritaires.",
+        "en": "Knowledge fades within a few months: a short quarterly refresher, scheduled after each simulation, consolidates the highest-priority modules."
+      },
+      "veille": {
+        "fr": "SI hybride avec services cloud et usage croissant de l'IA générative : les techniques (deepfakes, quishing) évoluent plus vite que le cycle annuel.",
+        "en": "Hybrid IT with cloud services and growing use of generative AI: techniques (deepfakes, quishing) change faster than the yearly cycle."
+      },
+      "crise": {
+        "fr": "NIS2 impose la formation des organes de direction : un exercice annuel suffit à une PME de cette taille pour tester la chaîne d'alerte et les décisions.",
+        "en": "NIS2 requires training for management bodies: a yearly exercise is enough for an SME of this size to test the alert chain and decisions."
+      },
+      "bilan": {
+        "fr": "Le plan est révisé chaque année avec l'analyse de risques, comme le prévoit la démarche d'amélioration continue (RGPD, NIS2).",
+        "en": "The plan is reviewed every year together with the risk analysis, as continuous improvement requires (GDPR, NIS2)."
+      }
+    }
   },
   "evaluation": {
     "seuilReussite": 70,

@@ -52,10 +52,11 @@ npm run dev        # http://localhost:4321
 | **8 modules** | Hameçonnage et quishing, mots de passe et MFA, fraude au président et deepfakes, IA générative, protection des données, nomadisme, réaction à incident, hygiène d'administration |
 | **Parcours calculés** | Ordre déterminé par l'analyse de risques de la configuration : socle obligatoire, puis modules prioritaires classés par score, avec la justification visible (« Pourquoi ce module ? ») |
 | **Moyens variés** | Pré-test, contenu court, simulation de boîte de réception, scénarios à embranchements, post-test, fiches « À retenir », audio sous-titré et transcrit |
+| **Support de présentation** | Diaporama accessible de chaque module pour les séances collectives : une diapositive à la fois, clavier, compteur annoncé, plein écran, questions pour la salle ; lisible et imprimable sans JavaScript |
 | **Version FALC** | Chaque module et chaque question de quiz existent en version facile à lire et à comprendre |
-| **Évaluation** | Pré-test / post-test, seuil de réussite configurable, progression individuelle (stockée dans le navigateur uniquement) |
+| **Évaluation** | Pré-test / post-test, seuil de réussite configurable, avis de fin de module (utilité, clarté, adaptation aux besoins), progression individuelle (stockée dans le navigateur uniquement) |
 | **Tableau de bord RSSI** | Complétion et scores par profil, simulations d'hameçonnage, modules en retard, prochaines campagnes (population fictive reproductible) |
-| **Calendrier annuel** | Généré depuis les fréquences de la configuration, exportable en `.ics` |
+| **Calendrier annuel** | Généré depuis les fréquences de la configuration, avec leur justification pour l'organisation et les renouvellements déclenchés par un événement ; exportable en `.ics` |
 | **Plan exporté** | Document complet (profils, objectifs, risques, modules, moyens, accessibilité, évaluation, fréquences), en Markdown et en PDF |
 
 | Parcours d'un profil | Simulation d'hameçonnage |
@@ -72,12 +73,12 @@ npm run dev        # http://localhost:4321
 
 | Critère | Où le constater dans la plateforme |
 | --- | --- |
-| 1. Profils et besoins identifiés | Page **Profils et parcours** ; section 3 du plan exporté |
+| 1. Profils et besoins identifiés | Page **Profils et parcours** ; section 3 du plan exporté (dont la méthode d'identification des besoins) |
 | 2. Objectifs pédagogiques par profil | Tableau des objectifs de chaque profil (niveau visé, modules qui l'évaluent) ; section 4 du plan |
 | 3. Analyse de risques et nouvelles technologies | `risquesPrioritaires` de la configuration → ordre des parcours et « Pourquoi ce module ? » ; menaces émergentes signalées (IA générative, deepfakes, quishing) ; section 2 du plan |
-| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 et 7 du plan |
-| 5. Évaluation définie et accessible | Pré-test / post-test, page **Ma progression**, **Tableau de bord** par profil (graphiques doublés de tableaux) ; section 8 du plan |
-| 6. Fréquence de renouvellement | Page **Calendrier** (fréquences par action et par module, export `.ics`) ; section 9 du plan |
+| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit, **support de présentation** pour les séances collectives ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 du plan (tableau moyen × type de handicap) et section 7 |
+| 5. Évaluation définie et accessible | Pré-test / post-test sans limite de temps et en FALC, **avis de fin de module**, page **Ma progression**, **Tableau de bord** par profil (graphiques doublés de tableaux) ; section 8 du plan (évaluation accessible : passation alternative, simulations sans sanction, indicateurs d'inclusion) |
+| 6. Fréquence de renouvellement | Page **Calendrier** (fréquences par action et par module, **justifiées par le contexte de l'organisation**, renouvellements déclenchés par un événement, export `.ics`) ; section 9 du plan |
 
 ## Accessibilité
 

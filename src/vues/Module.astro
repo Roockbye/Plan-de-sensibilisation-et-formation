@@ -8,6 +8,7 @@ import BoiteMail from '../components/BoiteMail.astro';
 import Media from '../components/Media.astro';
 import CarteJeu from '../components/CarteJeu.astro';
 import NavEtape from '../components/NavEtape.astro';
+import Avis from '../components/Avis.astro';
 import { donnees } from '../lib/donnees.ts';
 import type { Cle } from '../i18n/index.ts';
 import { sansCoupure, type Langue, type Texte } from '../lib/texte.ts';
@@ -128,6 +129,8 @@ const libellesEtapes = {
         </dd>
         <dt>{T('commun.profils')}</dt>
         <dd>{meta.profils.filter((p) => d.config.profilsActifs.includes(p)).map((p) => d.libelleProfil(p)).join(', ')}</dd>
+        <dt>{T('module.seanceCollective')}</dt>
+        <dd><a href={`${base}presentation/`}>{T('module.lienPresentation')}</a></dd>
         <dt>{T('commun.statut')}</dt>
         <dd><span class="statut" data-statut-module={meta.id}>{T('statut.aFaire')}</span></dd>
       </dl>
@@ -179,6 +182,7 @@ const libellesEtapes = {
       <h2 id="titre-posttest" tabindex="-1">{T('module.etapeN', { n: etapes.length, total: etapes.length })} · {T('module.etape4')}</h2>
       <p>{T('module.posttestIntro', { seuil: d.config.evaluation.seuilReussite })}</p>
       <Quiz module={meta.id} phase="posttest" questions={quiz.valeur.posttest} falc={falc} langue={d.langue} langueContenu={quiz.langue} />
+      <Avis module={meta.id} langue={d.langue} contact={d.config.contacts.accessibilite} />
       <NavEtape etapes={etapes} id="posttest" T={T} />
     </section>
 

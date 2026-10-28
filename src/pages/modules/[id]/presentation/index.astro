@@ -1,0 +1,10 @@
+---
+import Vue from '../../../../vues/Presentation.astro';
+import { languesPubliees } from '../../../../lib/donnees.ts';
+import { plateforme } from '../../../../lib/contenus.ts';
+
+export function getStaticPaths() {
+  return plateforme().modules.map((m) => m.meta.id).map((id) => ({ params: { id } }));
+}
+---
+<Vue langue={languesPubliees().defaut} id={Astro.params.id!} />

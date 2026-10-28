@@ -17,7 +17,7 @@ test('chaque étape passe l\'audit axe-core, ainsi que la carte parade gagnée',
     await expect(page.locator(`#${etape}`)).toBeVisible();
     await auditerAccessibilite(page, `étape ${etape}`);
   }
-  const qs = page.locator('#posttest fieldset');
+  const qs = page.locator('#posttest fieldset[data-bonnes]');
   for (let i = 0; i < (await qs.count()); i++) {
     const q = qs.nth(i);
     for (const v of (await q.getAttribute('data-bonnes'))!.split(' ')) await q.locator(`input[value="${v}"]`).check();
@@ -62,7 +62,7 @@ test('les réponses d\'un quiz en cours sont conservées en cas de rechargement'
 
 test('la collection de « Ma progression » retourne les parades d\'un module validé', async ({ page }) => {
   await page.goto('/modules/incident/#posttest');
-  const qs = page.locator('#posttest fieldset');
+  const qs = page.locator('#posttest fieldset[data-bonnes]');
   for (let i = 0; i < (await qs.count()); i++) {
     const q = qs.nth(i);
     for (const v of (await q.getAttribute('data-bonnes'))!.split(' ')) await q.locator(`input[value="${v}"]`).check();

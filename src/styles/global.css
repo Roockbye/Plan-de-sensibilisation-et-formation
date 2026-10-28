@@ -820,6 +820,58 @@ thead th { background: var(--violet-clair); }
 }
 html[data-animations="reduites"] :is(.bouton:hover, button:hover, .carte-profil:hover, .carte-profil:focus-within, .parcours__etape:hover, .parcours__etape:focus-within) { translate: none; }
 
+/* Support de présentation : diapositives lisibles de loin, une à la fois avec JavaScript. */
+.diaporama { margin: 0 0 3rem; }
+.diaporama__barre { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 0 0 1rem; }
+.diaporama__compteur { margin: 0; font-family: var(--police-affichage); font-weight: 700; font-size: 1.125rem; letter-spacing: 0.02em; min-width: 9rem; }
+.diaporama__aide { flex-basis: 100%; margin: 0; font-size: 0.9375rem; color: var(--texte-attenue); }
+.diaporama__diapos { display: grid; gap: 1.5rem; }
+.diapo {
+  position: relative; margin: 0; padding: 2rem clamp(1.25rem, 4vw, 3.5rem) 2.5rem;
+  border: 2px solid var(--bordure); border-top: 10px solid var(--violet-texte); border-radius: 22px;
+  background: var(--fond); font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+}
+.diapo:nth-child(4n + 2) { border-top-color: var(--corail); }
+.diapo:nth-child(4n + 3) { border-top-color: var(--soleil); }
+.diapo:nth-child(4n + 4) { border-top-color: var(--menthe); }
+.diapo h2 { margin: 0 0 0.8em; font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem); line-height: 1.05; max-width: 28ch; }
+.diapo h3 { font-size: 1.15em; }
+.diapo .contenu, .diapo > p, .diapo ul { max-width: 44rem; }
+.diapo__numero { position: absolute; top: 0.9rem; right: 1.25rem; margin: 0; font-family: var(--police-affichage); font-weight: 700; color: var(--texte-attenue); font-size: 1rem; }
+.diapo__surtitre { margin: 0 0 0.5rem; font-family: var(--police-affichage); font-weight: 600; letter-spacing: 0.04em; color: var(--texte-attenue); font-size: 1rem; }
+.diapo__chapo { font-size: 1.15em; }
+.diapo__meta { font-family: var(--police-affichage); font-weight: 600; letter-spacing: 0.02em; }
+.diapo--titre { background: var(--violet-clair); }
+.diapo--parades { background: var(--menthe-clair); }
+.diapo--fin { background: var(--soleil-clair); }
+.diapo__choix { padding-left: 1.4rem; }
+.diapo__choix li { margin-bottom: 0.4em; }
+.diapo__reponse { margin-top: 1.25rem; border: 2px solid var(--parade); border-radius: 14px; padding: 0.4rem 1rem; background: var(--fond); }
+.diapo__reponse summary { cursor: pointer; padding: 0.4rem 0; font-family: var(--police-affichage); font-weight: 700; }
+.diapo .carte-jeu__liste li { font-size: 1.1em; }
+.diaporama--une .diapo { min-height: min(70vh, 40rem); }
+.diaporama:fullscreen { background: var(--fond); padding: 1.5rem clamp(1rem, 4vw, 4rem); overflow: auto; display: flex; flex-direction: column; }
+.diaporama:fullscreen .diaporama__diapos { flex: 1; }
+.diaporama:fullscreen .diapo { min-height: 100%; font-size: clamp(1.375rem, 1rem + 1.2vw, 2.25rem); }
+:root[data-theme="contraste"] .diapo { border-top-color: var(--bordure); }
+@media print {
+  .diaporama__barre { display: none !important; }
+  .diapo { break-after: page; min-height: 0; border-width: 1px; }
+  .diapo[hidden] { display: block !important; }
+}
+
+/* Avis de fin de module. */
+.avis { margin-top: 2.5rem; padding: 1.25rem 1.5rem; border-radius: 18px; background: var(--violet-clair); border-top: 6px solid var(--violet-texte); }
+.avis h3 { margin-top: 0; }
+.avis__question { border: 0; margin: 0 0 1rem; padding: 0; min-width: 0; }
+.avis__question legend { font-weight: 700; padding: 0; margin-bottom: 0.4rem; }
+.avis__choix { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.avis__option { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; }
+.avis__option input { width: 1.3rem; height: 1.3rem; margin: 0; accent-color: var(--primaire); }
+.avis__statut { font-weight: 600; margin: 0.5rem 0; }
+.avis__statut:empty { display: none; }
+.avis__amenagement { margin-bottom: 0; font-size: 0.9375rem; }
+
 /* Mouvement : uniquement si la personne n'a demandé aucune réduction (système ou préférences du site). */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }

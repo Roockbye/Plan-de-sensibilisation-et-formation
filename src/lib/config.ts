@@ -70,6 +70,20 @@ export const configSchema = z.strictObject({
     rappelModules: z.enum(FREQUENCES),
     veilleNouvellesMenaces: z.enum(FREQUENCES),
     exerciceCrise: z.enum(FREQUENCES).default('annuelle'),
+    /**
+     * Pourquoi ces fréquences conviennent à l'écosystème de l'organisation (taille, secteur, SI,
+     * réglementation, rotation du personnel…). Facultatif : un texte générique est affiché sinon.
+     */
+    justifications: z
+      .strictObject({
+        accueil: texteSchema.optional(),
+        simulation: texteSchema.optional(),
+        rappel: texteSchema.optional(),
+        veille: texteSchema.optional(),
+        crise: texteSchema.optional(),
+        bilan: texteSchema.optional(),
+      })
+      .default({}),
   }),
   evaluation: z.strictObject({
     /** Score minimal (en %) au post-test pour valider un module. */
