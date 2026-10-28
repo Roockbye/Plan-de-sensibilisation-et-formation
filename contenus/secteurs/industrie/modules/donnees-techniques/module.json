@@ -1,0 +1,99 @@
+{
+  "id": "donnees-techniques",
+  "code": "I1",
+  "titre": {
+    "fr": "Données techniques des clients : plans, maquettes et échanges",
+    "en": "Clients' technical data: drawings, mock-ups and exchanges"
+  },
+  "resume": {
+    "fr": "Protéger les plans et maquettes confiés par les clients, les échanger uniquement par le canal autorisé et réagir vite en cas de fuite.",
+    "en": "Protect the drawings and mock-ups entrusted by clients, exchange them only through the authorised channel and react quickly to a leak."
+  },
+  "risques": [
+    "fuite-donnees",
+    "shadow-it",
+    "hameconnage"
+  ],
+  "profils": [
+    "bureau-etudes",
+    "prestataire",
+    "manager",
+    "utilisateur",
+    "nouvel-arrivant",
+    "admin-it"
+  ],
+  "obligatoirePour": [
+    "bureau-etudes",
+    "prestataire"
+  ],
+  "dureeMinutes": 10,
+  "niveau": "decouverte",
+  "formats": [
+    "micro-module",
+    "quiz",
+    "mise-en-situation",
+    "fiche-reflexe"
+  ],
+  "objectifs": [
+    {
+      "fr": "Reconnaître une donnée « Confidentiel client » et savoir où elle peut être stockée",
+      "en": "Recognise “Client confidential” data and know where it may be stored"
+    },
+    {
+      "fr": "Échanger les fichiers uniquement par la plateforme sécurisée prévue pour chaque client",
+      "en": "Exchange files only through the secure platform agreed with each client"
+    },
+    {
+      "fr": "Vérifier avec le référent avant d'envoyer des données techniques à l'étranger (biens à double usage)",
+      "en": "Check with the security officer before sending technical data abroad (dual-use goods)"
+    },
+    {
+      "fr": "Signaler immédiatement une fuite ou un envoi au mauvais destinataire",
+      "en": "Report a leak or a misdirected file immediately"
+    }
+  ],
+  "parades": [
+    {
+      "titre": {
+        "fr": "Les plans passent par la plateforme, jamais par mail",
+        "en": "Drawings go through the platform, never by email"
+      }
+    },
+    {
+      "titre": {
+        "fr": "« Confidentiel client » reste sur les partages prévus",
+        "en": "“Client confidential” stays on the agreed shares"
+      }
+    },
+    {
+      "titre": {
+        "fr": "Fuite ou mauvais destinataire : je signale tout de suite",
+        "en": "Leak or wrong recipient: I report it straight away"
+      }
+    }
+  ],
+  "reglementations": [
+    "aircyber",
+    "en9100",
+    "rgpd"
+  ],
+  "renouvellement": "annuelle",
+  "version": "1.0",
+  "derniereRevue": "2026-10-28",
+  "sources": [
+    {
+      "titre": "BoostAeroSpace – AirCyber, référentiel de maturité cyber de la filière aéronautique",
+      "url": "https://www.boostaerospace.com/"
+    },
+    {
+      "titre": "Service des biens à double usage (SBDU) – Contrôle des exportations",
+      "url": "https://www.entreprises.gouv.fr/"
+    },
+    {
+      "titre": "ANSSI – Guide d'hygiène informatique",
+      "url": "https://cyber.gouv.fr/"
+    }
+  ],
+  "secteur": "industrie",
+  "ordre": 12
+}

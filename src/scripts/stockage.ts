@@ -83,6 +83,7 @@ export function majModule(id: string, modifier: (s: SuiviModule) => void): boole
 export function effacerProgression(): void {
   try {
     localStorage.removeItem(cleProgression());
+    localStorage.removeItem('ssi:avis'); // avis de fin de module
   } catch {
     /* rien à effacer */
   }

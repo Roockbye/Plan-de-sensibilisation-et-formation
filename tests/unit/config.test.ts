@@ -1,13 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { validerConfig, ErreurConfig } from '../../src/lib/config.ts';
 import { ratioContraste } from '../../src/lib/contraste.ts';
-import { configExemple } from './aides.ts';
+import { readdirSync, readFileSync } from 'node:fs';
+import { configDeployee, configExemple } from './aides.ts';
 
 describe('validation de la configuration', () => {
-  it('accepte la configuration par défaut', () => {
+  it('accepte la configuration générique', () => {
     const { config, avertissements } = validerConfig(configExemple());
     expect(config.organisation.nom).toBe('Organisation exemple');
     expect(avertissements).toEqual([]);
+  });
+
+  it('accepte la configuration déployée (AéroStar) et chaque exemple fourni', () => {
+    const { config } = validerConfig(configDeployee());
+    expect(config.organisation.nom).toBe('AéroStar');
+    for (const f of readdirSync('config/exemples').filter((x) => x.endsWith('.json'))) {
+      expect(() => validerConfig(JSON.parse(readFileSync(`config/exemples/${f}`, 'utf8'))), f).not.toThrow();
+    }
   });
 
   it('refuse une clé inconnue (faute de frappe)', () => {

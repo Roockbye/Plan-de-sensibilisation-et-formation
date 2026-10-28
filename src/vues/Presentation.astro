@@ -1,0 +1,128 @@
+---
+/**
+ * Support de présentation d'un module, pour animer une séance collective (en salle ou en visio).
+ * Sans JavaScript : toutes les diapositives se lisent à la suite (et s'impriment une par page).
+ * Avec JavaScript : une diapositive à la fois, flèches du clavier, compteur annoncé, plein écran.
+ */
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import { donnees } from '../lib/donnees.ts';
+import { sansCoupure, type Langue, type Texte } from '../lib/texte.ts';
+
+interface Props { langue: Langue; id: string }
+const d = donnees(Astro.props.langue);
+const { T } = d;
+const lang = (v: Texte) => (d.langueDe(v) !== d.langue ? 'fr' : undefined);
+const m = d.module(Astro.props.id);
+const meta = m.meta;
+const titre = `${meta.code} – ${d.tr(meta.titre)}`;
+const base = d.lien(`/modules/${meta.id}/`);
+
+// Contenu essentiel découpé en diapositives : une par titre de niveau 2.
+const corps = d.contenu(m.standard);
+const langCorps = corps.langue !== d.langue ? corps.langue : undefined;
+const morceaux = corps.valeur.split(/^(?=## )/m).map((x) => x.trim()).filter(Boolean);
+const introduction = morceaux[0]?.startsWith('## ') ? '' : morceaux.shift() ?? '';
+const sections = morceaux.map((x) => {
+  const [ligne, ...reste] = x.split('\n');
+  return { titre: ligne.replace(/^##\s+/, ''), corps: reste.join('\n').trim() };
+});
+
+const quiz = d.contenu(m.quiz);
+const langQuiz = quiz.langue !== d.langue ? quiz.langue : undefined;
+const questions = quiz.valeur.posttest;
+const total = 1 + sections.length + 1 + questions.length + 1;
+const contacts = d.config.contacts;
+const libelles = {
+  compteur: T('presentation.compteur'),
+  pleinEcran: T('presentation.pleinEcran'),
+  quitterPleinEcran: T('presentation.quitterPleinEcran'),
+  toutAfficher: T('presentation.toutAfficher'),
+  uneParUne: T('presentation.uneParUne'),
+};
+let n = 0;
+const num = () => ++n;
+---
+<Base
+  titre={`${titre} – ${T('presentation.titre')}`}
+  langue={d.langue}
+  description={d.tr(meta.resume)}
+  filAriane={[{ libelle: T('nav.modules'), href: d.lien('/modules/') }, { libelle: meta.code, href: base }, { libelle: T('presentation.titre') }]}
+>
+  <header class="entete-page bande bande--violet">
+    <h1>{T('presentation.titre')} : {meta.code} – <span lang={lang(meta.titre)}>{sansCoupure(d.tr(meta.titre))}</span></h1>
+    <p>{T('presentation.intro')}</p>
+    <p><a href={base}>{T('presentation.retourModule')}</a></p>
+  </header>
+
+  <div class="diaporama" data-diaporama data-libelles={JSON.stringify(libelles)}>
+    <div class="diaporama__barre" data-barre hidden>
+      <button type="button" class="bouton--secondaire" data-precedente>{T('presentation.precedente')}</button>
+      <p class="diaporama__compteur" data-compteur role="status"></p>
+      <button type="button" data-suivante>{T('presentation.suivante')}</button>
+      <button type="button" class="bouton--secondaire" data-plein-ecran hidden>{T('presentation.pleinEcran')}</button>
+      <button type="button" class="bouton--lien" data-mode>{T('presentation.toutAfficher')}</button>
+      <p class="diaporama__aide">{T('presentation.aide')}</p>
+    </div>
+
+    <div class="diaporama__diapos" data-diapos aria-label={T('presentation.diapos')} role="group">
+      {(() => { const i = num(); return (
+        <section class="diapo diapo--titre" id={`diapo-${i}`} data-diapo aria-labelledby={`diapo-${i}-titre`}>
+          <p class="diapo__numero" aria-hidden="true">{i} / {total}</p>
+          <h2 id={`diapo-${i}-titre`} tabindex="-1">{meta.code} – <span lang={lang(meta.titre)}>{sansCoupure(d.tr(meta.titre))}</span></h2>
+          <p class="diapo__chapo" lang={lang(meta.resume)}>{d.tr(meta.resume)}</p>
+          {introduction && <div lang={langCorps}><Markdown source={introduction} /></div>}
+          <p class="diapo__meta">{T('commun.minutes', { n: meta.dureeMinutes })} · {T('module.attaqueLibelle')} : {d.libelleRisque(meta.risques[0])}</p>
+        </section>
+      ); })()}
+
+      {sections.map((sec) => { const i = num(); return (
+        <section class="diapo" id={`diapo-${i}`} data-diapo aria-labelledby={`diapo-${i}-titre`} lang={langCorps}>
+          <p class="diapo__numero" aria-hidden="true">{i} / {total}</p>
+          <h2 id={`diapo-${i}-titre`} tabindex="-1">{sec.titre}</h2>
+          <Markdown source={sec.corps} />
+        </section>
+      ); })}
+
+      {(() => { const i = num(); return (
+        <section class="diapo diapo--parades" id={`diapo-${i}`} data-diapo aria-labelledby={`diapo-${i}-titre`}>
+          <p class="diapo__numero" aria-hidden="true">{i} / {total}</p>
+          <h2 id={`diapo-${i}-titre`} tabindex="-1">{T('presentation.parades')}</h2>
+          <ul class="carte-jeu__liste">
+            {meta.parades.map((pa) => <li lang={lang(pa.titre)}>{d.tr(pa.titre)}</li>)}
+          </ul>
+        </section>
+      ); })()}
+
+      {questions.map((q, k) => { const i = num(); const bonnes = q.choix.filter((c) => q.bonnes.includes(c.id)); return (
+        <section class="diapo diapo--question" id={`diapo-${i}`} data-diapo aria-labelledby={`diapo-${i}-titre`}>
+          <p class="diapo__numero" aria-hidden="true">{i} / {total}</p>
+          <p class="diapo__surtitre">{T('presentation.questions')} · {k + 1} / {questions.length}</p>
+          <h2 id={`diapo-${i}-titre`} tabindex="-1" lang={langQuiz}>{d.tr(q.enonce)}</h2>
+          {k === 0 && <p class="diapo__consigne">{T('presentation.questionsIntro')}</p>}
+          <ul class="diapo__choix" lang={langQuiz}>
+            {q.choix.map((c) => <li>{d.tr(c.texte)}</li>)}
+          </ul>
+          <details class="diapo__reponse">
+            <summary>{T('presentation.reponse')}<span class="visuellement-masque"> ({k + 1})</span></summary>
+            <p lang={langQuiz}><strong>{bonnes.map((c) => d.tr(c.texte)).join(' ; ')}</strong></p>
+            <p lang={langQuiz}>{d.tr(q.explication)}</p>
+          </details>
+        </section>
+      ); })}
+
+      {(() => { const i = num(); return (
+        <section class="diapo diapo--fin" id={`diapo-${i}`} data-diapo aria-labelledby={`diapo-${i}-titre`}>
+          <p class="diapo__numero" aria-hidden="true">{i} / {total}</p>
+          <h2 id={`diapo-${i}-titre`} tabindex="-1">{T('presentation.signaler')}</h2>
+          <p class="diapo__chapo" lang={lang(contacts.signalement)}>{d.tr(contacts.signalement)}</p>
+          <p class="diapo__chapo">{contacts.securite} · {contacts.telephoneUrgence}</p>
+        </section>
+      ); })()}
+    </div>
+  </div>
+</Base>
+
+<script>
+  import '../scripts/diaporama.ts';
+</script>

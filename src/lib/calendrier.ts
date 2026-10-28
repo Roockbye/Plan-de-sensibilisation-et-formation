@@ -25,6 +25,15 @@ export interface Action {
 export const MOIS_PAR_FREQUENCE = { mensuelle: 1, trimestrielle: 3, semestrielle: 6, annuelle: 12 } as const;
 
 /** Libellé du type d'action, dans la langue demandée. */
+/**
+ * Justification de la fréquence de renouvellement d'un module : plus fréquent qu'annuel = menace
+ * qui évolue vite ; annuel avec un risque émergent = fondamentaux + actualisation à chaque revue.
+ */
+export function cleJustificationModule(meta: ModuleMeta, estEmergent: (risque: string) => boolean): Cle {
+  if (meta.renouvellement !== 'annuelle') return 'calendrier.justifEmergent';
+  return meta.risques.some(estEmergent) ? 'calendrier.justifAnnuelVeille' : 'calendrier.justifFondamentaux';
+}
+
 export const libelleType = (type: TypeAction, langue: Langue = 'fr') => t(`calendrier.type.${type}` as Cle, langue);
 
 /** Titre et description d'une action, dans la langue demandée. */

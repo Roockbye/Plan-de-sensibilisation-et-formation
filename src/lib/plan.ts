@@ -5,9 +5,11 @@
  */
 import type { Plateforme } from './contenus.ts';
 import type { Parcours } from './parcours.ts';
-import { libelleType, texteAction, type Action } from './calendrier.ts';
+import { cleJustificationModule, libelleType, texteAction, type Action } from './calendrier.ts';
 import { tr, type Texte } from './texte.ts';
 import { FORMATS } from './schemas.ts';
+import { repartirEffectif } from './indicateurs.ts';
+import { t as texteInterface, type Cle } from '../i18n/index.ts';
 
 const FREQ: Record<string, string> = { mensuelle: 'mensuelle', trimestrielle: 'trimestrielle', semestrielle: 'semestrielle', annuelle: 'annuelle' };
 const PRIORITE = { 1: 'Faible', 2: 'Moyenne', 3: 'Haute' } as const;
@@ -28,6 +30,7 @@ const BLOOM: Record<string, string> = { connaitre: 'Connaître', comprendre: 'Co
 const REGLEMENTATION: Record<string, string> = {
   rgpd: 'RGPD', nis2: 'Directive NIS2', iso27001: 'ISO/IEC 27001', dora: 'DORA', hds: 'Hébergement de données de santé (HDS)',
   'pgssi-s': 'PGSSI-S', lpm: 'Loi de programmation militaire (OIV)', rgs: 'RGS', 'pci-dss': 'PCI DSS',
+  aircyber: 'AirCyber (BoostAeroSpace)', en9100: 'EN 9100 (qualité aéronautique)',
 };
 
 /** Échappe une valeur placée dans une cellule de tableau Markdown. */
@@ -55,8 +58,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     return pr ? t(pr.libelle) : id;
   };
   const codeModule = (id: string) => p.modules.find((m) => m.meta.id === id)?.meta.code ?? id;
-  const effectifs = new Map(parcours.map((pc) => [pc.profil.id, pc.profil.partEffectif]));
-  const totalParts = [...effectifs.values()].reduce((s, v) => s + v, 0) || 1;
+  const effectifs = repartirEffectif(org.effectif, parcours, config.effectifsProfils);
   const emergents = p.risques.filter((r) => r.emergent);
   const s: string[] = [];
 
@@ -72,7 +74,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   ]));
 
   s.push('## 1. Finalité du plan');
-  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs de ${org.nom} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par l'équipe sécurité (contact : ${config.contacts.securite}) et révisé chaque année.`);
+  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs de ${org.nom} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par la fonction sécurité – RSSI ou, à défaut, référent sécurité (contact : ${config.contacts.securite}) – et révisé chaque année.`);
   s.push(`Les principes retenus : des parcours différenciés par profil, des formats courts et variés, une accessibilité à toutes et tous (y compris les personnes en situation de handicap), une évaluation systématique avant et après chaque module, et une fréquence de renouvellement adaptée à l'évolution des menaces.`);
 
   s.push('## 2. Prise en compte de l\'analyse de risques');
@@ -85,12 +87,21 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     p.modules.filter((m) => m.meta.risques.includes(r.id)).map((m) => m.meta.code).join(', ') || 'Aucun (à couvrir)',
   ])));
   s.push('### Nouvelles technologies et menaces émergentes');
-  s.push(`Le programme intègre explicitement les menaces liées aux nouvelles technologies : ${emergents.map((r) => `**${t(r.libelle)}**`).join(', ')}. Les modules correspondants sont renouvelés plus fréquemment (voir § 8) et leurs contenus sont revus selon une fréquence ${FREQ[config.campagnes.veilleNouvellesMenaces]}.`);
+  s.push(`Le programme intègre explicitement les menaces liées aux nouvelles technologies : ${emergents.map((r) => `**${t(r.libelle)}**`).join(', ')}. Les modules correspondants sont renouvelés plus fréquemment (voir § 9) et leurs contenus sont revus selon une fréquence ${FREQ[config.campagnes.veilleNouvellesMenaces]}.`);
 
   s.push('## 3. Profils utilisateurs et besoins');
+  s.push('### Méthode d\'identification des besoins');
+  s.push([
+    '- **Analyse de risques** : chaque risque prioritaire est rattaché aux profils qui y sont le plus exposés (fonctions, accès, outils utilisés).',
+    '- **Cartographie des fonctions et des accès** : effectif, droits (administration, paiements, données sensibles), mobilité, ancienneté.',
+    '- **Entretiens** avec les managers, les ressources humaines, l\'équipe informatique et le référent handicap (besoins d\'aménagement, sans données nominatives).',
+    '- **Retours d\'expérience** : incidents et signalements de l\'année, résultats des simulations d\'hameçonnage.',
+    '- **Pré-tests diagnostiques** en début de campagne : niveau initial de chaque profil, qui oriente les rappels.',
+  ].join('\n'));
+  s.push('Les contraintes de chaque profil (temps disponible, niveau technique, horaires, situation de handicap) déterminent le format et la durée des actions.');
   for (const pc of parcours) {
     const pr = pc.profil;
-    const n = Math.max(1, Math.round((org.effectif * pr.partEffectif) / totalParts));
+    const n = effectifs.get(pr.id)!;
     s.push(`### ${t(pr.libelle)} (environ ${n} personnes)`);
     s.push(t(pr.description));
     s.push('**Besoins identifiés :**\n\n' + pr.besoins.map((b) => `- ${t(b)}`).join('\n'));
@@ -118,8 +129,23 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
 
   s.push('## 6. Moyens pédagogiques');
   const formatsUtilises = FORMATS.filter((f) => p.modules.some((m) => m.meta.formats.includes(f)));
-  s.push(tableau(['Moyen', 'Modules concernés'], formatsUtilises.map((f) => [FORMAT_LIBELLE[f], p.modules.filter((m) => m.meta.formats.includes(f)).map((m) => m.meta.code).join(', ')])));
-  s.push('Chaque module suit la même séquence : **pré-test** (niveau initial), **contenu essentiel** court, **mise en situation** (simulation d\'hameçonnage dans la plateforme ou scénario à embranchements) et **post-test**. Les simulations d\'hameçonnage sont exclusivement pédagogiques : aucun message réel n\'est envoyé et les liens ne sont jamais actifs. Les séances collectives (exercice de crise pour la direction et les équipes informatiques) complètent le dispositif en ligne.');
+  const tousLesCodes = p.modules.map((m) => m.meta.code).join(', ');
+  s.push(tableau(['Moyen', 'Modules concernés'], [
+    ...formatsUtilises.map((f) => [FORMAT_LIBELLE[f], p.modules.filter((m) => m.meta.formats.includes(f)).map((m) => m.meta.code).join(', ')]),
+    ['Support de présentation pour séance collective (diaporama accessible, page « Support de présentation » de chaque module)', tousLesCodes],
+  ]));
+  s.push('Chaque module suit la même séquence : **pré-test** (niveau initial), **contenu essentiel** court, **mise en situation** (simulation d\'hameçonnage dans la plateforme ou scénario à embranchements) et **post-test**. Les simulations d\'hameçonnage sont exclusivement pédagogiques : aucun message réel n\'est envoyé et les liens ne sont jamais actifs. Les séances collectives (présentation d\'un module en réunion d\'équipe, exercice de crise pour la direction et les équipes informatiques) complètent le dispositif en ligne.');
+  s.push('### Adaptation des moyens aux situations de handicap');
+  s.push('Chaque moyen est conçu pour être utilisable sans aide ; les mesures marquées « sur demande » sont organisées avec le référent handicap.');
+  s.push(tableau(['Moyen', 'Handicap visuel', 'Handicap auditif', 'Handicap moteur', 'Troubles cognitifs, dys, psychiques'], [
+    ['Cours en ligne (modules courts)', 'Lecteur d\'écran, zoom jusqu\'à 200 %, contraste renforcé, police basse vision', 'Contenu entièrement écrit ; médias sous-titrés', 'Navigation complète au clavier, cibles de 24 px minimum', 'Version FALC, modules de 10 min, police dyslexie, espacement du texte, aucune limite de temps'],
+    ['Support de présentation (séance collective)', 'Diapositives structurées par titres, transmises avant la séance ; visuels décrits oralement', 'Support écrit fourni ; sous-titrage en visio ; interprète LSF sur demande', 'Navigation au clavier ; participation à distance possible', 'Une idée par diapositive, pauses, version FALC du module en complément'],
+    ['Simulation d\'hameçonnage (dans la plateforme)', 'Messages et destinations des liens lisibles au lecteur d\'écran', 'Simulation entièrement écrite', 'Décisions par boutons, au clavier', 'Sans chronomètre, retour explicatif immédiat, aucune sanction ; simulation sans effet de surprise sur demande'],
+    ['Mise en situation à choix', 'Étapes titrées, focus déplacé à chaque étape', 'Transcription des extraits audio', 'Choix au clavier', 'Choix guidés, possibilité de recommencer'],
+    ['Audio et vidéo', 'Transcription intégrale (y compris les éléments visuels)', 'Sous-titres et transcription', 'Lecteur pilotable au clavier', 'Pas de lecture automatique ; transcription lisible à son rythme'],
+    ['Fiche réflexe', 'Texte structuré, imprimable en gros caractères', 'Support écrit', 'Téléchargeable et imprimable', 'Phrases courtes, pictogrammes doublés de texte'],
+    ['Exercice de crise', 'Supports transmis à l\'avance au format accessible', 'Échanges écrits en parallèle ; interprète LSF sur demande', 'Locaux accessibles ou participation à distance', 'Rôle adapté, consignes écrites, débriefing'],
+  ]));
 
   s.push('## 7. Accessibilité et inclusion');
   s.push([
@@ -135,29 +161,51 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
 
   s.push('## 8. Évaluation et indicateurs');
   s.push(tableau(['Niveau (modèle de Kirkpatrick)', 'Moyen d\'évaluation', 'Indicateur'], [
-    ['1 – Réaction', 'Retours des apprenants, taux de participation', 'Taux de complétion par profil'],
+    ['1 – Réaction', 'Avis en fin de module (utilité, clarté, adaptation à ses besoins), taux de participation', 'Taux de complétion par profil ; part des apprenants jugeant le module adapté à leurs besoins'],
     ['2 – Apprentissage', 'Pré-test et post-test de chaque module', `Écart pré/post ; taux de réussite (seuil : ${config.evaluation.seuilReussite} %)`],
     ['3 – Comportement', 'Simulations d\'hameçonnage successives, signalements réels', 'Taux de clic (↓) et taux de signalement (↑)'],
     ['4 – Résultats', 'Suivi des incidents d\'origine humaine', 'Nombre et gravité des incidents, délai de signalement'],
   ]));
-  s.push(`Un module non terminé ${config.evaluation.delaiRetardJours} jours après son ouverture est considéré « en retard » et fait l'objet d'une relance. Les indicateurs sont suivis par profil dans le tableau de bord RSSI et présentés à la direction lors du bilan annuel. Les résultats individuels restent confidentiels : le pilotage s'appuie sur des indicateurs agrégés.`);
+  s.push(`Un module non terminé ${config.evaluation.delaiRetardJours} jours après son ouverture est considéré « en retard » et fait l'objet d'une relance. Les indicateurs sont suivis par profil dans le tableau de bord sécurité et présentés à la direction lors du bilan annuel. Les résultats individuels restent confidentiels : le pilotage s'appuie sur des indicateurs agrégés.`);
+  s.push('### Une évaluation accessible à toutes et tous');
+  s.push([
+    '- **Mêmes exigences, forme adaptée** : le seuil de réussite est identique pour tous ; l\'aménagement porte sur la forme de l\'évaluation, jamais sur son niveau.',
+    '- **Quiz** disponibles en version FALC, utilisables au clavier et au lecteur d\'écran, **sans limite de temps** ; la correction est écrite (jamais portée par la seule couleur) et le quiz peut être repris sans pénalité.',
+    `- **Passation alternative** sur demande (orale ou accompagnée), organisée avec le référent handicap via ${config.contacts.accessibilite}, avec un résultat pris en compte de la même façon.`,
+    '- **Simulations d\'hameçonnage** : retour pédagogique immédiat et non culpabilisant, aucune sanction ; une personne qui le demande (par exemple en cas de troubles anxieux) suit la simulation dans la plateforme, sans effet de surprise.',
+    '- **Avis des apprenants** : chaque module se termine par trois questions, dont « Le module était-il adapté à vos besoins (rythme, format, accessibilité) ? », pour repérer les contenus à améliorer.',
+    '- **Indicateurs d\'inclusion** suivis au bilan annuel : nombre de demandes d\'aménagement et délai de réponse, part des avis « adapté à mes besoins », taux de complétion des versions FALC.',
+    '- **Confidentialité** : un besoin d\'aménagement n\'est jamais rattaché aux résultats ni communiqué au manager sans l\'accord de la personne.',
+  ].join('\n'));
 
   s.push('## 9. Fréquence de renouvellement et calendrier');
-  s.push(tableau(['Action', 'Fréquence'], [
-    ['Parcours d\'accueil des nouveaux arrivants', `À chaque arrivée, sous ${config.campagnes.onboardingDelaiJours} jours`],
-    ['Simulation d\'hameçonnage pédagogique', FREQ[config.campagnes.simulationPhishing]],
-    ['Campagne de rappel et post-tests de consolidation', FREQ[config.campagnes.rappelModules]],
-    ['Revue des contenus (nouvelles menaces)', FREQ[config.campagnes.veilleNouvellesMenaces]],
-    ['Exercice de gestion de crise', FREQ[config.campagnes.exerciceCrise]],
-    ['Bilan et révision du plan', 'annuelle'],
+  const c = config.campagnes;
+  const justif = (cle: keyof typeof c.justifications) => (c.justifications[cle] ? t(c.justifications[cle]!) : texteInterface(`calendrier.justif.${cle}` as Cle, 'fr'));
+  const reglements = config.reglementations.map((r) => REGLEMENTATION[r]);
+  const risqueHaut = config.risquesPrioritaires.filter((r) => r.priorite === 3).map((r) => libRisque(r.id).toLowerCase());
+  s.push('### Adaptation à l\'écosystème de l\'organisation');
+  s.push(`Les fréquences sont préconisées pour ${org.nom} : ${org.taille.toUpperCase()} de ${org.effectif} personnes, secteur « ${SECTEUR[org.secteur]} », système d'information ${TYPE_SI[org.typeSI].toLowerCase()}${reglements.length ? `, soumise à : ${reglements.join(', ')}` : ''}. Les risques de priorité haute (${risqueHaut.join(', ') || 'aucun'}) fixent le rythme des simulations et des rappels ; la rapidité d'évolution des menaces liées aux nouvelles technologies fixe celui de la revue des contenus. Elles sont paramétrables et revues à chaque bilan annuel.`);
+  s.push(tableau(['Action', 'Fréquence', 'Justification pour l\'organisation'], [
+    ['Parcours d\'accueil des nouveaux arrivants', `À chaque arrivée, sous ${c.onboardingDelaiJours} jours`, justif('accueil')],
+    ['Simulation d\'hameçonnage pédagogique', FREQ[c.simulationPhishing], justif('simulation')],
+    ['Campagne de rappel et post-tests de consolidation', FREQ[c.rappelModules], justif('rappel')],
+    ['Revue des contenus (nouvelles menaces)', FREQ[c.veilleNouvellesMenaces], justif('veille')],
+    ['Exercice de gestion de crise', FREQ[c.exerciceCrise], justif('crise')],
+    ['Bilan et révision du plan', 'annuelle', justif('bilan')],
   ]));
-  s.push(tableau(['Module', 'Renouvellement préconisé'], p.modules.map(({ meta }) => [`${meta.code} – ${t(meta.titre)}`, FREQ[meta.renouvellement]])));
+  s.push(tableau(['Module', 'Renouvellement préconisé', 'Justification'], p.modules.map(({ meta }) => [
+    `${meta.code} – ${t(meta.titre)}`,
+    FREQ[meta.renouvellement],
+    texteInterface(cleJustificationModule(meta, (r) => Boolean(risque(r)?.emergent)), 'fr'),
+  ])));
+  s.push('### Renouvellements déclenchés par un événement');
+  s.push(texteInterface('calendrier.declencheursIntro', 'fr') + '\n\n' + (['incident', 'menace', 'outil', 'poste', 'retour', 'echec'] as const).map((k) => `- ${texteInterface(`calendrier.declencheur.${k}` as Cle, 'fr')}`).join('\n'));
   s.push('### Calendrier de l\'année');
   s.push(tableau(['Date', 'Type', 'Action', 'Public'], calendrier.map((a) => [dateFr(a.date), libelleType(a.type), texteAction(a).titre, a.profils.length ? a.profils.map(libProfil).join(', ') : 'Tous'])));
 
   s.push('## 10. Pilotage et amélioration continue');
   s.push([
-    `- **Pilotage** : équipe sécurité (${config.contacts.securite}), avec l'appui des managers pour les relances et de la direction pour le portage.`,
+    `- **Pilotage** : fonction sécurité, RSSI ou référent sécurité (${config.contacts.securite}), avec l'appui des managers pour les relances et de la direction pour le portage.`,
     '- **Revue annuelle** : mise à jour de l\'analyse de risques, des profils, des contenus et des fréquences, à partir des indicateurs et des incidents de l\'année.',
     '- **Veille** : intégration des nouvelles menaces (publications de l\'ANSSI, de Cybermalveillance.gouv.fr, retours d\'incidents).',
     `- **Signalement** : ${t(config.contacts.signalement)} ; urgence : ${config.contacts.telephoneUrgence}.`,

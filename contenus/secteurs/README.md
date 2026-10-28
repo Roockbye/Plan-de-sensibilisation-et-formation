@@ -17,7 +17,10 @@ contenus/secteurs/<secteur>/modules/<id-module>/
 └── scenario.json    (facultatif)
 ```
 
-**Exemple fourni** : `sante/modules/secret-medical` (S1, « Secret médical et accès au dossier patient »), activé par `config/exemples/clinique.json`.
+**Exemples fournis** :
+
+- `industrie/modules/donnees-techniques` (I1, « Données techniques des clients : plans, maquettes et échanges »), activé par la configuration livrée (AéroStar) ;
+- `sante/modules/secret-medical` (S1, « Secret médical et accès au dossier patient »), activé par `config/exemples/clinique.json`.
 
 Secteurs reconnus : `sante`, `industrie`, `finance`, `collectivite`, `education`, `commerce`.
 

@@ -1,0 +1,147 @@
+{
+  "pretest": [
+    {
+      "id": "pre-proprietaire",
+      "enonce": "À qui appartiennent les plans et maquettes qu'un client confie à {{organisation.nom}} ?",
+      "enonceFalc": "Les plans envoyés par un client sont à qui ?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "organisation",
+          "texte": "À {{organisation.nom}}, puisqu'elle les stocke"
+        },
+        {
+          "id": "client",
+          "texte": "Au client : {{organisation.nom}} n'en est que dépositaire"
+        },
+        {
+          "id": "ingenieur",
+          "texte": "À l'ingénieur qui travaille dessus"
+        }
+      ],
+      "bonnes": [
+        "client"
+      ],
+      "explication": "Le client reste propriétaire. {{organisation.nom}} s'engage par contrat (accord de confidentialité) à les protéger : une fuite peut faire perdre le client."
+    },
+    {
+      "id": "pre-gros-fichier",
+      "enonce": "Une maquette de 2 Go doit partir chez le client ce soir et la plateforme d'échange est lente. Que faites-vous ?",
+      "enonceFalc": "Un gros fichier doit partir ce soir. La plateforme est lente. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "transfert",
+          "texte": "J'utilise un service de transfert gratuit sur Internet, c'est plus rapide"
+        },
+        {
+          "id": "plateforme",
+          "texte": "J'utilise la plateforme prévue et je préviens le client du délai"
+        },
+        {
+          "id": "cle",
+          "texte": "Je copie le fichier sur une clé USB personnelle"
+        }
+      ],
+      "bonnes": [
+        "plateforme"
+      ],
+      "explication": "Les services de transfert gratuits et les clés personnelles sortent les données du périmètre maîtrisé. Un retard annoncé vaut mieux qu'une fuite."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "post-canal",
+      "enonce": "Un client vous envoie une archive de plans en pièce jointe d'un e-mail. Quelle est la bonne réaction ?",
+      "enonceFalc": "Un client envoie des plans par e-mail. Que faites-vous ?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "ok",
+          "texte": "Je l'enregistre sur le partage du projet, c'est le client qui l'a envoyée"
+        },
+        {
+          "id": "plateforme",
+          "texte": "Je l'enregistre sur le partage du projet et je demande au client d'utiliser désormais la plateforme sécurisée"
+        },
+        {
+          "id": "supprimer",
+          "texte": "Je la supprime sans rien dire"
+        }
+      ],
+      "bonnes": [
+        "plateforme"
+      ],
+      "explication": "On ne perd pas les données reçues, mais on fait revenir les échanges sur le canal sécurisé prévu au contrat."
+    },
+    {
+      "id": "post-ia",
+      "enonce": "Pour gagner du temps, peut-on demander à un outil d'IA générative public de résumer une spécification client ?",
+      "enonceFalc": "Peut-on mettre un document d'un client dans une IA sur Internet ?",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "oui",
+          "texte": "Oui, si je supprime le nom du client"
+        },
+        {
+          "id": "non",
+          "texte": "Non, sauf outil validé par {{organisation.nom}} pour ce type de données"
+        }
+      ],
+      "bonnes": [
+        "non"
+      ],
+      "explication": "Le contenu envoyé peut être conservé ou réutilisé par l'éditeur. Les données techniques restent confidentielles même sans le nom du client."
+    },
+    {
+      "id": "post-etranger",
+      "enonce": "Un partenaire situé hors de l'Union européenne demande des données techniques d'une pièce. Avant d'envoyer :",
+      "enonceFalc": "Une entreprise d'un autre pays demande des plans. Avant d'envoyer :",
+      "type": "unique",
+      "choix": [
+        {
+          "id": "envoyer",
+          "texte": "J'envoie, le client principal est d'accord"
+        },
+        {
+          "id": "verifier",
+          "texte": "Je vérifie avec le référent : certaines données peuvent relever du contrôle des biens à double usage"
+        },
+        {
+          "id": "compresser",
+          "texte": "Je compresse l'archive avec un mot de passe"
+        }
+      ],
+      "bonnes": [
+        "verifier"
+      ],
+      "explication": "Même hors défense, des données techniques aéronautiques peuvent nécessiter une autorisation d'exportation. La vérification se fait projet par projet."
+    },
+    {
+      "id": "post-erreur",
+      "enonce": "Vous avez envoyé un plan au mauvais destinataire. Que faites-vous ? (plusieurs réponses possibles)",
+      "enonceFalc": "Vous avez envoyé un plan à la mauvaise personne. Que faites-vous ? (plusieurs réponses)",
+      "type": "multiple",
+      "choix": [
+        {
+          "id": "signaler",
+          "texte": "Je préviens immédiatement le référent sécurité ({{contacts.securite}})"
+        },
+        {
+          "id": "rappel",
+          "texte": "Je demande au destinataire de supprimer le fichier et de le confirmer"
+        },
+        {
+          "id": "silence",
+          "texte": "Je ne dis rien pour éviter les ennuis"
+        }
+      ],
+      "bonnes": [
+        "signaler",
+        "rappel"
+      ],
+      "explication": "Le client doit souvent être informé dans un délai court (fixé au contrat) : plus le signalement est rapide, plus les dégâts sont limités. Aucune sanction pour un signalement."
+    }
+  ]
+}

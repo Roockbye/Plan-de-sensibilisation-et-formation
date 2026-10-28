@@ -35,5 +35,8 @@ export const identifiantSchema = z
  * un liant de mots invisible (U+2060) est inséré après le trait d'union. Sans effet pour les lecteurs d'écran.
  */
 export function sansCoupure(texte: string): string {
-  return texte.replace(/(^|[\s(«])(\p{L}{1,2})-(?=\p{L})/gu, '$1$2-\u2060');
+  return texte
+    .replace(/(^|[\s(«])(\p{L}{1,2})-(?=\p{L})/gu, '$1$2-\u2060')
+    // Typographie française : espace insécable avant « : ; ? ! » (jamais de ligne qui commence par « : »).
+    .replace(/ ([:;?!])/g, '\u00A0$1');
 }

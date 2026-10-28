@@ -19,6 +19,8 @@ La plateforme est **{{accessibilite.etatConformite}}** avec le référentiel gé
 - Préférences d'affichage : taille du texte jusqu'à 200 %, police adaptée à la basse vision ou à la dyslexie, espacement du texte augmenté, thème sombre, contraste renforcé, réduction des animations.
 - Transcription textuelle et sous-titres pour tout contenu audio ou vidéo.
 - Graphiques du tableau de bord toujours accompagnés d'un tableau de données.
+- **Support de présentation** de chaque module pour les séances collectives : pilotable au clavier, compteur annoncé aux lecteurs d'écran, lisible et imprimable sans JavaScript.
+- Évaluations adaptées : quiz en version FALC, sans limite de temps, repris sans pénalité ; avis de fin de module sur l'adaptation aux besoins ; passation alternative (orale ou accompagnée) sur demande.
 - Tests automatisés (axe-core) de chaque page à chaque modification du code.
 
 ## Contenus non accessibles

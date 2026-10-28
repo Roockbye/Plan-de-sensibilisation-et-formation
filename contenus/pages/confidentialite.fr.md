@@ -2,7 +2,7 @@
 
 Cette plateforme est une **démonstration** : elle ne collecte aucune donnée personnelle et n'utilise aucun cookie, aucun outil de mesure d'audience ni aucune ressource externe.
 
-- Vos **réponses aux quiz**, vos **résultats** et vos **préférences d'affichage** sont enregistrés uniquement dans le stockage local de votre navigateur (`localStorage`). Ils ne quittent jamais votre appareil et vous pouvez les effacer à tout moment depuis la page « Ma progression ».
+- Vos **réponses aux quiz**, vos **résultats**, vos **avis de fin de module** et vos **préférences d'affichage** sont enregistrés uniquement dans le stockage local de votre navigateur (`localStorage`). Ils ne quittent jamais votre appareil et vous pouvez les effacer à tout moment depuis la page « Ma progression ».
 - Les **simulations d'hameçonnage** sont des mises en situation affichées dans la plateforme : **aucun e-mail, SMS ou message réel n'est envoyé**, et les liens présentés ne sont jamais cliquables.
 - Le **tableau de bord** présente une population **entièrement fictive**, générée automatiquement à partir de l'effectif déclaré dans la configuration.
 

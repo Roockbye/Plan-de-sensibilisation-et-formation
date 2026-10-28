@@ -2,7 +2,7 @@
 
 Plateforme web **générique, accessible et paramétrable** pour sensibiliser et former les utilisateurs d'une organisation à la sécurité de son système d'information. Tout ce qui est propre à une organisation (nom, couleurs, profils, risques prioritaires, réglementations, fréquences) est décrit dans **un seul fichier de configuration**. Les contenus pédagogiques (Markdown et JSON) sont séparés du code.
 
-La configuration livrée décrit une **« Organisation exemple »** neutre (PME tous secteurs). Toutes les données de suivi sont **fictives** : aucune donnée personnelle n'est collectée et aucun e-mail n'est envoyé (les simulations d'hameçonnage sont des mises en situation affichées dans la plateforme).
+La configuration livrée décrit **AéroStar**, PME **fictive** de 120 personnes, bureau d'études sous-traitant de rang 2 en aéronautique (voir [Organisation de démonstration](#organisation-de-démonstration--aérostar)). Une configuration neutre (`config/exemples/generique.json`) et un exemple du secteur santé (`config/exemples/clinique.json`) montrent que la plateforme s'adapte sans toucher au code. Toutes les données de suivi sont **fictives** : aucune donnée personnelle n'est collectée et aucun e-mail n'est envoyé (les simulations d'hameçonnage sont des mises en situation affichées dans la plateforme).
 
 ![Page d'accueil : choix du profil](docs/captures/accueil.png)
 
@@ -48,14 +48,15 @@ npm run dev        # http://localhost:4321
 
 | Fonctionnalité | Description |
 | --- | --- |
-| **5 profils** | Utilisateur standard, manager et direction, administrateur informatique, nouvel arrivant, télétravailleur et nomade : besoins, contraintes, objectifs pédagogiques (taxonomie de Bloom) reliés aux modules |
-| **8 modules** | Hameçonnage et quishing, mots de passe et MFA, fraude au président et deepfakes, IA générative, protection des données, nomadisme, réaction à incident, hygiène d'administration |
+| **7 profils** | Ingénieur de bureau d'études, utilisateur standard, manager et direction, administrateur informatique, nouvel arrivant, prestataire et intervenant externe, télétravailleur et nomade (6 actifs pour AéroStar) : besoins, contraintes, objectifs pédagogiques (taxonomie de Bloom) reliés aux modules |
+| **8 modules + modules sectoriels** | Hameçonnage et quishing, mots de passe et MFA, fraude au président et deepfakes, IA générative, protection des données, nomadisme, réaction à incident, hygiène d'administration ; secteurs : industrie (I1, données techniques des clients), santé (S1, secret médical) |
 | **Parcours calculés** | Ordre déterminé par l'analyse de risques de la configuration : socle obligatoire, puis modules prioritaires classés par score, avec la justification visible (« Pourquoi ce module ? ») |
 | **Moyens variés** | Pré-test, contenu court, simulation de boîte de réception, scénarios à embranchements, post-test, fiches « À retenir », audio sous-titré et transcrit |
+| **Support de présentation** | Diaporama accessible de chaque module pour les séances collectives : une diapositive à la fois, clavier, compteur annoncé, plein écran, questions pour la salle ; lisible et imprimable sans JavaScript |
 | **Version FALC** | Chaque module et chaque question de quiz existent en version facile à lire et à comprendre |
-| **Évaluation** | Pré-test / post-test, seuil de réussite configurable, progression individuelle (stockée dans le navigateur uniquement) |
-| **Tableau de bord RSSI** | Complétion et scores par profil, simulations d'hameçonnage, modules en retard, prochaines campagnes (population fictive reproductible) |
-| **Calendrier annuel** | Généré depuis les fréquences de la configuration, exportable en `.ics` |
+| **Évaluation** | Pré-test / post-test, seuil de réussite configurable, avis de fin de module (utilité, clarté, adaptation aux besoins), progression individuelle (stockée dans le navigateur uniquement) |
+| **Tableau de bord sécurité** | Complétion et scores par profil, simulations d'hameçonnage, modules en retard, prochaines campagnes (population fictive reproductible) |
+| **Calendrier annuel** | Généré depuis les fréquences de la configuration, avec leur justification pour l'organisation et les renouvellements déclenchés par un événement ; exportable en `.ics` |
 | **Plan exporté** | Document complet (profils, objectifs, risques, modules, moyens, accessibilité, évaluation, fréquences), en Markdown et en PDF |
 
 | Parcours d'un profil | Simulation d'hameçonnage |
@@ -66,18 +67,33 @@ npm run dev        # http://localhost:4321
 | --- | --- |
 | ![Page des préférences en contraste renforcé](docs/captures/preferences-contraste.png) | ![Module en version FALC avec la police OpenDyslexic sur mobile](docs/captures/mobile-falc-dyslexie.png) |
 
-![Tableau de bord du RSSI](docs/captures/tableau-de-bord.png)
+![Tableau de bord sécurité](docs/captures/tableau-de-bord.png)
+
+## Organisation de démonstration : AéroStar
+
+AéroStar est l'entreprise fictive commune aux quatre blocs du titre. Chaque élément de sa fiche se retrouve dans la configuration (`config/organisation.json`) et donc dans le plan exporté :
+
+| Élément de la fiche AéroStar | Effet dans la plateforme |
+| --- | --- |
+| 120 salariés, dont 80 au bureau d'études ; 4 ingénieurs indépendants ; infogérant | 6 profils actifs avec leur effectif réel (`effectifsProfils`), dont **Ingénieur de bureau d'études** et **Prestataire et intervenant externe** |
+| Plans et maquettes clients, confidentialité très forte, 75 % du CA sur deux clients | Risque « fuite de données » en priorité haute ; module sectoriel **I1 – Données techniques des clients** (plateforme d'échange, « Confidentiel client », biens à double usage) |
+| Incident de mars 2026 : faux lien de partage, compte Microsoft 365 volé | Hameçonnage en priorité haute ; mise en situation « faux partage de fichiers » dans I1 ; simulation trimestrielle justifiée par l'incident |
+| Pas de MFA, comptes admin partagés (dont l'infogérant), exigence de l'assureur | Mots de passe et privilèges d'administration en priorité haute ; M2 obligatoire pour les ingénieurs et les prestataires |
+| Scénario redouté : rançongiciel via l'AD, chiffrement du serveur du bureau d'études | Rançongiciel en priorité haute ; M7 obligatoire pour tous ; exercice de crise annuel sur ce scénario |
+| AirCyber Bronze fin 2027, EN 9100, RGPD ; NIS2 à qualifier | Cadre réglementaire du plan ; NIS2 suivie dans la revue semestrielle des contenus |
+| Aucune formation depuis 3 ans ; pas de RSSI (responsable IT référent sécurité) | Rappels trimestriels la première année ; pilotage par le référent sécurité |
+| Télétravail 2 jours par semaine | Module M6 dans le parcours des ingénieurs |
 
 ## Correspondance avec les critères d'évaluation
 
 | Critère | Où le constater dans la plateforme |
 | --- | --- |
-| 1. Profils et besoins identifiés | Page **Profils et parcours** ; section 3 du plan exporté |
+| 1. Profils et besoins identifiés | Page **Profils et parcours** ; section 3 du plan exporté (dont la méthode d'identification des besoins) |
 | 2. Objectifs pédagogiques par profil | Tableau des objectifs de chaque profil (niveau visé, modules qui l'évaluent) ; section 4 du plan |
 | 3. Analyse de risques et nouvelles technologies | `risquesPrioritaires` de la configuration → ordre des parcours et « Pourquoi ce module ? » ; menaces émergentes signalées (IA générative, deepfakes, quishing) ; section 2 du plan |
-| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 et 7 du plan |
-| 5. Évaluation définie et accessible | Pré-test / post-test, page **Ma progression**, **Tableau de bord** par profil (graphiques doublés de tableaux) ; section 8 du plan |
-| 6. Fréquence de renouvellement | Page **Calendrier** (fréquences par action et par module, export `.ics`) ; section 9 du plan |
+| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit, **support de présentation** pour les séances collectives ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 du plan (tableau moyen × type de handicap) et section 7 |
+| 5. Évaluation définie et accessible | Pré-test / post-test sans limite de temps et en FALC, **avis de fin de module**, page **Ma progression**, **Tableau de bord** par profil (graphiques doublés de tableaux) ; section 8 du plan (évaluation accessible : passation alternative, simulations sans sanction, indicateurs d'inclusion) |
+| 6. Fréquence de renouvellement | Page **Calendrier** (fréquences par action et par module, **justifiées par le contexte de l'organisation**, renouvellements déclenchés par un événement, export `.ics`) ; section 9 du plan |
 
 ## Accessibilité
 
@@ -118,9 +134,10 @@ Les tests automatisés ne détectent qu'une partie des défauts : un **audit man
 
 ```
 config/
-  organisation.json          ← LE fichier à modifier pour une organisation
+  organisation.json          ← LE fichier à modifier pour une organisation (livré : AéroStar)
   organisation.schema.json   ← schéma généré (autocomplétion dans l'éditeur)
-  exemples/clinique.json     ← second exemple (secteur santé)
+  exemples/generique.json    ← configuration neutre (« Organisation exemple »)
+  exemples/clinique.json     ← exemple du secteur santé
 contenus/                    ← contenus pédagogiques, sans code
   risques.json               ← catalogue des risques (dont menaces émergentes)
   profils/*.json             ← profils : besoins, objectifs, exposition

@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { donnees } from '../lib/donnees.ts';
-import type { Action } from '../lib/calendrier.ts';
+import { cleJustificationModule, type Action } from '../lib/calendrier.ts';
+import type { Cle } from '../i18n/index.ts';
 import type { Langue, Texte } from '../lib/texte.ts';
 
 interface Props { langue: Langue }
@@ -20,14 +21,20 @@ const libelleMois = (m: string) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
+// Justification propre à l'organisation (configuration), sinon texte générique.
+const justif = (cle: keyof typeof c.justifications) => {
+  const v = c.justifications[cle];
+  return v ? { texte: d.tr(v), lang: lang(v) } : { texte: T(`calendrier.justif.${cle}` as Cle) };
+};
 const frequences = [
-  { action: T('calendrier.freq.accueil'), frequence: T('calendrier.freq.accueilValeur', { jours: c.onboardingDelaiJours }) },
-  { action: T('calendrier.freq.simulation'), frequence: d.frequence(c.simulationPhishing) },
-  { action: T('calendrier.freq.rappel'), frequence: d.frequence(c.rappelModules) },
-  { action: T('calendrier.freq.veille'), frequence: d.frequence(c.veilleNouvellesMenaces) },
-  { action: T('calendrier.freq.crise'), frequence: d.frequence(c.exerciceCrise) },
-  { action: T('calendrier.freq.bilan'), frequence: d.frequence('annuelle') },
+  { action: T('calendrier.freq.accueil'), frequence: T('calendrier.freq.accueilValeur', { jours: c.onboardingDelaiJours }), justification: justif('accueil') },
+  { action: T('calendrier.freq.simulation'), frequence: d.frequence(c.simulationPhishing), justification: justif('simulation') },
+  { action: T('calendrier.freq.rappel'), frequence: d.frequence(c.rappelModules), justification: justif('rappel') },
+  { action: T('calendrier.freq.veille'), frequence: d.frequence(c.veilleNouvellesMenaces), justification: justif('veille') },
+  { action: T('calendrier.freq.crise'), frequence: d.frequence(c.exerciceCrise), justification: justif('crise') },
+  { action: T('calendrier.freq.bilan'), frequence: d.frequence('annuelle'), justification: justif('bilan') },
 ];
+const declencheurs = (['incident', 'menace', 'outil', 'poste', 'retour', 'echec'] as const).map((k) => T(`calendrier.declencheur.${k}` as Cle));
 ---
 <Base titre={T('nav.calendrier')} langue={d.langue} filAriane={[{ libelle: T('nav.calendrier') }]}>
   <header class="entete-page bande bande--soleil">
@@ -40,9 +47,9 @@ const frequences = [
   <div class="tableau-defilant" tabindex="0" role="region" aria-labelledby="legende-frequences">
     <table>
       <caption id="legende-frequences">{T('calendrier.frequencesLegende')}</caption>
-      <thead><tr><th scope="col">{T('calendrier.action')}</th><th scope="col">{T('calendrier.frequence')}</th></tr></thead>
+      <thead><tr><th scope="col">{T('calendrier.action')}</th><th scope="col">{T('calendrier.frequence')}</th><th scope="col">{T('calendrier.justification')}</th></tr></thead>
       <tbody>
-        {frequences.map((f) => <tr><th scope="row">{f.action}</th><td>{f.frequence}</td></tr>)}
+        {frequences.map((f) => <tr><th scope="row">{f.action}</th><td>{f.frequence}</td><td lang={f.justification.lang}>{f.justification.texte}</td></tr>)}
       </tbody>
     </table>
   </div>
@@ -56,12 +63,18 @@ const frequences = [
           <tr>
             <th scope="row"><a href={d.lien(`/modules/${meta.id}/`)}>{meta.code} – <span lang={lang(meta.titre)}>{d.tr(meta.titre)}</span></a></th>
             <td>{d.frequence(meta.renouvellement)}</td>
-            <td>{meta.risques.some((r) => d.risque(r)?.emergent) ? T('calendrier.justifEmergent') : T('calendrier.justifFondamentaux')}</td>
+            <td>{T(cleJustificationModule(meta, (r) => Boolean(d.risque(r)?.emergent)))}</td>
           </tr>
         ))}
       </tbody>
     </table>
   </div>
+
+  <section class="lecture" aria-labelledby="titre-declencheurs">
+    <h2 id="titre-declencheurs">{T('calendrier.declencheurs')}</h2>
+    <p>{T('calendrier.declencheursIntro')}</p>
+    <ul>{declencheurs.map((x) => <li>{x}</li>)}</ul>
+  </section>
 
   <h2>{T('calendrier.programme')}</h2>
   {[...parMois].map(([mois, actions]) => (

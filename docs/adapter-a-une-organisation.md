@@ -1,6 +1,6 @@
 # Adapter la plateforme à une organisation
 
-Ce guide décrit, étape par étape, comment passer de l'« Organisation exemple » à une organisation réelle. **Aucune modification du code n'est nécessaire.**
+Ce guide décrit, étape par étape, comment passer de la configuration livrée (AéroStar, entreprise fictive) ou de la configuration neutre (`config/exemples/generique.json`) à une organisation réelle. **Aucune modification du code n'est nécessaire.**
 
 Conseil : travaillez sur une copie, `cp config/organisation.json config/mon-organisation.json`, et utilisez-la avec la variable `ORGANISATION_CONFIG` :
 
@@ -73,8 +73,13 @@ Exemple réel avec `config/exemples/clinique.json` :
 ### Profils actifs
 
 ```json
-"profilsActifs": ["utilisateur", "manager", "admin-it", "nouvel-arrivant", "nomade"]
+"profilsActifs": ["bureau-etudes", "utilisateur", "manager", "admin-it", "nouvel-arrivant", "prestataire"],
+"effectifsProfils": { "bureau-etudes": 72, "utilisateur": 26, "manager": 8, "admin-it": 4, "nouvel-arrivant": 10, "prestataire": 4 }
 ```
+
+Profils disponibles : `utilisateur`, `manager`, `admin-it`, `nouvel-arrivant`, `nomade`, `bureau-etudes` (ingénieurs et techniciens qui manipulent les données techniques des clients), `prestataire` (indépendants, infogérant, intervenants externes).
+
+`effectifsProfils` (facultatif) donne l'effectif **réel** de chaque profil : il apparaît dans le plan (section 3) et sert à la population fictive du tableau de bord. Sans lui, l'effectif total est réparti selon une part par défaut.
 
 Retirez un profil sans objet (par exemple `nomade` s'il n'y a pas de télétravail). Pour **créer un profil**, ajoutez un fichier `contenus/profils/<id>.json`, sur le modèle des fichiers existants : besoins, objectifs reliés aux modules, risques d'exposition, part de l'effectif.
 
@@ -111,13 +116,19 @@ Le nombre entre parenthèses est le score de priorité : la somme des priorités
   "simulationPhishing": "mensuelle",
   "rappelModules": "trimestrielle",
   "veilleNouvellesMenaces": "semestrielle",
-  "exerciceCrise": "annuelle"
+  "exerciceCrise": "annuelle",
+  "justifications": {
+    "simulation": "Établissement de santé, cible prioritaire des rançongiciels : simulation mensuelle très courte.",
+    "accueil": { "fr": "Forte rotation (intérimaires, internes) : parcours obligatoire avant la remise des identifiants.", "en": "High turnover…" }
+  }
 },
 "evaluation": { "seuilReussite": 80, "delaiRetardJours": 21 }
 ```
 
 - **Fréquences** : `mensuelle`, `trimestrielle`, `semestrielle`, `annuelle`. Le calendrier annuel, l'export `.ics` et la section 9 du plan sont régénérés à partir de ces valeurs.
-- **modulesSectoriels** : active les modules de `contenus/secteurs/<secteur>/modules/` (voir `contenus/secteurs/README.md`).
+- **justifications** (facultatif) : pourquoi chaque fréquence convient à **votre** organisation (taille, secteur, SI, réglementation, rotation du personnel). Clés : `accueil`, `simulation`, `rappel`, `veille`, `crise`, `bilan`. Elles apparaissent dans le calendrier et dans la section 9 du plan ; sans elles, un texte générique est affiché. C'est ce qui montre que la fréquence est **adaptée à l'écosystème**, et pas seulement choisie.
+- **modulesSectoriels** : active les modules de `contenus/secteurs/<secteur>/modules/` (voir `contenus/secteurs/README.md`). Exemples fournis : `industrie` (I1, données techniques des clients) et `sante` (S1, secret médical).
+- **reglementations** : `rgpd`, `nis2`, `iso27001`, `dora`, `hds`, `pgssi-s`, `lpm`, `rgs`, `pci-dss`, `aircyber` (référentiel de la filière aéronautique), `en9100` (qualité aéronautique).
 - **seuilReussite** : pourcentage de bonnes réponses au post-test pour valider un module.
 - **delaiRetardJours** : au-delà de ce délai, un module non terminé apparaît « en retard » dans le tableau de bord.
 
@@ -186,7 +197,7 @@ Le build vérifie qu'une traduction a exactement la même structure que l'origin
 - [ ] Profils actifs pertinents
 - [ ] Risques prioritaires repris de l'analyse de risques, avec justification
 - [ ] Réglementations applicables
-- [ ] Fréquences des campagnes et date de début
+- [ ] Fréquences des campagnes, date de début et justification de chaque fréquence
 - [ ] Seuil de réussite et délai de retard
 - [ ] Relecture des modules (procédures internes, outils autorisés)
 - [ ] Déclaration d'accessibilité et date d'audit

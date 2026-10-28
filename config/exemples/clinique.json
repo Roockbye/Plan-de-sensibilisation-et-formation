@@ -78,7 +78,33 @@
     "simulationPhishing": "mensuelle",
     "rappelModules": "semestrielle",
     "veilleNouvellesMenaces": "semestrielle",
-    "exerciceCrise": "annuelle"
+    "exerciceCrise": "annuelle",
+    "justifications": {
+      "accueil": {
+        "fr": "Forte rotation (intérimaires, internes, remplaçants de nuit) : le parcours d'accueil est obligatoire avant la remise des identifiants au dossier patient.",
+        "en": "High turnover (agency staff, interns, night replacements): the induction path is compulsory before credentials for patient records are issued."
+      },
+      "simulation": {
+        "fr": "Établissement de santé, cible prioritaire des rançongiciels : une simulation mensuelle très courte, adaptée aux équipes en horaires décalés.",
+        "en": "Healthcare facility, a prime ransomware target: a very short monthly simulation, suited to staff working shifts."
+      },
+      "rappel": {
+        "fr": "Les soignants disposent de peu de temps : rappels semestriels regroupés, complétés par les simulations mensuelles.",
+        "en": "Care staff have little time: grouped six-monthly refreshers, backed up by the monthly simulations."
+      },
+      "veille": {
+        "fr": "Le secteur santé est régulièrement visé par de nouvelles campagnes : revue des contenus tous les six mois, à partir des alertes du CERT Santé.",
+        "en": "The health sector is regularly targeted by new campaigns: content review every six months, based on CERT Santé alerts."
+      },
+      "crise": {
+        "fr": "Continuité des soins : exercice annuel de fonctionnement en mode dégradé avec la direction, la DSI et l'encadrement soignant.",
+        "en": "Continuity of care: a yearly degraded-mode exercise with management, IT and senior nursing staff."
+      },
+      "bilan": {
+        "fr": "Révision annuelle alignée sur la certification HAS et la politique de sécurité (PGSSI-S).",
+        "en": "Yearly review aligned with HAS certification and the security policy (PGSSI-S)."
+      }
+    }
   },
   "evaluation": {
     "seuilReussite": 80,
