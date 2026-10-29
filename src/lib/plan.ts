@@ -6,13 +6,16 @@
 import type { Plateforme } from './contenus.ts';
 import type { Parcours } from './parcours.ts';
 import { cleJustificationModule, libelleType, texteAction, type Action } from './calendrier.ts';
-import { tr, type Texte } from './texte.ts';
+import { deNom, tr, type Texte } from './texte.ts';
 import { FORMATS } from './schemas.ts';
 import { repartirEffectif } from './indicateurs.ts';
 import { t as texteInterface, type Cle } from '../i18n/index.ts';
 
 const FREQ: Record<string, string> = { mensuelle: 'mensuelle', trimestrielle: 'trimestrielle', semestrielle: 'semestrielle', annuelle: 'annuelle' };
 const PRIORITE = { 1: 'Faible', 2: 'Moyenne', 3: 'Haute' } as const;
+const NIVEAU: Record<string, string> = { decouverte: 'Découverte', intermediaire: 'Intermédiaire', avance: 'Avancé' };
+const RYTHME: Record<string, string> = { mensuelle: 'chaque mois', trimestrielle: 'chaque trimestre', semestrielle: 'tous les six mois', annuelle: 'chaque année' };
+const nombre = (n: number) => new Intl.NumberFormat('fr-FR').format(n);
 const FORMAT_LIBELLE: Record<(typeof FORMATS)[number], string> = {
   'micro-module': 'Module court (10 min environ)',
   quiz: 'Quiz (pré-test et post-test)',
@@ -73,8 +76,27 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     ['Document généré le', dateFr(dateGeneration)],
   ]));
 
+  // Effort de formation : effectif × durée du parcours de chaque profil.
+  const effort = parcours.map((pc) => ({ profil: pc.profil, n: effectifs.get(pc.profil.id)!, minutes: pc.dureeTotaleMinutes }));
+  const heuresTotales = Math.round(effort.reduce((x, e) => x + e.n * e.minutes, 0) / 60);
+  const joursTotaux = Math.round((heuresTotales / 7) * 10) / 10;
+  const dureesParcours = parcours.map((pc) => pc.dureeTotaleMinutes);
+  const risquesHauts = config.risquesPrioritaires.filter((r) => r.priorite === 3);
+  const emergentsCouverts = emergents.filter((r) => p.modules.some((m) => m.meta.risques.includes(r.id)));
+  const c = config.campagnes;
+
+  s.push('## En bref');
+  s.push([
+    `- **Public** : ${parcours.length} profils (${nombre(effort.reduce((x, e) => x + e.n, 0))} personnes), chacun avec ses besoins et ses objectifs pédagogiques (§ 3 et 4).`,
+    `- **Lien avec l'analyse de risques** : ${config.risquesPrioritaires.length} risques prioritaires, dont ${risquesHauts.length} de priorité haute, ordonnent les parcours ; ${emergentsCouverts.length} menaces liées aux nouvelles technologies sont traitées (${emergentsCouverts.map((r) => t(r.libelle)).join(', ')}) (§ 2).`,
+    `- **Programme** : ${p.modules.length} modules de ${Math.min(...p.modules.map((m) => m.meta.dureeMinutes))} à ${Math.max(...p.modules.map((m) => m.meta.dureeMinutes))} minutes ; parcours de ${Math.min(...dureesParcours)} à ${Math.max(...dureesParcours)} minutes par an selon le profil, soit environ ${nombre(heuresTotales)} heures pour toute l'organisation (§ 5 et 6).`,
+    '- **Moyens** : cours en ligne, simulation d\'hameçonnage, mises en situation, quiz, fiches réflexes, support de présentation pour les séances collectives, exercice de crise ; chacun adapté aux situations de handicap (§ 6 et 7).',
+    `- **Évaluation** : pré-test et post-test (seuil ${config.evaluation.seuilReussite} %), avis de fin de module, simulations et incidents, selon les 4 niveaux de Kirkpatrick ; évaluation accessible, sans limite de temps (§ 8).`,
+    `- **Renouvellement** : accueil sous ${c.onboardingDelaiJours} jours, simulation d'hameçonnage ${RYTHME[c.simulationPhishing]}, rappels ${RYTHME[c.rappelModules]}, revue des contenus ${RYTHME[c.veilleNouvellesMenaces]}, exercice de crise ${RYTHME[c.exerciceCrise]}, bilan annuel ; rythmes justifiés par le contexte ${deNom(org.nom)} (§ 9).`,
+  ].join('\n'));
+
   s.push('## 1. Finalité du plan');
-  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs de ${org.nom} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par la fonction sécurité – RSSI ou, à défaut, référent sécurité (contact : ${config.contacts.securite}) – et révisé chaque année.`);
+  s.push(`Ce plan organise la sensibilisation et la formation de l'ensemble des utilisateurs ${deNom(org.nom)} à la sécurité du système d'information. Il vise à réduire les risques d'origine humaine identifiés par l'analyse de risques, à ancrer des réflexes durables (reconnaître, protéger, signaler) et à mesurer leur progression. Il est piloté par la fonction sécurité – RSSI ou, à défaut, référent sécurité (contact : ${config.contacts.securite}) – et révisé chaque année.`);
   s.push(`Les principes retenus : des parcours différenciés par profil, des formats courts et variés, une accessibilité à toutes et tous (y compris les personnes en situation de handicap), une évaluation systématique avant et après chaque module, et une fréquence de renouvellement adaptée à l'évolution des menaces.`);
 
   s.push('## 2. Prise en compte de l\'analyse de risques');
@@ -118,7 +140,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
 
   s.push('## 5. Programme : modules et parcours');
   s.push(tableau(['Code', 'Module', 'Durée', 'Niveau', 'Risques couverts', 'Profils'], p.modules.map(({ meta }) => [
-    meta.code, t(meta.titre), `${meta.dureeMinutes} min`, meta.niveau, meta.risques.map(libRisque).join(', '), meta.profils.filter((x) => config.profilsActifs.includes(x)).map(libProfil).join(', '),
+    meta.code, t(meta.titre), `${meta.dureeMinutes} min`, NIVEAU[meta.niveau], meta.risques.map(libRisque).join(', '), meta.profils.filter((x) => config.profilsActifs.includes(x)).map(libProfil).join(', '),
   ])));
   s.push('### Parcours par profil');
   s.push('Ordre calculé automatiquement : socle obligatoire, puis modules prioritaires classés par score (Σ priorité du risque × 2 si le profil y est particulièrement exposé), puis modules complémentaires.');
@@ -126,6 +148,13 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     const etapes = pc.etapes.map((e) => `${e.module.code}${e.categorie === 'obligatoire' ? ' (obligatoire)' : e.categorie === 'complementaire' ? ' (complémentaire)' : ''}`);
     s.push(`- **${t(pc.profil.libelle)}** – ${pc.dureeTotaleMinutes} min : ${etapes.join(' → ')}`);
   }
+
+  s.push('### Effort de formation');
+  s.push(tableau(['Profil', 'Effectif', 'Parcours annuel', 'Total'], [
+    ...effort.map((e) => [t(e.profil.libelle), nombre(e.n), `${e.minutes} min`, `${nombre(Math.round((e.n * e.minutes) / 60))} h`]),
+    ['**Total**', `**${nombre(effort.reduce((x, e) => x + e.n, 0))}**`, '', `**${nombre(heuresTotales)} h**`],
+  ]));
+  s.push(`Soit environ ${nombre(joursTotaux)} journées de travail par an pour l'ensemble des personnes formées, réparties en séquences de 10 minutes.${org.coutJourneeArret ? ` À mettre en regard d'une seule journée d'arrêt de l'activité, estimée à ${nombre(Math.round(org.coutJourneeArret / 1000))} k€ : le scénario que ce plan contribue à éviter.` : ''} La plateforme est un site statique sans serveur ni licence : son hébergement ne génère pas de coût récurrent.`);
 
   s.push('## 6. Moyens pédagogiques');
   const formatsUtilises = FORMATS.filter((f) => p.modules.some((m) => m.meta.formats.includes(f)));
@@ -135,6 +164,15 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     ['Support de présentation pour séance collective (diaporama accessible, page « Support de présentation » de chaque module)', tousLesCodes],
   ]));
   s.push('Chaque module suit la même séquence : **pré-test** (niveau initial), **contenu essentiel** court, **mise en situation** (simulation d\'hameçonnage dans la plateforme ou scénario à embranchements) et **post-test**. Les simulations d\'hameçonnage sont exclusivement pédagogiques : aucun message réel n\'est envoyé et les liens ne sont jamais actifs. Les séances collectives (présentation d\'un module en réunion d\'équipe, exercice de crise pour la direction et les équipes informatiques) complètent le dispositif en ligne.');
+  s.push('### Simulations d\'hameçonnage : cadre de mise en œuvre');
+  s.push([
+    '- **Dans la plateforme** : boîte de réception fictive et mises en situation ; aucun e-mail n\'est envoyé et aucun lien n\'est actif.',
+    `- **Campagnes par messagerie** (rythme ${FREQ[c.simulationPhishing]}, § 9) : conduites par la fonction sécurité avec un outil dédié (module de simulation d'attaques de la messagerie si la licence le permet, ou outil libre hébergé en interne), avec des leurres inspirés des menaces réelles de l'organisation.`,
+    '- **Cadre** : information préalable des salariés et des représentants du personnel ; traitement inscrit au registre RGPD, résultats pseudonymisés, agrégés par profil et conservés au plus 12 mois ; pas de leurre exploitant un sujet sensible (santé, rémunération, emploi).',
+    '- **Après un clic** : page pédagogique immédiate qui explique les indices, **jamais de sanction** ; un module ciblé est proposé au profil concerné.',
+    '- **Indicateurs** : taux de clic, taux de saisie d\'identifiants, taux et délai de signalement, suivis d\'une campagne à l\'autre (§ 8).',
+  ].join('\n'));
+
   s.push('### Adaptation des moyens aux situations de handicap');
   s.push('Chaque moyen est conçu pour être utilisable sans aide ; les mesures marquées « sur demande » sont organisées avec le référent handicap.');
   s.push(tableau(['Moyen', 'Handicap visuel', 'Handicap auditif', 'Handicap moteur', 'Troubles cognitifs, dys, psychiques'], [
@@ -155,7 +193,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
     '- Préférences : taille du texte jusqu\'à 200 %, police pour la basse vision ou la dyslexie, espacement du texte, thème sombre, contraste renforcé, réduction des animations.',
     '- **Aucune limite de temps** dans les quiz et mises en situation ; possibilité de recommencer sans pénalité.',
     '- Médias : sous-titres et transcription intégrale ; aucune information portée uniquement par la couleur.',
-    `- Couleurs de la charte de ${org.nom} vérifiées automatiquement (contraste ≥ 4,5:1) et corrigées si nécessaire.`,
+    `- Couleurs de la charte ${deNom(org.nom)} vérifiées automatiquement (contraste ≥ 4,5:1) et corrigées si nécessaire.`,
     `- Contact accessibilité : ${config.contacts.accessibilite} ; alternatives (séance en présentiel, accompagnement individuel) proposées sur demande.`,
   ].join('\n'));
 
@@ -163,7 +201,7 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   s.push(tableau(['Niveau (modèle de Kirkpatrick)', 'Moyen d\'évaluation', 'Indicateur'], [
     ['1 – Réaction', 'Avis en fin de module (utilité, clarté, adaptation à ses besoins), taux de participation', 'Taux de complétion par profil ; part des apprenants jugeant le module adapté à leurs besoins'],
     ['2 – Apprentissage', 'Pré-test et post-test de chaque module', `Écart pré/post ; taux de réussite (seuil : ${config.evaluation.seuilReussite} %)`],
-    ['3 – Comportement', 'Simulations d\'hameçonnage successives, signalements réels', 'Taux de clic (↓) et taux de signalement (↑)'],
+    ['3 – Comportement', 'Campagnes de simulation d\'hameçonnage successives (§ 6), signalements réels', 'Taux de clic et de saisie d\'identifiants (↓), taux de signalement (↑), délai de signalement'],
     ['4 – Résultats', 'Suivi des incidents d\'origine humaine', 'Nombre et gravité des incidents, délai de signalement'],
   ]));
   s.push(`Un module non terminé ${config.evaluation.delaiRetardJours} jours après son ouverture est considéré « en retard » et fait l'objet d'une relance. Les indicateurs sont suivis par profil dans le tableau de bord sécurité et présentés à la direction lors du bilan annuel. Les résultats individuels restent confidentiels : le pilotage s'appuie sur des indicateurs agrégés.`);
@@ -179,7 +217,6 @@ export function genererPlan(p: Plateforme, parcours: Parcours[], calendrier: Act
   ].join('\n'));
 
   s.push('## 9. Fréquence de renouvellement et calendrier');
-  const c = config.campagnes;
   const justif = (cle: keyof typeof c.justifications) => (c.justifications[cle] ? t(c.justifications[cle]!) : texteInterface(`calendrier.justif.${cle}` as Cle, 'fr'));
   const reglements = config.reglementations.map((r) => REGLEMENTATION[r]);
   const risqueHaut = config.risquesPrioritaires.filter((r) => r.priorite === 3).map((r) => libRisque(r.id).toLowerCase());

@@ -265,7 +265,7 @@
   "calendrier.accueil.titre": "Parcours d'accueil (en continu, sous {jours} jours après chaque arrivée)",
   "calendrier.accueil.description": "Chaque nouvel arrivant suit son parcours obligatoire dans le délai fixé, puis rejoint le parcours de son profil métier.",
   "calendrier.simulation.titre": "Simulation d'hameçonnage n° {n}",
-  "calendrier.simulation.description": "Mise en situation pédagogique dans la plateforme (aucun e-mail réel), suivie d'un retour immédiat et de la mesure des taux de signalement.",
+  "calendrier.simulation.description": "Campagne de simulation encadrée par le référent sécurité (outil dédié, page pédagogique immédiate, aucune sanction), complétée par la mise en situation de la plateforme ; mesure des taux de clic et de signalement.",
   "calendrier.rappel.titre": "Campagne de rappel n° {n}",
   "calendrier.rappel.description": "Relance des modules non terminés, post-tests de consolidation et fiches réflexes.",
   "calendrier.renouvellement.titre": "Renouvellement du module {code}",

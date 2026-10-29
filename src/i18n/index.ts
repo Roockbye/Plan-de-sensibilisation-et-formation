@@ -4,7 +4,7 @@
  */
 import fr from './fr.json' with { type: 'json' };
 import en from './en.json' with { type: 'json' };
-import type { Langue } from '../lib/texte.ts';
+import { deNom, type Langue } from '../lib/texte.ts';
 
 export type Cle = keyof typeof fr;
 
@@ -12,7 +12,9 @@ const dictionnaires: Record<Langue, Partial<Record<Cle, string>>> = { fr, en };
 
 export function t(cle: Cle, langue: Langue = 'fr', params: Record<string, string | number> = {}): string {
   const brut = dictionnaires[langue][cle] ?? fr[cle];
-  return brut.replace(/\{(\w+)\}/g, (m, nom: string) => (nom in params ? String(params[nom]) : m));
+  // Français : « de {org} » devient « d'AéroStar » quand la valeur commence par une voyelle.
+  const elide = langue === 'fr' ? brut.replace(/\bde \{(\w+)\}/g, (m, nom: string) => (nom in params ? deNom(String(params[nom])) : m)) : brut;
+  return elide.replace(/\{(\w+)\}/g, (m, nom: string) => (nom in params ? String(params[nom]) : m));
 }
 
 /** Traducteur lié à une langue : `const T = traducteur('fr'); T('nav.accueil')`. */

@@ -6,7 +6,7 @@
 import { micromark } from 'micromark';
 import { gfm, gfmHtml } from 'micromark-extension-gfm';
 import type { Config } from './config.ts';
-import { tr, type Langue } from './texte.ts';
+import { deNom, tr, type Langue } from './texte.ts';
 
 const LIBELLES_SI: Record<Langue, Record<Config['organisation']['typeSI'], string>> = {
   fr: { cloud: 'principalement hébergé dans le cloud', 'sur-site': 'hébergé sur site', hybride: 'hybride (sur site et cloud)' },
@@ -26,6 +26,8 @@ export function variables(config: Config, langue: Langue = 'fr'): Record<string,
   return {
     'organisation.nom': o.nom,
     'organisation.nomCourt': o.nomCourt ?? o.nom,
+    // « d'AéroStar » / « de Clinique… » : élision du « de » devant une voyelle (français).
+    'organisation.deNom': deNom(o.nom),
     'organisation.effectif': String(o.effectif),
     'organisation.typeSI': LIBELLES_SI[langue][o.typeSI],
     // Domaine de messagerie, déduit de l'adresse du contact sécurité (sert aux mises en situation).

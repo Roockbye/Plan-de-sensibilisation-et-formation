@@ -21,7 +21,7 @@ Puis :
 
 1. Vérifiez le nom de la personne qui va recevoir le document.
 2. Envoyez seulement ce qui est utile.
-3. Utilisez les outils de partage de {{organisation.nom}}.
+3. Utilisez les outils de partage {{organisation.deNom}}.
 
 N'utilisez pas :
 
