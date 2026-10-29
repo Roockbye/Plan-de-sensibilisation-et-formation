@@ -30,6 +30,8 @@ export const configSchema = z.strictObject({
     taille: z.enum(['tpe', 'pme', 'eti', 'ge']),
     effectif: z.number().int().min(1).max(500000),
     typeSI: z.enum(['cloud', 'sur-site', 'hybride']),
+    /** Coût estimé d'une journée d'arrêt de l'activité, en euros (facultatif) : met en regard l'effort de formation. */
+    coutJourneeArret: z.number().int().min(0).optional(),
   }),
   /**
    * Effectif réel de chaque profil (facultatif). À défaut, l'effectif total est réparti

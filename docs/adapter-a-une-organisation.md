@@ -126,6 +126,7 @@ Le nombre entre parenthèses est le score de priorité : la somme des priorités
 ```
 
 - **Fréquences** : `mensuelle`, `trimestrielle`, `semestrielle`, `annuelle`. Le calendrier annuel, l'export `.ics` et la section 9 du plan sont régénérés à partir de ces valeurs.
+- **organisation.coutJourneeArret** (facultatif, en euros) : coût estimé d'une journée d'arrêt de l'activité ; le plan le met en regard de l'effort de formation (section 5).
 - **justifications** (facultatif) : pourquoi chaque fréquence convient à **votre** organisation (taille, secteur, SI, réglementation, rotation du personnel). Clés : `accueil`, `simulation`, `rappel`, `veille`, `crise`, `bilan`. Elles apparaissent dans le calendrier et dans la section 9 du plan ; sans elles, un texte générique est affiché. C'est ce qui montre que la fréquence est **adaptée à l'écosystème**, et pas seulement choisie.
 - **modulesSectoriels** : active les modules de `contenus/secteurs/<secteur>/modules/` (voir `contenus/secteurs/README.md`). Exemples fournis : `industrie` (I1, données techniques des clients) et `sante` (S1, secret médical).
 - **reglementations** : `rgpd`, `nis2`, `iso27001`, `dora`, `hds`, `pgssi-s`, `lpm`, `rgs`, `pci-dss`, `aircyber` (référentiel de la filière aéronautique), `en9100` (qualité aéronautique).

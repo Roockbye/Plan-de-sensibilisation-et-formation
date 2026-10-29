@@ -265,7 +265,7 @@
   "calendrier.accueil.titre": "Onboarding path (ongoing, within {jours} days of each arrival)",
   "calendrier.accueil.description": "Every newcomer completes their mandatory path within the set time, then joins the path of their job profile.",
   "calendrier.simulation.titre": "Phishing simulation no. {n}",
-  "calendrier.simulation.description": "Educational scenario within the platform (no real email), followed by immediate feedback and measurement of reporting rates.",
+  "calendrier.simulation.description": "Phishing simulation campaign supervised by the security officer (dedicated tool, immediate learning page, no penalty), backed up by the platform's exercise; click and reporting rates are measured.",
   "calendrier.rappel.titre": "Refresher campaign no. {n}",
   "calendrier.rappel.description": "Reminders for unfinished modules, consolidation post-tests and quick reference cards.",
   "calendrier.renouvellement.titre": "Renewal of module {code}",

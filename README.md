@@ -57,7 +57,7 @@ npm run dev        # http://localhost:4321
 | **Évaluation** | Pré-test / post-test, seuil de réussite configurable, avis de fin de module (utilité, clarté, adaptation aux besoins), progression individuelle (stockée dans le navigateur uniquement) |
 | **Tableau de bord sécurité** | Complétion et scores par profil, simulations d'hameçonnage, modules en retard, prochaines campagnes (population fictive reproductible) |
 | **Calendrier annuel** | Généré depuis les fréquences de la configuration, avec leur justification pour l'organisation et les renouvellements déclenchés par un événement ; exportable en `.ics` |
-| **Plan exporté** | Document complet (profils, objectifs, risques, modules, moyens, accessibilité, évaluation, fréquences), en Markdown et en PDF |
+| **Plan exporté** | Document complet, ouvert par une synthèse « En bref » d'une page : profils, objectifs, risques, modules, effort de formation (heures par profil), moyens, accessibilité, évaluation, fréquences ; en Markdown et en PDF |
 
 | Parcours d'un profil | Simulation d'hameçonnage |
 | --- | --- |
@@ -91,7 +91,7 @@ AéroStar est l'entreprise fictive commune aux quatre blocs du titre. Chaque él
 | 1. Profils et besoins identifiés | Page **Profils et parcours** ; section 3 du plan exporté (dont la méthode d'identification des besoins) |
 | 2. Objectifs pédagogiques par profil | Tableau des objectifs de chaque profil (niveau visé, modules qui l'évaluent) ; section 4 du plan |
 | 3. Analyse de risques et nouvelles technologies | `risquesPrioritaires` de la configuration → ordre des parcours et « Pourquoi ce module ? » ; menaces émergentes signalées (IA générative, deepfakes, quishing) ; section 2 du plan |
-| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit, **support de présentation** pour les séances collectives ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 du plan (tableau moyen × type de handicap) et section 7 |
+| 4. Moyens variés et adaptés au handicap | Quiz, simulation de boîte mail, scénarios, audio transcrit, **support de présentation** pour les séances collectives ; FALC, préférences d'affichage, clavier, lecteurs d'écran, aucune limite de temps ; section 6 du plan (tableau moyen × type de handicap, cadre des campagnes de simulation d'hameçonnage) et section 7 |
 | 5. Évaluation définie et accessible | Pré-test / post-test sans limite de temps et en FALC, **avis de fin de module**, page **Ma progression**, **Tableau de bord** par profil (graphiques doublés de tableaux) ; section 8 du plan (évaluation accessible : passation alternative, simulations sans sanction, indicateurs d'inclusion) |
 | 6. Fréquence de renouvellement | Page **Calendrier** (fréquences par action et par module, **justifiées par le contexte de l'organisation**, renouvellements déclenchés par un événement, export `.ics`) ; section 9 du plan |
 

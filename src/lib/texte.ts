@@ -30,6 +30,11 @@ export const identifiantSchema = z
   .string()
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'identifiant attendu en minuscules, chiffres et tirets (ex. « fraude-president »)');
 
+/** « de » + nom, élidé devant une voyelle : « d'AéroStar », « de Clinique des Tilleuls ». */
+export function deNom(nom: string): string {
+  return /^[aeiouyàâäéèêëîïôöûü]/i.test(nom) ? `d'${nom}` : `de ${nom}`;
+}
+
 /**
  * Empêche la coupure de ligne au trait d'union des mots courts (« e-mail », « QR-code ») dans les titres :
  * un liant de mots invisible (U+2060) est inséré après le trait d'union. Sans effet pour les lecteurs d'écran.

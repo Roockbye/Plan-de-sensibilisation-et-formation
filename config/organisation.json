@@ -8,7 +8,8 @@
     "secteur": "industrie",
     "taille": "pme",
     "effectif": 120,
-    "typeSI": "hybride"
+    "typeSI": "hybride",
+    "coutJourneeArret": 55000
   },
   "effectifsProfils": {
     "bureau-etudes": 72,

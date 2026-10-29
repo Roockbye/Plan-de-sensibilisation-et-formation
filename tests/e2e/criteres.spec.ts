@@ -85,6 +85,10 @@ test('le plan exporté couvre besoins, handicap, évaluation accessible et fréq
     "### Adaptation à l'écosystème de l'organisation",
     '### Renouvellements déclenchés par un événement',
   ]) expect(plan).toContain(titre);
+  for (const titre of ['## En bref', '### Effort de formation', "### Simulations d'hameçonnage : cadre de mise en œuvre"]) expect(plan).toContain(titre);
   expect(plan).toContain('Support de présentation pour séance collective');
+  // Français soigné : élision devant le nom de l'organisation, niveaux accentués.
+  expect(plan).not.toMatch(/\bde AéroStar\b/);
+  expect(plan).not.toMatch(/\| decouverte \|/);
   expect(plan).toContain('| Action | Fréquence | Justification pour l\'organisation |');
 });

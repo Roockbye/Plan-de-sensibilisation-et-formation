@@ -8,7 +8,7 @@ Cette plateforme est une **démonstration** : elle ne collecte aucune donnée pe
 
 ## Dans un déploiement réel
 
-Si cette plateforme était reliée à un système de suivi réel, un traitement de données personnelles serait créé (suivi des formations des salariés). Il devrait alors être inscrit au registre des traitements de {{organisation.nom}}, faire l'objet d'une information des personnes et respecter la minimisation des données (par exemple, des indicateurs agrégés par profil plutôt que des résultats individuels nominatifs).
+Si cette plateforme était reliée à un système de suivi réel, un traitement de données personnelles serait créé (suivi des formations des salariés). Il devrait alors être inscrit au registre des traitements {{organisation.deNom}}, faire l'objet d'une information des personnes et respecter la minimisation des données (par exemple, des indicateurs agrégés par profil plutôt que des résultats individuels nominatifs).
 
 ## Contact
 
